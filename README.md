@@ -19,3 +19,4 @@
 
 ### Configuration
 - [x] Change Prefix | >prefix {desired_prefix}
+- [x] AFK | waiting for ``discord.py-self v1.9`` release
