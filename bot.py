@@ -262,6 +262,8 @@ async def eightball(ctx, *, question: str = None):
 
 @bot.command()
 async def ghostping(ctx, member: discord.Member):
+    if config['CONFIGURATION']['logging'] == "true":
+        print(f"[LOST-UB] ghostping command ran by {ctx.author.display_name}")
     msg = await ctx.send(f'{member}')
     await msg.delete()
     await ctx.message.delete()
@@ -283,6 +285,8 @@ async def ghostping_error(ctx, error):
 
 @bot.command()
 async def iq(ctx, member: discord.Member):
+    if config['CONFIGURATION']['logging'] == "true":
+        print(f"[LOST-UB] iq command ran by {ctx.author.display_name}")
     result = ""
     iq_rating = random.randrange(0, 199)
     if iq_rating <= 69:
