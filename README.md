@@ -5,7 +5,7 @@
 ### Trolling
 - [x] Ghost Ping
 - [x] Dick Size
-- [ ] IQ Rating
+- [x] IQ Rating
 - [ ] Insult
 
 ### Fun

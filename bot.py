@@ -69,7 +69,8 @@ async def info(ctx):
               "- Dicksize\n"
               "- 8Ball\n"
               "- Flipcoin\n"
-              "- Ghostping"
+              "- Ghostping\n"
+              "- IQ Rating"
     )
     await ctx.reply(embed=embed)
 
@@ -276,6 +277,60 @@ async def ghostping_error(ctx, error):
 async def ghostping_error(ctx, error):
     if isinstance(error, commands.MissingRequiredArgument):
         await ctx.reply(f'Incorrect arguments | {config["CONFIGURATION"]["prefix"]}ghostping (@member)')
+
+
+# IQ Rating ============================================================================================================
+
+@bot.command()
+async def iq(ctx, member: discord.Member):
+    result = ""
+    iq_rating = random.randrange(0, 199)
+    if iq_rating <= 69:
+        result = "Extremely Low"
+    elif 70 <= iq_rating <= 79:
+        result = "Borderline"
+    elif 80 <= iq_rating <= 89:
+        result = "Low Average"
+    elif 90 <= iq_rating <= 109:
+        result = "Average"
+    elif 110 <= iq_rating <= 119:
+        result = "High Averrage"
+    elif 120 <= iq_rating <= 129:
+        result = "Superior"
+    elif iq_rating >= 130:
+        result = "Very Superior"
+    embed = discord.embeds.Embed(
+        title="Official IQ Rating",
+        description=f"{member}'s IQ is {iq_rating}",
+        colour=discord.colour.Colour.blue()
+    )
+    embed.add_field(
+        name="Rating",
+        value=f"{result}"
+    )
+    embed.add_field(
+        name="IQ Classification",
+        value="130 and above: Very Superior\n"
+              "120 - 129:     Superior\n"
+              "110 - 119:     High Average\n"
+              "90 - 109:      Average\n"
+              "80 - 89:       Low Average\n"
+              "70 - 79:       Borderline\n"
+              "69 and below:  Extremely Low"
+    )
+    await ctx.reply(embed=embed)
+
+
+@iq.error
+async def iq_error(ctx, error):
+    if isinstance(error, commands.MemberNotFound):
+        await ctx.reply(f'Incorrect arguments | {config["CONFIGURATION"]["prefix"]}iq (@member)')
+
+
+@iq.error
+async def iq_error(ctx, error):
+    if isinstance(error, commands.MissingRequiredArgument):
+        await ctx.reply(f'Incorrect arguments | {config["CONFIGURATION"]["prefix"]}iq (@member)')
 
 
 # ======================================================================================================================
