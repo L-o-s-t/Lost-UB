@@ -7,10 +7,12 @@
 - [x] Dick Size
 - [ ] IQ Rating
 - [ ] Insult
+
 ### Fun
 - [x] Rock Paper Scissors.
 - [x] Coin Toss
 - [x] Eight Ball
+
 ### Utility
 - [ ] Get User Info
 - [ ] Get Profile Picture
