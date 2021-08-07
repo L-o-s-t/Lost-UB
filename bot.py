@@ -169,10 +169,7 @@ async def dicksize(ctx, member: discord.Member):
     desc = ''
     if config['CONFIGURATION']['logging'] == "true":
         print(f"[LOST-UB] dicksize command ran by {ctx.author.display_name}")
-    if member.id == 691171747138895882:
-        size = 16
-    else:
-        size = random.randrange(0, 12)
+    size = random.randrange(0, 12)
     if size >= 6:
         desc = "That's a schlong dong!"
     elif size < 6:
