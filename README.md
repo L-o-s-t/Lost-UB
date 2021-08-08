@@ -18,7 +18,7 @@
 - [x] Save Profile Picture
 - [x] Settings
 - [x] Change Prefix | >prefix {desired_prefix}
-- [x] AFK | waiting for ``discord.py-self v1.9`` release
+- [x] AFK
 - [x] AFKmsg
 - [x] StealPFP
 
