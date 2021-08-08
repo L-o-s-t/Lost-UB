@@ -6,7 +6,6 @@
 - [x] Ghost Ping
 - [x] Dick Size
 - [x] IQ Rating
-- [ ] Insult
 
 ### Fun
 - [x] Rock Paper Scissors.
@@ -15,8 +14,10 @@
 
 ### Utility
 - [ ] Get User Info
-- [ ] Get Profile Picture
-
-### Configuration
+- [x] Get Profile Picture
+- [x] Save Profile Picture
+- [x] Settings
 - [x] Change Prefix | >prefix {desired_prefix}
 - [x] AFK | waiting for ``discord.py-self v1.9`` release
+- [x] AFKmsg
+- [x] StealPFP
