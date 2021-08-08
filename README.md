@@ -21,3 +21,8 @@
 - [x] AFK | waiting for ``discord.py-self v1.9`` release
 - [x] AFKmsg
 - [x] StealPFP
+
+
+# Disclaimer
+I am not responsible for any bans, discord terminations, or any other consequences that may occur when using this.
+Use this at your own risk.
