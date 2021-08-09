@@ -143,7 +143,10 @@ async def info(ctx):
         name="Commands",
         value=f"{cmds}"
     )
-    embed.set_footer(text=f"Command Author: {ctx.author}", icon_url=ctx.author.avatar_url)
+    embed.set_footer(
+        text=ctx.author,
+        icon_url=ctx.author.avatar_url
+    )
     await ctx.reply(embed=embed)
 
 
@@ -162,6 +165,10 @@ async def rps(ctx):
     embed.add_field(
         name="Choices",
         value="Rock, Paper, Scissors"
+    )
+    embed.set_footer(
+        text=ctx.author,
+        icon_url=ctx.author.avatar_url
     )
     await ctx.reply(embed=embed)
 
@@ -208,6 +215,10 @@ async def rps(ctx):
         embed.add_field(
             name="CPU's Choice",
             value=f"{rps_choice}"
+        )
+        embed.set_footer(
+            text=ctx.author,
+            icon_url=ctx.author.avatar_url
         )
         await ctx.reply(embed=embed)
     except asyncio.TimeoutError:
@@ -260,6 +271,10 @@ async def dicksize(ctx, member: discord.Member):
     embed.add_field(
         name="Demonstration",
         value=f"8{size * '='}D"
+    )
+    embed.set_footer(
+        text=ctx.author,
+        icon_url=ctx.author.avatar_url
     )
     await ctx.reply(embed=embed)
 
@@ -322,6 +337,10 @@ async def eightball(ctx, *, question: str = None):
             name="Answer",
             value=f"{answers}"
         )
+        embed.set_footer(
+            text=ctx.author,
+            icon_url=ctx.author.avatar_url
+        )
         await ctx.reply(embed=embed)
 
 
@@ -362,7 +381,7 @@ async def iq(ctx, member: discord.Member):
     elif 90 <= iq_rating <= 109:
         result = "Average"
     elif 110 <= iq_rating <= 119:
-        result = "High Averrage"
+        result = "High Average"
     elif 120 <= iq_rating <= 129:
         result = "Superior"
     elif iq_rating >= 130:
@@ -385,6 +404,10 @@ async def iq(ctx, member: discord.Member):
               "80 - 89:       Low Average\n"
               "70 - 79:       Borderline\n"
               "69 and below:  Extremely Low"
+    )
+    embed.set_footer(
+        text=ctx.author,
+        icon_url=ctx.author.avatar_url
     )
     await ctx.reply(embed=embed)
 
@@ -430,9 +453,9 @@ async def on_message(ctx):
 
 @bot.command()
 async def stealpfp(ctx, member: discord.Member):
-    if config['CONFIGURATION']['logging'] == "True":
-        print(f"[LOST-UB] Stole {member.display_name}'s avatar")
     if ctx.author == bot.user:
+        if config['CONFIGURATION']['logging'] == "True":
+            print(f"[LOST-UB] Stole {member.display_name}'s avatar")
         if config['CONFIGURATION']['silentsteal'] == "True":
             await ctx.message.delete()
         if member.is_avatar_animated():
@@ -457,7 +480,10 @@ async def stealpfp(ctx, member: discord.Member):
                 value=f"[Link]({member.avatar_url})"
             )
             embed.set_thumbnail(url=member.avatar_url)
-            embed.set_footer(text=f"Command Author: {ctx.author}", icon_url=ctx.author.avatar_url)
+            embed.set_footer(
+                text=ctx.author,
+                icon_url=ctx.author.avatar_url
+            )
             await ctx.reply(embed=embed)
 
 
@@ -478,6 +504,10 @@ async def pfp(ctx, member: discord.Member):
         value=f"{member.display_name}"
     )
     embed.set_thumbnail(url=member.avatar_url)
+    embed.set_footer(
+        text=ctx.author,
+        icon_url=ctx.author.avatar_url
+    )
     await ctx.reply(embed=embed)
 
 
@@ -507,6 +537,10 @@ async def savepfp(ctx, member: discord.Member):
                 value=f"[Link]({member.avatar_url})"
             )
             embed.set_thumbnail(url=member.avatar_url)
+            embed.set_footer(
+                text=ctx.author,
+                icon_url=ctx.author.avatar_url
+            )
             await ctx.reply(embed=embed)
 
 
@@ -571,6 +605,10 @@ async def settings(ctx, section: str = None, setting: str = None, *, value: str 
                     value=f"- legit | {config['CONFIGURATION']['afk_legit']}\n"
                           f"- message | {config['CONFIGURATION']['afk_msg']}"
                 )
+                embed.set_footer(
+                    text=ctx.author,
+                    icon_url=ctx.author.avatar_url
+                )
                 await ctx.reply(embed=embed)
             elif setting.lower() == "legit":
                 if value is None:
@@ -584,6 +622,10 @@ async def settings(ctx, section: str = None, setting: str = None, *, value: str 
                         description=f"This has been turned on!",
                         colour=embedcolor()
                     )
+                    embed.set_footer(
+                        text=ctx.author,
+                        icon_url=ctx.author.avatar_url
+                    )
                     await ctx.reply(embed=embed)
                 elif value.lower() == "false":
                     config['CONFIGURATION']['afk_legit'] = "False"
@@ -593,12 +635,20 @@ async def settings(ctx, section: str = None, setting: str = None, *, value: str 
                         description=f"This has been turned off!",
                         colour=embedcolor()
                     )
+                    embed.set_footer(
+                        text=ctx.author,
+                        icon_url=ctx.author.avatar_url
+                    )
                     await ctx.reply(embed=embed)
                 else:
                     embed = discord.embeds.Embed(
                         title="AFK Legit Setting",
                         description=f"Value has to be ``True`` or ``False``!",
                         colour=embedcolor()
+                    )
+                    embed.set_footer(
+                        text=ctx.author,
+                        icon_url=ctx.author.avatar_url
                     )
                     await ctx.reply(embed=embed)
             elif setting.lower() == "message":
@@ -619,6 +669,10 @@ async def settings(ctx, section: str = None, setting: str = None, *, value: str 
                     name="Settings",
                     value=f"- legit | {config['CONFIGURATION']['afk_legit']}"
                 )
+                embed.set_footer(
+                    text=ctx.author,
+                    icon_url=ctx.author.avatar_url
+                )
                 await ctx.reply(embed=embed)
         elif section.lower() == "pfp":
             if setting is None:
@@ -631,6 +685,10 @@ async def settings(ctx, section: str = None, setting: str = None, *, value: str 
                     name="Settings",
                     value=f"- silentsteal | {config['CONFIGURATION']['silentsteal']}\n"
                           f"- silentsave  | {config['CONFIGURATION']['silentsave']}"
+                )
+                embed.set_footer(
+                    text=ctx.author,
+                    icon_url=ctx.author.avatar_url
                 )
                 await ctx.reply(embed=embed)
             elif setting.lower() == "silentsteal":
@@ -645,6 +703,10 @@ async def settings(ctx, section: str = None, setting: str = None, *, value: str 
                         description=f"This has been turned on!",
                         colour=embedcolor()
                     )
+                    embed.set_footer(
+                        text=ctx.author,
+                        icon_url=ctx.author.avatar_url
+                    )
                     await ctx.reply(embed=embed)
                 elif value.lower() == "false":
                     config['CONFIGURATION']['silentsteal'] = "False"
@@ -654,12 +716,20 @@ async def settings(ctx, section: str = None, setting: str = None, *, value: str 
                         description=f"This has been turned off!",
                         colour=embedcolor()
                     )
+                    embed.set_footer(
+                        text=ctx.author,
+                        icon_url=ctx.author.avatar_url
+                    )
                     await ctx.reply(embed=embed)
                 else:
                     embed = discord.embeds.Embed(
                         title="SilentSteal Setting",
                         description=f"Value has to be ``True`` or ``False``!",
                         colour=embedcolor()
+                    )
+                    embed.set_footer(
+                        text=ctx.author,
+                        icon_url=ctx.author.avatar_url
                     )
                     await ctx.reply(embed=embed)
             elif setting.lower() == "silentsave":
@@ -668,6 +738,10 @@ async def settings(ctx, section: str = None, setting: str = None, *, value: str 
                         title="SilentSave Setting",
                         description=f"Doesn't send any messages after cmd and deletes command message.",
                         colour=embedcolor()
+                    )
+                    embed.set_footer(
+                        text=ctx.author,
+                        icon_url=ctx.author.avatar_url
                     )
                     await ctx.reply(embed=embed)
                 elif value.lower() == "true":
@@ -681,12 +755,20 @@ async def settings(ctx, section: str = None, setting: str = None, *, value: str 
                         description=f"This has been turned off!",
                         colour=embedcolor()
                     )
+                    embed.set_footer(
+                        text=ctx.author,
+                        icon_url=ctx.author.avatar_url
+                    )
                     await ctx.reply(embed=embed)
                 else:
                     embed = discord.embeds.Embed(
                         title="SilentSave Setting",
                         description=f"Value has to be ``True`` or ``False``!",
                         colour=embedcolor()
+                    )
+                    embed.set_footer(
+                        text=ctx.author,
+                        icon_url=ctx.author.avatar_url
                     )
                     await ctx.reply(embed=embed)
             else:
@@ -700,6 +782,10 @@ async def settings(ctx, section: str = None, setting: str = None, *, value: str 
                     name="Settings",
                     value=f"- silent | {config['CONFIGURATION']['silentsteal']}"
                 )
+                embed.set_footer(
+                    text=ctx.author,
+                    icon_url=ctx.author.avatar_url
+                )
                 await ctx.reply(embed=embed)
         elif section.lower() == "customization":
             if setting is None:
@@ -711,6 +797,10 @@ async def settings(ctx, section: str = None, setting: str = None, *, value: str 
                 embed.add_field(
                     name="Settings",
                     value=f"- embedcolor | {config['CONFIGURATION']['embedcolor']}"
+                )
+                embed.set_footer(
+                    text=ctx.author,
+                    icon_url=ctx.author.avatar_url
                 )
                 await ctx.reply(embed=embed)
             elif setting.lower() == "embedcolor":
@@ -760,6 +850,10 @@ async def settings(ctx, section: str = None, setting: str = None, *, value: str 
                               "- Purple\n"
                               "- Pink"
                     )
+                    embed.set_footer(
+                        text=ctx.author,
+                        icon_url=ctx.author.avatar_url
+                    )
                     await ctx.reply(embed=embed)
             else:
                 embed = discord.embeds.Embed(
@@ -772,9 +866,34 @@ async def settings(ctx, section: str = None, setting: str = None, *, value: str 
                     name="Settings",
                     value=f"- embedcolor | {config['CONFIGURATION']['embedcolor']}"
                 )
+                embed.set_footer(
+                    text=ctx.author,
+                    icon_url=ctx.author.avatar_url
+                )
                 await ctx.reply(embed=embed)
         else:
             await sections_embed(ctx)
+
+
+# Dice Roll ============================================================================================================
+
+
+@bot.command()
+async def rolladice(ctx):
+    number = random.randrange(1, 7)
+    embed = discord.embeds.Embed(
+        title="Dice Roll",
+        description=f"You rolled a {number}",
+        colour=embedcolor()
+    )
+    embed.set_footer(
+        text=ctx.author,
+        icon_url=ctx.author.avatar_url
+    )
+    await ctx.reply(embed=embed)
+
+
+# ======================================================================================================================
 
 
 bot.run(config['CONFIGURATION']['token'])
