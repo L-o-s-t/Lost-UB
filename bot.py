@@ -532,7 +532,7 @@ async def settings(ctx, section: str = None, setting: str = None, *, value: str 
     def sections_embed(context):
         section_embed = discord.embeds.Embed(
             title="Settings",
-            description=f"Command usage: {get_prefix()}settings (section) (setting) (boolean)",
+            description=f"Command usage: {get_prefix()}settings (section) (setting) (value)",
             colour=embedcolor()
         )
         section_embed.add_field(
@@ -560,7 +560,7 @@ async def settings(ctx, section: str = None, setting: str = None, *, value: str 
             if setting is None:
                 embed = discord.embeds.Embed(
                     title="AFK Section",
-                    description=f"Command usage: {get_prefix()}settings (section) (setting) (boolean)",
+                    description=f"Command usage: {get_prefix()}settings (section) (setting) (value)",
                     colour=embedcolor()
                 )
                 embed.add_field(
@@ -599,14 +599,17 @@ async def settings(ctx, section: str = None, setting: str = None, *, value: str 
                     )
                     await ctx.reply(embed=embed)
             elif setting.lower() == "message":
-                config["CONFIGURATION"]["afk_msg"] = value
-                write()
-                await ctx.reply(f"AFK message has been set to: ``{value}``")
+                if value is None:
+                    await settings_embed(ctx, "AFK Message", "Set the message to send to users when AFK is enabled.")
+                else:
+                    config["CONFIGURATION"]["afk_msg"] = value
+                    write()
+                    await ctx.reply(f"AFK message has been set to: ``{value}``")
             else:
                 embed = discord.embeds.Embed(
                     title="AFK Section",
                     description=f"Setting not found.\n"
-                                f"Command usage: {get_prefix()}settings (section) (setting) (boolean)",
+                                f"Command usage: {get_prefix()}settings (section) (setting) (value)",
                     colour=embedcolor()
                 )
                 embed.add_field(
@@ -618,7 +621,7 @@ async def settings(ctx, section: str = None, setting: str = None, *, value: str 
             if setting is None:
                 embed = discord.embeds.Embed(
                     title="PFP Section",
-                    description=f"Command usage: {get_prefix()}settings (section) (setting) (boolean)",
+                    description=f"Command usage: {get_prefix()}settings (section) (setting) (value)",
                     colour=embedcolor()
                 )
                 embed.add_field(
@@ -687,7 +690,7 @@ async def settings(ctx, section: str = None, setting: str = None, *, value: str 
                 embed = discord.embeds.Embed(
                     title="StealPFP Section",
                     description=f"Setting not found.\n"
-                                f"Command usage: {get_prefix()}settings (section) (setting) (boolean)",
+                                f"Command usage: {get_prefix()}settings (section) (setting) (value)",
                     colour=embedcolor()
                 )
                 embed.add_field(
@@ -699,7 +702,7 @@ async def settings(ctx, section: str = None, setting: str = None, *, value: str 
             if setting is None:
                 embed = discord.embeds.Embed(
                     title="Customization Section",
-                    description=f"Command usage: {get_prefix()}settings (section) (setting) (boolean)",
+                    description=f"Command usage: {get_prefix()}settings (section) (setting) (value)",
                     colour=embedcolor()
                 )
                 embed.add_field(
@@ -709,7 +712,7 @@ async def settings(ctx, section: str = None, setting: str = None, *, value: str 
                 await ctx.reply(embed=embed)
             elif setting.lower() == "embedcolor":
                 if value is None:
-                    await settings_embed(ctx, "EmbedColor", "Color of all embedded messages sent")
+                    await settings_embed(ctx, "EmbedColor", "Changes the color of all embed messages sent.")
                 elif value.lower() == "red":
                     config['CONFIGURATION']['embedcolor'] = "red"
                     write()
@@ -759,7 +762,7 @@ async def settings(ctx, section: str = None, setting: str = None, *, value: str 
                 embed = discord.embeds.Embed(
                     title="EmbedColor Section",
                     description=f"Setting not found.\n"
-                                f"Command usage: {get_prefix()}settings (section) (setting) (boolean)",
+                                f"Command usage: {get_prefix()}settings (section) (setting) (value)",
                     colour=embedcolor()
                 )
                 embed.add_field(
