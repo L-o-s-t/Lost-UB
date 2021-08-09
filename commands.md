@@ -14,3 +14,4 @@ REPLACE "." WITH YOUR PREFIX
 | AFK  | .afk  | Sends message when someone mentions you |
 | Steal Profile Picture  | .stealpfp  | Get member's avatar and changes your avatar to his |
 | Save Profile Picture  | .savepfp  | Saves member's avatar to folder named "avatar" |
+| rolladice  | .rolladice  | Dice roll |
