@@ -219,18 +219,20 @@ async def rps(ctx):
 
 @bot.command()
 async def prefix(ctx, x):
-    if config['CONFIGURATION']['logging'] == "True":
-        print(f"[LOST-UB] prefix command ran by {ctx.author.display_name}")
-    config["CONFIGURATION"]["prefix"] = x
-    write()
-    bot.command_prefix = x
-    await ctx.reply(f'Prefix changed to: ``{x}``')
+    if ctx.author == bot.user:
+        if config['CONFIGURATION']['logging'] == "True":
+            print(f"[LOST-UB] prefix command ran by {ctx.author.display_name}")
+        config["CONFIGURATION"]["prefix"] = x
+        write()
+        bot.command_prefix = x
+        await ctx.reply(f'Prefix changed to: ``{x}``')
 
 
 @prefix.error
 async def prefix_error(ctx, error):
-    if isinstance(error, commands.MissingRequiredArgument):
-        await ctx.reply(f'Incorrect arguments | {config["CONFIGURATION"]["prefix"]}prefix (desired_prefix)')
+    if ctx.author == bot.user:
+        if isinstance(error, commands.MissingRequiredArgument):
+            await ctx.reply(f'Incorrect arguments | {config["CONFIGURATION"]["prefix"]}prefix (desired_prefix)')
 
 
 # Dicksize =============================================================================================================
@@ -481,9 +483,9 @@ async def pfp(ctx, member: discord.Member):
 
 @bot.command()
 async def savepfp(ctx, member: discord.Member):
-    if config['CONFIGURATION']['logging'] == "True":
-        print(f"[LOST-UB] {member.display_name}'s avatar was saved.")
     if ctx.author == bot.user:
+        if config['CONFIGURATION']['logging'] == "True":
+            print(f"[LOST-UB] {member.display_name}'s avatar was saved.")
         if config['CONFIGURATION']['silentsave'] == "True":
             await ctx.message.delete()
         if member.is_avatar_animated():
@@ -510,10 +512,11 @@ async def savepfp(ctx, member: discord.Member):
 
 @savepfp.error
 async def savepfp_error(ctx, error):
-    if isinstance(error, commands.MemberNotFound):
-        await ctx.reply("Member not found.")
-    if isinstance(error, commands.MissingRequiredArgument):
-        await ctx.reply(f"Missing arguments | {get_prefix()}savepfp (@member)")
+    if ctx.author == bot.user:
+        if isinstance(error, commands.MemberNotFound):
+            await ctx.reply("Member not found.")
+        if isinstance(error, commands.MissingRequiredArgument):
+            await ctx.reply(f"Missing arguments | {get_prefix()}savepfp (@member)")
 
 
 @pfp.error
