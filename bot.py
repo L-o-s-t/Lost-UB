@@ -425,16 +425,17 @@ async def iq_error(ctx, error):
 
 @bot.command()
 async def afk(ctx):
-    if config['CONFIGURATION']['logging'] == "True":
-        print(f"[LOST-UB] afk command ran by {ctx.author.display_name}")
-    if config["CONFIGURATION"]["AFK"] == "True":
-        config["CONFIGURATION"]["AFK"] = "False"
-        write()
-        await ctx.reply("Successfully set! AFK has been turned off.")
-    elif config["CONFIGURATION"]["AFK"] == "False":
-        config["CONFIGURATION"]["AFK"] = "True"
-        write()
-        await ctx.reply("Successfully set! AFK has been turned on.")
+    if ctx.author == bot.user:
+        if config['CONFIGURATION']['logging'] == "True":
+            print(f"[LOST-UB] afk command ran by {ctx.author.display_name}")
+        if config["CONFIGURATION"]["AFK"] == "True":
+            config["CONFIGURATION"]["AFK"] = "False"
+            write()
+            await ctx.reply("Successfully set! AFK has been turned off.")
+        elif config["CONFIGURATION"]["AFK"] == "False":
+            config["CONFIGURATION"]["AFK"] = "True"
+            write()
+            await ctx.reply("Successfully set! AFK has been turned on.")
 
 
 @bot.event
