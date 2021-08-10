@@ -459,12 +459,12 @@ async def stealpfp(ctx, member: discord.Member):
         if config['CONFIGURATION']['silentsteal'] == "True":
             await ctx.message.delete()
         if member.is_avatar_animated():
-            await member.avatar_url.save(f"avatars\\{member.id}.gif")
-            with open(f'avatars/{member.id}.gif', 'rb') as image:
+            await member.avatar_url.save(f"avatars\\{member.display_name}.gif")
+            with open(f'avatars/{member.display_name}.gif', 'rb') as image:
                 await bot.user.edit(avatar=image.read())
         else:
-            await member.avatar_url.save(f"avatars\\{member.id}.png")
-            with open(f'avatars/{member.id}.png', 'rb') as image:
+            await member.avatar_url.save(f"avatars\\{member.display_name}.png")
+            with open(f'avatars/{member.display_name}.png', 'rb') as image:
                 await bot.user.edit(avatar=image.read())
         if config['CONFIGURATION']['silentsteal'] == "False":
             embed = discord.embeds.Embed(
