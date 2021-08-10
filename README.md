@@ -24,11 +24,12 @@
 
 # Installation
 ### 1. Install required libraries using the following commands
+Python 3.8 or higher is required
 ```
 pip install pyinstaller
 ```
 ```
-pip install discord.py-self
+pip install discord.py-self[voice]
 ```
 ### 2. Download "updater.exe" and run
 - [updater.exe](https://github.com/L-o-s-t/Lost-UB/raw/main/updater.exe)
