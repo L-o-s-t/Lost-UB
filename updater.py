@@ -19,11 +19,6 @@ print("""
 """)
 
 
-def on_rm_error(path):
-    os.chmod(path, stat.S_IWRITE)
-    os.unlink(path)
-
-
 lostUB_new = requests.get("https://raw.githubusercontent.com/L-o-s-t/Lost-UB/main/bot.py")
 with open("bot_new.py", "w", encoding="utf-8") as new:
     new.write(lostUB_new.text)
