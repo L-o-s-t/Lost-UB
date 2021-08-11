@@ -144,8 +144,8 @@ async def info(ctx):
         value=f"{cmds}"
     )
     embed.set_footer(
-        text=ctx.author,
-        icon_url=ctx.author.avatar_url
+        text=f"Logged in as {bot.user} | Lost-UB",
+        icon_url=bot.user.avatar_url
     )
     await ctx.reply(embed=embed)
 
@@ -167,8 +167,8 @@ async def rps(ctx):
         value="Rock, Paper, Scissors"
     )
     embed.set_footer(
-        text=ctx.author,
-        icon_url=ctx.author.avatar_url
+        text=f"Logged in as {bot.user} | Lost-UB",
+        icon_url=bot.user.avatar_url
     )
     await ctx.reply(embed=embed)
 
@@ -217,8 +217,8 @@ async def rps(ctx):
             value=f"{rps_choice}"
         )
         embed.set_footer(
-            text=ctx.author,
-            icon_url=ctx.author.avatar_url
+            text=f"Logged in as {bot.user} | Lost-UB",
+            icon_url=bot.user.avatar_url
         )
         await ctx.reply(embed=embed)
     except asyncio.TimeoutError:
@@ -273,8 +273,8 @@ async def dicksize(ctx, member: discord.Member):
         value=f"8{size * '='}D"
     )
     embed.set_footer(
-        text=ctx.author,
-        icon_url=ctx.author.avatar_url
+        text=f"Logged in as {bot.user} | Lost-UB",
+        icon_url=bot.user.avatar_url
     )
     await ctx.reply(embed=embed)
 
@@ -338,8 +338,8 @@ async def eightball(ctx, *, question: str = None):
             value=f"{answers}"
         )
         embed.set_footer(
-            text=ctx.author,
-            icon_url=ctx.author.avatar_url
+            text=f"Logged in as {bot.user} | Lost-UB",
+            icon_url=bot.user.avatar_url
         )
         await ctx.reply(embed=embed)
 
@@ -406,8 +406,8 @@ async def iq(ctx, member: discord.Member):
               "69 and below:  Extremely Low"
     )
     embed.set_footer(
-        text=ctx.author,
-        icon_url=ctx.author.avatar_url
+        text=f"Logged in as {bot.user} | Lost-UB",
+        icon_url=bot.user.avatar_url
     )
     await ctx.reply(embed=embed)
 
@@ -482,8 +482,8 @@ async def stealpfp(ctx, member: discord.Member):
             )
             embed.set_thumbnail(url=member.avatar_url)
             embed.set_footer(
-                text=ctx.author,
-                icon_url=ctx.author.avatar_url
+                text=f"Logged in as {bot.user} | Lost-UB",
+                icon_url=bot.user.avatar_url
             )
             await ctx.reply(embed=embed)
 
@@ -506,8 +506,8 @@ async def pfp(ctx, member: discord.Member):
     )
     embed.set_thumbnail(url=member.avatar_url)
     embed.set_footer(
-        text=ctx.author,
-        icon_url=ctx.author.avatar_url
+        text=f"Logged in as {bot.user} | Lost-UB",
+        icon_url=bot.user.avatar_url
     )
     await ctx.reply(embed=embed)
 
@@ -539,8 +539,8 @@ async def savepfp(ctx, member: discord.Member):
             )
             embed.set_thumbnail(url=member.avatar_url)
             embed.set_footer(
-                text=ctx.author,
-                icon_url=ctx.author.avatar_url
+                text=f"Logged in as {bot.user} | Lost-UB",
+                icon_url=bot.user.avatar_url
             )
             await ctx.reply(embed=embed)
 
@@ -607,8 +607,8 @@ async def settings(ctx, section: str = None, setting: str = None, *, value: str 
                           f"- message | {config['CONFIGURATION']['afk_msg']}"
                 )
                 embed.set_footer(
-                    text=ctx.author,
-                    icon_url=ctx.author.avatar_url
+                    text=f"Logged in as {bot.user} | Lost-UB",
+                    icon_url=bot.user.avatar_url
                 )
                 await ctx.reply(embed=embed)
             elif setting.lower() == "legit":
@@ -624,8 +624,8 @@ async def settings(ctx, section: str = None, setting: str = None, *, value: str 
                         colour=embedcolor()
                     )
                     embed.set_footer(
-                        text=ctx.author,
-                        icon_url=ctx.author.avatar_url
+                        text=f"Logged in as {bot.user} | Lost-UB",
+                        icon_url=bot.user.avatar_url
                     )
                     await ctx.reply(embed=embed)
                 elif value.lower() == "false":
@@ -637,8 +637,8 @@ async def settings(ctx, section: str = None, setting: str = None, *, value: str 
                         colour=embedcolor()
                     )
                     embed.set_footer(
-                        text=ctx.author,
-                        icon_url=ctx.author.avatar_url
+                        text=f"Logged in as {bot.user} | Lost-UB",
+                        icon_url=bot.user.avatar_url
                     )
                     await ctx.reply(embed=embed)
                 else:
@@ -648,8 +648,8 @@ async def settings(ctx, section: str = None, setting: str = None, *, value: str 
                         colour=embedcolor()
                     )
                     embed.set_footer(
-                        text=ctx.author,
-                        icon_url=ctx.author.avatar_url
+                        text=f"Logged in as {bot.user} | Lost-UB",
+                        icon_url=bot.user.avatar_url
                     )
                     await ctx.reply(embed=embed)
             elif setting.lower() == "message":
@@ -671,8 +671,8 @@ async def settings(ctx, section: str = None, setting: str = None, *, value: str 
                     value=f"- legit | {config['CONFIGURATION']['afk_legit']}"
                 )
                 embed.set_footer(
-                    text=ctx.author,
-                    icon_url=ctx.author.avatar_url
+                    text=f"Logged in as {bot.user} | Lost-UB",
+                    icon_url=bot.user.avatar_url
                 )
                 await ctx.reply(embed=embed)
         elif section.lower() == "pfp":
@@ -688,8 +688,8 @@ async def settings(ctx, section: str = None, setting: str = None, *, value: str 
                           f"- silentsave  | {config['CONFIGURATION']['silentsave']}"
                 )
                 embed.set_footer(
-                    text=ctx.author,
-                    icon_url=ctx.author.avatar_url
+                    text=f"Logged in as {bot.user} | Lost-UB",
+                    icon_url=bot.user.avatar_url
                 )
                 await ctx.reply(embed=embed)
             elif setting.lower() == "silentsteal":
@@ -705,8 +705,8 @@ async def settings(ctx, section: str = None, setting: str = None, *, value: str 
                         colour=embedcolor()
                     )
                     embed.set_footer(
-                        text=ctx.author,
-                        icon_url=ctx.author.avatar_url
+                        text=f"Logged in as {bot.user} | Lost-UB",
+                        icon_url=bot.user.avatar_url
                     )
                     await ctx.reply(embed=embed)
                 elif value.lower() == "false":
@@ -718,8 +718,8 @@ async def settings(ctx, section: str = None, setting: str = None, *, value: str 
                         colour=embedcolor()
                     )
                     embed.set_footer(
-                        text=ctx.author,
-                        icon_url=ctx.author.avatar_url
+                        text=f"Logged in as {bot.user} | Lost-UB",
+                        icon_url=bot.user.avatar_url
                     )
                     await ctx.reply(embed=embed)
                 else:
@@ -729,8 +729,8 @@ async def settings(ctx, section: str = None, setting: str = None, *, value: str 
                         colour=embedcolor()
                     )
                     embed.set_footer(
-                        text=ctx.author,
-                        icon_url=ctx.author.avatar_url
+                        text=f"Logged in as {bot.user} | Lost-UB",
+                        icon_url=bot.user.avatar_url
                     )
                     await ctx.reply(embed=embed)
             elif setting.lower() == "silentsave":
@@ -741,8 +741,8 @@ async def settings(ctx, section: str = None, setting: str = None, *, value: str 
                         colour=embedcolor()
                     )
                     embed.set_footer(
-                        text=ctx.author,
-                        icon_url=ctx.author.avatar_url
+                        text=f"Logged in as {bot.user} | Lost-UB",
+                        icon_url=bot.user.avatar_url
                     )
                     await ctx.reply(embed=embed)
                 elif value.lower() == "true":
@@ -757,8 +757,8 @@ async def settings(ctx, section: str = None, setting: str = None, *, value: str 
                         colour=embedcolor()
                     )
                     embed.set_footer(
-                        text=ctx.author,
-                        icon_url=ctx.author.avatar_url
+                        text=f"Logged in as {bot.user} | Lost-UB",
+                        icon_url=bot.user.avatar_url
                     )
                     await ctx.reply(embed=embed)
                 else:
@@ -768,8 +768,8 @@ async def settings(ctx, section: str = None, setting: str = None, *, value: str 
                         colour=embedcolor()
                     )
                     embed.set_footer(
-                        text=ctx.author,
-                        icon_url=ctx.author.avatar_url
+                        text=f"Logged in as {bot.user} | Lost-UB",
+                        icon_url=bot.user.avatar_url
                     )
                     await ctx.reply(embed=embed)
             else:
@@ -784,8 +784,8 @@ async def settings(ctx, section: str = None, setting: str = None, *, value: str 
                     value=f"- silent | {config['CONFIGURATION']['silentsteal']}"
                 )
                 embed.set_footer(
-                    text=ctx.author,
-                    icon_url=ctx.author.avatar_url
+                    text=f"Logged in as {bot.user} | Lost-UB",
+                    icon_url=bot.user.avatar_url
                 )
                 await ctx.reply(embed=embed)
         elif section.lower() == "customization":
@@ -800,8 +800,8 @@ async def settings(ctx, section: str = None, setting: str = None, *, value: str 
                     value=f"- embedcolor | {config['CONFIGURATION']['embedcolor']}"
                 )
                 embed.set_footer(
-                    text=ctx.author,
-                    icon_url=ctx.author.avatar_url
+                    text=f"Logged in as {bot.user} | Lost-UB",
+                    icon_url=bot.user.avatar_url
                 )
                 await ctx.reply(embed=embed)
             elif setting.lower() == "embedcolor":
@@ -852,8 +852,8 @@ async def settings(ctx, section: str = None, setting: str = None, *, value: str 
                               "- Pink"
                     )
                     embed.set_footer(
-                        text=ctx.author,
-                        icon_url=ctx.author.avatar_url
+                        text=f"Logged in as {bot.user} | Lost-UB",
+                        icon_url=bot.user.avatar_url
                     )
                     await ctx.reply(embed=embed)
             else:
@@ -868,8 +868,8 @@ async def settings(ctx, section: str = None, setting: str = None, *, value: str 
                     value=f"- embedcolor | {config['CONFIGURATION']['embedcolor']}"
                 )
                 embed.set_footer(
-                    text=ctx.author,
-                    icon_url=ctx.author.avatar_url
+                    text=f"Logged in as {bot.user} | Lost-UB",
+                    icon_url=bot.user.avatar_url
                 )
                 await ctx.reply(embed=embed)
         else:
@@ -888,8 +888,8 @@ async def rolladice(ctx):
         colour=embedcolor()
     )
     embed.set_footer(
-        text=ctx.author,
-        icon_url=ctx.author.avatar_url
+        text=f"Logged in as {bot.user} | Lost-UB",
+        icon_url=bot.user.avatar_url
     )
     await ctx.reply(embed=embed)
 
