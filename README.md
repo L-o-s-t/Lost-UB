@@ -42,8 +42,8 @@ pip install discord.py-self[voice]
   - highly suggest moving it to a dedicated folder.
 ### 4. Run bot.exe
 
-#Tutorial
-wip...
+# Video Tutorial
+[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/Fmbia_6jrI0/0.jpg)](https://www.youtube.com/watch?v=Fmbia_6jrI0)
 
 # To Update...
 Simply just run updater.exe, and it should look for updates.
