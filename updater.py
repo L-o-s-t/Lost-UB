@@ -43,6 +43,7 @@ if not os.path.exists("commands.md"):
 
 # Checks if bot.py exists, if not it will create it
 if not os.path.exists("bot.py"):
+    print("[LOST] Bot.py not found, creating new one")
     os.replace("repo/bot.py", "bot.py")
 elif os.path.exists("bot.py"):
     with open("repo/bot.py", "r") as new:
@@ -75,7 +76,7 @@ if not os.path.exists("bot.exe"):
     print("[LOST] Successfully created bot executable")
 
 # If bot.exe does exist, and bot.py isn't up to date
-elif os.path.exists("bot.exe") and newbot != oldbot:
+elif os.path.exists("bot.exe"):
 
     # updates bot executable file
     os.remove("bot.exe")
