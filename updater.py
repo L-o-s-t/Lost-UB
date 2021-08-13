@@ -96,3 +96,5 @@ process = subprocess.run("echo y | rmdir /s repo",
                          shell=True,
                          stdout=subprocess.DEVNULL,
                          stderr=subprocess.STDOUT)
+
+input("[LOST] You may now close this window.")
