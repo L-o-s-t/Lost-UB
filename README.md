@@ -13,7 +13,7 @@
 - [x] Eight Ball
 
 ### Utility
-- [ ] Get User Info
+- [x] Get User Info
 - [x] Get Profile Picture
 - [x] Save Profile Picture
 - [x] Settings
