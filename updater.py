@@ -1,6 +1,4 @@
-import requests
 import os
-import time
 import shutil
 import subprocess
 from git import Repo
