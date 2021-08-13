@@ -881,6 +881,8 @@ async def settings(ctx, section: str = None, setting: str = None, *, value: str 
 
 @bot.command()
 async def rolladice(ctx):
+    if config['CONFIGURATION']['logging'] == "True":
+        print(f"[LOST-UB] rps command ran by {ctx.author.display_name}")
     number = random.randrange(1, 7)
     embed = discord.embeds.Embed(
         title="Dice Roll",
@@ -898,6 +900,8 @@ async def rolladice(ctx):
 
 @bot.command()
 async def userinfo(ctx, member: discord.Member):
+    if config['CONFIGURATION']['logging'] == "True":
+        print(f"[LOST-UB] userinfo command ran by {ctx.author.display_name}")
     minute = ""
     friends = ""
     guilds = ""
