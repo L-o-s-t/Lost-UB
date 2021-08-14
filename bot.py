@@ -978,12 +978,16 @@ async def warn(ctx, member: discord.Member, *, reason: str = None):
         if reason is None:
             await ctx.reply("You must enter a reason for this warning.")
         else:
-            with open(f"data/warnings/{member.id}.txt", "a+") as warnings_file:
+            if not os.path.exists("data/warnings"):
+                os.mkdir("data/warnings")
+            if not os.path.exists(f"data/warnings/{ctx.guild.id}"):
+                os.mkdir(f"data/warnings/{ctx.guild.id}")
+            with open(f"data/warnings/{ctx.guild.id}/{member.id}.txt", "a+") as warnings_file:
                 old = warnings_file.read()
                 local_time = time.localtime()
                 warnings_file.write(f"{old}"
                                     f"[{local_time.tm_mon}/{local_time.tm_mday}/{local_time.tm_year}] {reason}\n")
-                warnings_file = open(f"data/warnings/{member.id}.txt", "r")
+                warnings_file = open(f"data/warnings/{ctx.guild.id}/{member.id}.txt", "r")
                 count = 0
                 warnings_file_content = warnings_file.read()
                 lines = warnings_file_content.split("\n")
@@ -1019,7 +1023,7 @@ async def warn(ctx, member: discord.Member, *, reason: str = None):
 @bot.command()
 @commands.has_permissions(administrator=True)
 async def warnings(ctx, member: discord.Member):
-    if not os.path.exists(f"data/warnings/{member.id}.txt"):
+    if not os.path.exists(f"data/warnings/{ctx.guild.id}/{member.id}.txt"):
         embed = discord.embeds.Embed(
             title="User Warnings",
             description="This user doesn't have any warnings yet",
@@ -1027,9 +1031,9 @@ async def warnings(ctx, member: discord.Member):
         )
         await ctx.reply(embed=embed)
     else:
-        with open(f"data/warnings/{member.id}.txt", "r") as file:
+        with open(f"data/warnings/{ctx.guild.id}/{member.id}.txt", "r") as file:
             warns = ""
-            warnings_file = open(f"data/warnings/{member.id}.txt", "r")
+            warnings_file = open(f"data/warnings/{ctx.guild.id}/{member.id}.txt", "r")
             count = 0
             remainder = 0
             warnings_file_content = warnings_file.read()
@@ -1041,13 +1045,21 @@ async def warnings(ctx, member: discord.Member):
                         warns += f"{x}\n"
                     else:
                         remainder += 1
-            embed = discord.embeds.Embed(
-                title="User Warnings",
-                description=f"{member} has {count} warnings"
-                            f"```{warns}"
-                            f"+ {remainder} more```",
-                colour=embedcolor()
-            )
+            if remainder == 0:
+                embed = discord.embeds.Embed(
+                    title="User Warnings",
+                    description=f"{member} has {count} warnings"
+                                f"```{warns}```",
+                    colour=embedcolor()
+                )
+            else:
+                embed = discord.embeds.Embed(
+                    title="User Warnings",
+                    description=f"{member} has {count} warnings"
+                                f"```{warns}"
+                                f"+ {remainder} more```",
+                    colour=embedcolor()
+                )
             await ctx.reply(embed=embed)
 
 
