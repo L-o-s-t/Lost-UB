@@ -1077,8 +1077,97 @@ async def userinfo_error(ctx, error):
         print("Error when running userinfo")
 
 
-# ======================================================================================================================
+# Kick =================================================================================================================
 
+@bot.command()
+async def kick(ctx, member: discord.Member, *, reason: str = None):
+    if ctx.author == bot.user:
+        embed = discord.embeds.Embed(
+            title="User Kicked",
+            description=f"Command Author: {ctx.author}",
+            colour=embedcolor()
+        )
+        embed.add_field(
+            name="User",
+            value=f"{member}"
+        )
+        embed.add_field(
+            name="Reason",
+            value=reason
+        )
+        embed.set_thumbnail(
+            url=member.avatar_url
+        )
+        if reason is None:
+            await member.kick(reason=f"You have been kicked by {ctx.author}")
+            await member.send(f"You have been kicked from {ctx.guild}")
+        else:
+            await member.kick(reason=f"You have been kicked by {ctx.author} for: {reason}")
+            await member.send(f"You have been kicked from {ctx.guild} for: {reason}")
+        await ctx.reply(embed=embed)
+    else:
+        return
+
+
+@kick.error
+async def kick_error(ctx, error):
+    if ctx.author == bot.user:
+        if isinstance(error, commands.MissingRequiredArgument):
+            await ctx.reply(f"Invalid arguments | {get_prefix()}kick (@member)")
+        elif isinstance(error, commands.MemberNotFound):
+            await ctx.reply("Member not found")
+        elif isinstance(error, commands.MissingPermissions):
+            await ctx.reply("Missing permissions")
+        else:
+            await ctx.reply(error)
+
+
+# Ban ==================================================================================================================
+
+@bot.command()
+async def ban(ctx, member: discord.Member, *, reason: str = None):
+    if ctx.author == bot.user:
+        embed = discord.embeds.Embed(
+            title="User Banned",
+            description=f"Command Author: {ctx.author}",
+            colour=embedcolor()
+        )
+        embed.add_field(
+            name="User",
+            value=f"{member}"
+        )
+        embed.add_field(
+            name="Reason",
+            value=reason
+        )
+        embed.set_thumbnail(
+            url=member.avatar_url
+        )
+        if reason is None:
+            await member.ban(reason=f"You have been banned by {ctx.author}")
+            await member.send(f"You have been banned from {ctx.guild}")
+        else:
+            await member.ban(reason=f"You have been banned by {ctx.author} for: {reason}")
+            await member.send(f"You have been banned from {ctx.guild} for: {reason}")
+        await ctx.reply(embed=embed)
+    else:
+        return
+
+
+@ban.error
+async def ban_error(ctx, error):
+    if ctx.author == bot.user:
+        if isinstance(error, commands.MissingRequiredArgument):
+            await ctx.reply(f"Invalid arguments | {get_prefix()}ban (@member)")
+        elif isinstance(error, commands.MemberNotFound):
+            await ctx.reply("Member not found")
+        elif isinstance(error, commands.MissingPermissions):
+            await ctx.reply("Missing permissions")
+        else:
+            await ctx.reply(error)
+
+
+# ======================================================================================================================
 
 bot.run(config['CONFIGURATION']['token'])
 # for safety purposes and ease of access, your token will be stored in
