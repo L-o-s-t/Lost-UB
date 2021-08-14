@@ -4,9 +4,7 @@ import os
 import time
 import discord
 import random
-import aiofiles
 from discord.ext import commands
-from discord.ext.commands import Bot
 
 print("""                                                                                                               
                                   :::            ::::::::           ::::::::       :::::::::::
