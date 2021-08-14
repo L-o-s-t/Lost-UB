@@ -116,8 +116,8 @@ def embedcolor():
         return discord.Colour.from_rgb(255, 192, 203)
 
 
-bot: Bot = commands.Bot(command_prefix=f"{config['CONFIGURATION']['prefix']}", help_command=None, user_bot=True,
-                        guild_subscriptions=False)
+bot = commands.Bot(command_prefix=f"{config['CONFIGURATION']['prefix']}", help_command=None, user_bot=True,
+                   guild_subscriptions=False)
 
 
 # Prints message to console when bot is ready
