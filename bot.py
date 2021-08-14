@@ -970,108 +970,104 @@ async def servericon(ctx):
 
 # warnings =============================================================================================================
 
-bot.warnings = {}  # guild_id : {member_id: [count, [(admin_id, reason)]]}
-
-
-@bot.event
-async def on_ready():
-    for guild in bot.guilds:
-        bot.warnings[guild.id] = {}
-
-        async with aiofiles.open(f"{guild.id}.txt", mode="a") as temp:
-            pass
-
-        async with aiofiles.open(f"{guild.id}.txt", mode="r") as file:
-            lines = await file.readlines()
-
-            for line in lines:
-                data = line.split(" ")
-                member_id = int(data[0])
-                admin_id = int(data[1])
-                reason = " ".join(data[2:]).strip("\n")
-
-                try:
-                    bot.warnings[guild.id][member_id][0] += 1
-                    bot.warnings[guild.id][member_id][1].append((admin_id, reason))
-
-                except KeyError:
-                    bot.warnings[guild.id][member_id] = [1, [(admin_id, reason)]]
-
-    print(bot.user.name + " is ready.")
-
-
-@bot.event
-async def on_guild_join(guild):
-    bot.warnings[guild.id] = {}
+@bot.command()
+@commands.has_permissions(administrator=True)
+async def warn(ctx, member: discord.Member, *, reason: str = None):
+    if bot.user == ctx.author:
+        if reason is None:
+            await ctx.reply("You must enter a reason for this warning.")
+        else:
+            with open(f"data/warnings/{member.id}.txt", "a+") as warnings_file:
+                old = warnings_file.read()
+                local_time = time.localtime()
+                warnings_file.write(f"{old}"
+                                    f"[{local_time.tm_mon}/{local_time.tm_wday}/{local_time.tm_year}] {reason}\n")
+                warnings_file = open(f"data/warnings/{member.id}.txt", "r")
+                count = 0
+                warnings_file_content = warnings_file.read()
+                lines = warnings_file_content.split("\n")
+                for x in lines:
+                    if x:
+                        count += 1
+            embed = discord.embeds.Embed(
+                title="User Warned",
+                description=f"Command Author: {ctx.author}",
+                colour=embedcolor()
+            )
+            embed.add_field(
+                name="User",
+                value=f"{member}",
+                inline=True
+            )
+            embed.add_field(
+                name="Reason",
+                value=reason,
+                inline=True
+            )
+            embed.add_field(
+                name="Warnings",
+                value=f"{count + 1}",
+                inline=True
+            )
+            embed.set_thumbnail(
+                url=member.avatar_url
+            )
+            await ctx.reply(embed=embed)
 
 
 @bot.command()
 @commands.has_permissions(administrator=True)
-async def warn(ctx, member: discord.Member = None, *, reason=None):
-    if member is None:
-        return await ctx.send("The provided member could not be found or you forgot to provide one.")
-
-    if reason is None:
-        return await ctx.send("Please provide a reason for warning this user.")
-
-    try:
-        first_warning = False
-        bot.warnings[ctx.guild.id][member.id][0] += 1
-        bot.warnings[ctx.guild.id][member.id][1].append((ctx.author.id, reason))
-
-    except KeyError:
-        first_warning = True
-        bot.warnings[ctx.guild.id][member.id] = [1, [(ctx.author.id, reason)]]
-
-    count = bot.warnings[ctx.guild.id][member.id][0]
-
-    async with aiofiles.open(f"{ctx.guild.id}.txt", mode="a") as file:
-        await file.write(f"{member.id} {ctx.author.id} {reason}\n")
-
-    await ctx.send(f"{member.mention} now has {count} {'warning' if first_warning else 'warnings'}.")
-
-
-@bot.command()
-@commands.has_permissions(administrator=True)
-async def warnings(ctx, member: discord.Member = None):
-    if member is None:
-        return await ctx.send("The provided member could not be found or you forgot to provide one.")
-
-    embed = discord.Embed(title=f"Displaying Warnings for {member.name}", description="", colour=discord.Colour.red())
-    try:
-        i = 1
-        for admin_id, reason in bot.warnings[ctx.guild.id][member.id][1]:
-            admin = ctx.guild.get_member(admin_id)
-            embed.description += f"**Warning {i}** given by: {admin.mention} for: *'{reason}'*.\n"
-            i += 1
-
-        await ctx.send(embed=embed)
-
-    except KeyError:  # no warnings
-        await ctx.send("This user has no warnings.")
+async def warnings(ctx, member: discord.Member):
+    if not os.path.exists(f"data/warnings/{member.id}.txt"):
+        embed = discord.embeds.Embed(
+            title="User Warnings",
+            description="This user doesn't have any warnings yet",
+            colour=embedcolor()
+        )
+        await ctx.reply(embed=embed)
+    else:
+        with open(f"data/warnings/{member.id}.txt", "r") as file:
+            warns = ""
+            warnings_file = open(f"data/warnings/{member.id}.txt", "r")
+            count = 0
+            remainder = 0
+            warnings_file_content = warnings_file.read()
+            lines = warnings_file_content.split("\n")
+            for x in lines:
+                if x:
+                    count += 1
+                    if count <= 5:
+                        warns += f"{x}\n"
+                    else:
+                        remainder += 1
+            embed = discord.embeds.Embed(
+                title="User Warnings",
+                description=f"{member} has {count} warnings"
+                            f"```{warns}"
+                            f"+ {remainder} more```",
+                colour=embedcolor()
+            )
+            await ctx.reply(embed=embed)
 
 
-@bot.command()
-@commands.has_permissions(administrator=True)
-async def unwarn(ctx, member: discord.Member = None, *, reason=None):
-    if member is None:
-        return await ctx.send("The provided member could not be found or you forgot to provide one.")
+@warn.error
+async def warn_error(ctx, error):
+    if isinstance(error, commands.MissingPermissions):
+        await ctx.reply('You are missing permissions!')
+    elif isinstance(error, commands.MemberNotFound):
+        await ctx.reply('Member not found!')
 
-    try:
-        first_warning = True
-        bot.warnings[ctx.guild.id][member.id][0] -= 1
-        bot.warnings[ctx.guild.id][member.id][1].append((ctx.author.id, reason))
 
-    except KeyError:
-        first_warning = False
-        bot.warnings[ctx.guild.id][member.id] = [1, [(ctx.author.id, reason)]]
+@warnings.error
+async def warnings_error(ctx, error):
+    if isinstance(error, commands.MissingPermissions):
+        await ctx.reply('You are missing permissions!')
+    elif isinstance(error, commands.MemberNotFound):
+        await ctx.reply('Member not found!')
 
-    count = bot.warnings[ctx.guild.id][member.id][0]
 
-    async with aiofiles.open(f"{ctx.guild.id}.txt", mode="a") as file:
-        await file.write(f"{member.id} {ctx.author.id} {reason}\n")
+# User info ============================================================================================================
 
-    await ctx.send(f"{member.mention} now has {count} {'warning' if first_warning else 'warnings'}.")
 
 @bot.command()
 async def userinfo(ctx, member: discord.Member):
