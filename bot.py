@@ -925,9 +925,9 @@ async def server(ctx):
     description = str(ctx.guild.description)
 
     owner = str(ctx.guild.owner)
-    id = str(ctx.guild.id)
+    guild_id = str(ctx.guild.id)
     region = str(ctx.guild.region)
-    memberCount = str(ctx.guild.member_count)
+    membercount = str(ctx.guild.member_count)
 
     icon = ctx.guild.icon_url
 
@@ -938,9 +938,9 @@ async def server(ctx):
     )
     embed.set_thumbnail(url=icon)
     embed.add_field(name="owner", value=owner, inline=True)
-    embed.add_field(name="Server ID", value=id, inline=True)
+    embed.add_field(name="Server ID", value=guild_id, inline=True)
     embed.add_field(name="Server Region", value=region, inline=True)
-    embed.add_field(name="Member Count", value=memberCount, inline=True)
+    embed.add_field(name="Member Count", value=membercount, inline=True)
 
     await ctx.send(embed=embed)
 
