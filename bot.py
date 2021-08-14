@@ -4,7 +4,9 @@ import os
 import time
 import discord
 import random
+import aiofiles
 from discord.ext import commands
+from discord.ext.commands import Bot
 
 print("""                                                                                                               
                                   :::            ::::::::           ::::::::       :::::::::::
@@ -116,8 +118,8 @@ def embedcolor():
         return discord.Colour.from_rgb(255, 192, 203)
 
 
-bot = commands.Bot(command_prefix=f"{config['CONFIGURATION']['prefix']}", help_command=None, user_bot=True,
-                   guild_subscriptions=False)
+bot: Bot = commands.Bot(command_prefix=f"{config['CONFIGURATION']['prefix']}", help_command=None, user_bot=True,
+                        guild_subscriptions=False)
 
 
 # Prints message to console when bot is ready
@@ -895,8 +897,183 @@ async def rolladice(ctx):
     )
     await ctx.reply(embed=embed)
 
+# who asked ============================================================================================================
 
-# ======================================================================================================================
+
+@bot.command()
+async def whoasked(ctx):
+    embed = discord.embeds.Embed(
+        title="I must be a rapist cause i dont remember asking",
+        colour=embedcolor())
+    await ctx.reply(embed=embed)
+
+
+# porn hub =============================================================================================================
+
+@bot.command()
+async def pornhub(ctx):
+    embed = discord.embeds.Embed(
+        title="You need jesus. Come and receive some of my help my child",
+        colour=embedcolor())
+    embed.set_image(url='https://preventsatan.com/wp-content/uploads/2019/06/Jesus-name-powerful.jpg')
+    await ctx.reply(embed=embed)
+
+
+# server info ==========================================================================================================
+
+@bot.command()
+async def server(ctx):
+    name = str(ctx.guild.name)
+    description = str(ctx.guild.description)
+
+    owner = str(ctx.guild.owner)
+    id = str(ctx.guild.id)
+    region = str(ctx.guild.region)
+    memberCount = str(ctx.guild.member_count)
+
+    icon = ctx.guild.icon_url
+
+    embed = discord.Embed(
+        title=name + "Server Info",
+        description=description,
+        color=discord.Color.blue()
+    )
+    embed.set_thumbnail(url=icon)
+    embed.add_field(name="owner", value=owner, inline=True)
+    embed.add_field(name="Server ID", value=id, inline=True)
+    embed.add_field(name="Server Region", value=region, inline=True)
+    embed.add_field(name="Member Count", value=memberCount, inline=True)
+
+    await ctx.send(embed=embed)
+
+
+# abc ==================================================================================================================
+
+@bot.command()
+async def abc(ctx):
+    embed = discord.embeds.Embed(
+        colour=embedcolor(),
+        title="ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+    await ctx.reply(embed=embed)
+
+
+# server icon ==========================================================================================================
+
+@bot.command()
+async def servericon(ctx):
+    embed = discord.embeds.Embed()
+
+    embed.add_field(
+        name="Server Icon Link",
+        value=f"[========>]({ctx.guild.icon_url_as(format='jpg')})")
+    embed.set_thumbnail(url=ctx.guild.icon_url)
+    await ctx.reply(embed=embed)
+
+
+# warnings =============================================================================================================
+
+bot.warnings = {}  # guild_id : {member_id: [count, [(admin_id, reason)]]}
+
+
+@bot.event
+async def on_ready():
+    for guild in bot.guilds:
+        bot.warnings[guild.id] = {}
+
+        async with aiofiles.open(f"{guild.id}.txt", mode="a") as temp:
+            pass
+
+        async with aiofiles.open(f"{guild.id}.txt", mode="r") as file:
+            lines = await file.readlines()
+
+            for line in lines:
+                data = line.split(" ")
+                member_id = int(data[0])
+                admin_id = int(data[1])
+                reason = " ".join(data[2:]).strip("\n")
+
+                try:
+                    bot.warnings[guild.id][member_id][0] += 1
+                    bot.warnings[guild.id][member_id][1].append((admin_id, reason))
+
+                except KeyError:
+                    bot.warnings[guild.id][member_id] = [1, [(admin_id, reason)]]
+
+    print(bot.user.name + " is ready.")
+
+
+@bot.event
+async def on_guild_join(guild):
+    bot.warnings[guild.id] = {}
+
+
+@bot.command()
+@commands.has_permissions(administrator=True)
+async def warn(ctx, member: discord.Member = None, *, reason=None):
+    if member is None:
+        return await ctx.send("The provided member could not be found or you forgot to provide one.")
+
+    if reason is None:
+        return await ctx.send("Please provide a reason for warning this user.")
+
+    try:
+        first_warning = False
+        bot.warnings[ctx.guild.id][member.id][0] += 1
+        bot.warnings[ctx.guild.id][member.id][1].append((ctx.author.id, reason))
+
+    except KeyError:
+        first_warning = True
+        bot.warnings[ctx.guild.id][member.id] = [1, [(ctx.author.id, reason)]]
+
+    count = bot.warnings[ctx.guild.id][member.id][0]
+
+    async with aiofiles.open(f"{ctx.guild.id}.txt", mode="a") as file:
+        await file.write(f"{member.id} {ctx.author.id} {reason}\n")
+
+    await ctx.send(f"{member.mention} now has {count} {'warning' if first_warning else 'warnings'}.")
+
+
+@bot.command()
+@commands.has_permissions(administrator=True)
+async def warnings(ctx, member: discord.Member = None):
+    if member is None:
+        return await ctx.send("The provided member could not be found or you forgot to provide one.")
+
+    embed = discord.Embed(title=f"Displaying Warnings for {member.name}", description="", colour=discord.Colour.red())
+    try:
+        i = 1
+        for admin_id, reason in bot.warnings[ctx.guild.id][member.id][1]:
+            admin = ctx.guild.get_member(admin_id)
+            embed.description += f"**Warning {i}** given by: {admin.mention} for: *'{reason}'*.\n"
+            i += 1
+
+        await ctx.send(embed=embed)
+
+    except KeyError:  # no warnings
+        await ctx.send("This user has no warnings.")
+
+
+@bot.command()
+@commands.has_permissions(administrator=True)
+async def unwarn(ctx, member: discord.Member = None, *, reason=None):
+    if member is None:
+        return await ctx.send("The provided member could not be found or you forgot to provide one.")
+
+    try:
+        first_warning = True
+        bot.warnings[ctx.guild.id][member.id][0] -= 1
+        bot.warnings[ctx.guild.id][member.id][1].append((ctx.author.id, reason))
+
+    except KeyError:
+        first_warning = False
+        bot.warnings[ctx.guild.id][member.id] = [1, [(ctx.author.id, reason)]]
+
+    count = bot.warnings[ctx.guild.id][member.id][0]
+
+    async with aiofiles.open(f"{ctx.guild.id}.txt", mode="a") as file:
+        await file.write(f"{member.id} {ctx.author.id} {reason}\n")
+
+    await ctx.send(f"{member.mention} now has {count} {'warning' if first_warning else 'warnings'}.")
 
 @bot.command()
 async def userinfo(ctx, member: discord.Member):
