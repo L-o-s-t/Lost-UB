@@ -982,7 +982,7 @@ async def warn(ctx, member: discord.Member, *, reason: str = None):
                 old = warnings_file.read()
                 local_time = time.localtime()
                 warnings_file.write(f"{old}"
-                                    f"[{local_time.tm_mon}/{local_time.tm_wday}/{local_time.tm_year}] {reason}\n")
+                                    f"[{local_time.tm_mon}/{local_time.tm_mday}/{local_time.tm_year}] {reason}\n")
                 warnings_file = open(f"data/warnings/{member.id}.txt", "r")
                 count = 0
                 warnings_file_content = warnings_file.read()
