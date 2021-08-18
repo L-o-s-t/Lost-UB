@@ -3,6 +3,7 @@ import configparser
 import os
 import time
 import discord
+import requests
 import random
 from discord.ext import commands
 
@@ -1031,7 +1032,7 @@ async def warnings(ctx, member: discord.Member):
         )
         await ctx.reply(embed=embed)
     else:
-        with open(f"data/warnings/{ctx.guild.id}/{member.id}.txt", "r") as file:
+        with open(f"data/warnings/{ctx.guild.id}/{member.id}.txt", "r"):
             warns = ""
             warnings_file = open(f"data/warnings/{ctx.guild.id}/{member.id}.txt", "r")
             count = 0
@@ -1349,6 +1350,38 @@ async def ban_error(ctx, error):
             await ctx.reply("Missing permissions")
         else:
             await ctx.reply(error)
+
+
+# Calculate ============================================================================================================
+
+@bot.command(aliases=['calc'])
+async def calculate(ctx, first_number: str = None, operator: str = None, second_number: str = None):
+    operators = ['*', '/', '+', '-']
+    result = ""
+    if not first_number.isnumeric():
+        await ctx.reply(f"``{first_number}`` is not a number")
+    else:
+        if operator not in operators:
+            await ctx.reply(f"``{operator}`` is not an operator")
+        else:
+            if not second_number.isnumeric():
+                await ctx.reply(f"``{second_number}`` is not a number")
+            else:
+                if operator == "*":
+                    result = int(first_number) * int(second_number)
+                elif operator == "/":
+                    result = int(first_number) / int(second_number)
+                elif operator == "+":
+                    result = int(first_number) + int(second_number)
+                elif operator == "-":
+                    result = int(first_number) - int(second_number)
+                embed = discord.embeds.Embed(
+                    title="Calculator",
+                    description=f"Equation: {first_number} {operator} {second_number}\n"
+                                f"```{result}```",
+                    colour=embedcolor()
+                )
+                await ctx.reply(embed=embed)
 
 
 # ======================================================================================================================
