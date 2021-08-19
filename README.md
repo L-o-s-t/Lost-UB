@@ -48,6 +48,9 @@ pip install discord.py-self[voice]
 # To Update...
 Simply just run updater.exe, and it should look for updates.
 
+# Official Discord Server
+[Lost.](https://discord.gg/CFNKjPPUbW)
+
 # Disclaimer
 I am not responsible for any bans, discord terminations, or any other consequences that may occur when using this.
 Use this at your own risk.
