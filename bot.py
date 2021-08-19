@@ -144,6 +144,10 @@ async def info(ctx):
         name="Commands",
         value=f"{cmds}"
     )
+    embed.add_field(
+        name="Official Lost-UB Server",
+        value="[Link](https://discord.gg/CFNKjPPUbW)"
+    )
     embed.set_footer(
         text=f"Logged in as {bot.user} | Lost-UB",
         icon_url=bot.user.avatar_url
