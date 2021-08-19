@@ -96,8 +96,8 @@ else:
         config["CONFIGURATION"]["embedcolor"] = "red"
         write()
 
-if not os.path.exists('avatars/'):
-    os.mkdir('avatars/')
+if not os.path.exists('data/avatars'):
+    os.mkdir('data/avatars')
 
 
 def embedcolor():
@@ -465,12 +465,12 @@ async def stealpfp(ctx, member: discord.Member):
         if config['CONFIGURATION']['silentsteal'] == "True":
             await ctx.message.delete()
         if member.is_avatar_animated():
-            await member.avatar_url.save(f"avatars\\{member.id}.gif")
-            with open(f'avatars/{member.id}.gif', 'rb') as image:
+            await member.avatar_url.save(f"data\\avatars\\{member.id}.gif")
+            with open(f'data/avatars/{member.id}.gif', 'rb') as image:
                 await bot.user.edit(avatar=image.read())
         else:
-            await member.avatar_url.save(f"avatars\\{member.id}.png")
-            with open(f'avatars/{member.id}.png', 'rb') as image:
+            await member.avatar_url.save(f"data\\avatars\\{member.id}.png")
+            with open(f'data/avatars/{member.id}.png', 'rb') as image:
                 await bot.user.edit(avatar=image.read())
         if config['CONFIGURATION']['silentsteal'] == "False":
             embed = discord.embeds.Embed(
@@ -521,13 +521,13 @@ async def pfp(ctx, member: discord.Member):
 async def savepfp(ctx, member: discord.Member):
     if ctx.author == bot.user:
         if config['CONFIGURATION']['logging'] == "True":
-            print(f"[LOST-UB] {member.display_name}'s avatar was saved.")
+            print(f"[LOST-UB] {member.display_name}'s avatar was saved as {member.id}.png.")
         if config['CONFIGURATION']['silentsave'] == "True":
             await ctx.message.delete()
         if member.is_avatar_animated():
-            await member.avatar_url.save(f"avatars\\{member.display_name}.gif")
+            await member.avatar_url.save(f"data\\avatars\\{member.id}.gif")
         else:
-            await member.avatar_url.save(f"avatars\\{member.display_name}.png")
+            await member.avatar_url.save(f"data\\avatars\\{member.id}.png")
         if config['CONFIGURATION']['silentsave'] == "False":
             embed = discord.embeds.Embed(
                 title="Avatar Saved!",
