@@ -1395,6 +1395,7 @@ async def userinfo_error(ctx, error):
 # Kick =================================================================================================================
 
 @bot.command()
+@commands.has_permissions(administrator=True)
 async def kick(ctx, member: discord.Member, *, reason: str = None):
     if ctx.author == bot.user:
         embed = discord.embeds.Embed(
@@ -1440,6 +1441,7 @@ async def kick_error(ctx, error):
 # Ban ==================================================================================================================
 
 @bot.command()
+@commands.has_permissions(administrator=True)
 async def ban(ctx, member: discord.Member, *, reason: str = None):
     if ctx.author == bot.user:
         embed = discord.embeds.Embed(
