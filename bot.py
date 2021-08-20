@@ -143,28 +143,110 @@ async def on_ready():
 
 
 @bot.command(aliases=['help'])
-async def info(ctx):
-    cmds = ''
-    for x in bot.all_commands:
-        cmds += f"- {x}\n"
-    embed = discord.embeds.Embed(
-        title="All Commands",
-        description=f"Your prefix is: {config['CONFIGURATION']['prefix']}",
-        colour=embedcolor()
-    )
-    embed.add_field(
-        name="Commands",
-        value=f"{cmds}"
-    )
-    embed.add_field(
-        name="Official Lost-UB Server",
-        value="[Link](https://discord.gg/CFNKjPPUbW)"
-    )
-    embed.set_footer(
-        text=f"Logged in as {bot.user} | Lost-UB",
-        icon_url=bot.user.avatar_url
-    )
-    await ctx.reply(embed=embed)
+async def info(ctx, module: str = None):
+    if module is None:
+        embed = discord.embeds.Embed(
+            title="Command Categories\n",
+            description=f"Choose a category\n"
+                        f"Command usage: {get_prefix()}help [category]",
+            colour=embedcolor()
+        )
+        embed.add_field(
+            name="Games",
+            value="Total Commands: 1",
+            inline=True
+        )
+        embed.add_field(
+            name="Fun",
+            value="Total Commands: 6",
+            inline=True
+        )
+        embed.add_field(
+            name="Tools",
+            value="Total Commands: 8",
+            inline=True
+        )
+        embed.set_thumbnail(
+            url="https://i.ibb.co/6PGdDFg/Logo2.png"
+        )
+        embed.set_footer(
+            text=f"Logged in as {bot.user} | Lost-UB | Server Code: CFNKjPPUbW",
+            icon_url=bot.user.avatar_url
+        )
+        await ctx.reply(embed=embed)
+    elif module.lower() == "games" or module.lower() == "game":
+        embed = discord.embeds.Embed(
+            title="Game Commands",
+            description=f"Your prefix is: ``{get_prefix()}``\n"
+                        f"**[]** = required, **()** = optional.",
+            colour=embedcolor()
+        )
+        embed.add_field(
+            name="Games",
+            value=f"**Rock, Paper, Scissors** | {get_prefix()}rps",
+            inline=True
+        )
+        embed.set_thumbnail(
+            url="https://i.ibb.co/6PGdDFg/Logo2.png"
+        )
+        embed.set_footer(
+            text=f"Logged in as {bot.user} | Lost-UB | Server Code: CFNKjPPUbW",
+            icon_url=bot.user.avatar_url
+        )
+        await ctx.reply(embed=embed)
+    elif module.lower() == "fun":
+        embed = discord.embeds.Embed(
+            title="Fun Commands",
+            description=f"Your prefix is: ``{get_prefix()}``\n"
+                        f"**[]** = required, **()** = optional.",
+            colour=embedcolor()
+        )
+        embed.add_field(
+            name="Fun",
+            value=f"**DickSize**  | {get_prefix()}dicksize [@member]\n"
+                  f"**FlipCoin**  | {get_prefix()}flipcoin\n"
+                  f"**8Ball**     | {get_prefix()}8ball [question]\n"
+                  f"**GhostPing** | {get_prefix()}ghostping [@member]\n"
+                  f"**IQ Rating** | {get_prefix()}iq [@member]\n"
+                  f"**Dice Roll** | {get_prefix()}rolladice",
+            inline=True
+
+        )
+        embed.set_thumbnail(
+            url="https://i.ibb.co/6PGdDFg/Logo2.png"
+        )
+        embed.set_footer(
+            text=f"Logged in as {bot.user} | Lost-UB | Server Code: CFNKjPPUbW",
+            icon_url=bot.user.avatar_url
+        )
+        await ctx.reply(embed=embed)
+    elif module.lower() == "tools" or module.lower() == "tool":
+        embed = discord.embeds.Embed(
+            title="Tools Commands",
+            description=f"Your prefix is: ``{get_prefix()}``\n"
+                        f"**[]** = required, **()** = optional.",
+            colour=embedcolor()
+        )
+        embed.add_field(
+            name="Tools",
+            value=f"**StealPFP**   | {get_prefix()}stealpfp [@member]\n"
+                  f"**SavePFP**    | {get_prefix()}savepfp [@member]\n"
+                  f"**PFP**        | {get_prefix()}pfp [@member]\n"
+                  f"**AFK**        | {get_prefix()}afk\n"
+                  f"**ServerInfo** | {get_prefix()}serverinfo\n"
+                  f"**ServerIcon** | {get_prefix()}servericon\n"
+                  f"**UserInfo**   | {get_prefix()}userinfo [@member]\n"
+                  f"**Calculate**  | {get_prefix()}calculate [number] [operator] [number]",
+            inline=True
+        )
+        embed.set_thumbnail(
+            url="https://i.ibb.co/6PGdDFg/Logo2.png"
+        )
+        embed.set_footer(
+            text=f"Logged in as {bot.user} | Lost-UB | Server Code: CFNKjPPUbW",
+            icon_url=bot.user.avatar_url
+        )
+        await ctx.reply(embed=embed)
 
 
 # Rock, paper, scissors ================================================================================================
