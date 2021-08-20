@@ -103,18 +103,30 @@ if not os.path.exists('data/avatars'):
 def embedcolor():
     if config['CONFIGURATION']['embedcolor'].lower() == "red":
         return discord.Colour.from_rgb(255, 0, 0)
+    elif config['CONFIGURATION']['embedcolor'].lower() == "light red":
+        return discord.Colour.from_rgb(255, 76, 76)
     elif config['CONFIGURATION']['embedcolor'].lower() == "orange":
         return discord.Colour.from_rgb(255, 165, 0)
+    elif config['CONFIGURATION']['embedcolor'].lower() == "light orange":
+        return discord.Colour.from_rgb(255, 192, 76)
     elif config['CONFIGURATION']['embedcolor'].lower() == "yellow":
         return discord.Colour.from_rgb(255, 255, 0)
     elif config['CONFIGURATION']['embedcolor'].lower() == "green":
         return discord.Colour.from_rgb(0, 128, 0)
+    elif config['CONFIGURATION']['embedcolor'].lower() == "light green":
+        return discord.Colour.from_rgb(76, 166, 76)
     elif config['CONFIGURATION']['embedcolor'].lower() == "blue":
         return discord.Colour.from_rgb(0, 0, 255)
+    elif config['CONFIGURATION']['embedcolor'].lower() == "light blue":
+        return discord.Colour.from_rgb(76, 76, 255)
     elif config['CONFIGURATION']['embedcolor'].lower() == "purple":
+        return discord.Colour.from_rgb(128, 0, 128)
+    elif config['CONFIGURATION']['embedcolor'].lower() == "light purple":
         return discord.Colour.from_rgb(128, 0, 128)
     elif config['CONFIGURATION']['embedcolor'].lower() == "pink":
         return discord.Colour.from_rgb(255, 192, 203)
+    elif config['CONFIGURATION']['embedcolor'].lower() == "light pink":
+        return discord.Colour.from_rgb(255, 210, 218)
 
 
 bot = commands.Bot(command_prefix=f"{config['CONFIGURATION']['prefix']}", help_command=None, user_bot=True,
@@ -811,13 +823,35 @@ async def settings(ctx, section: str = None, setting: str = None, *, value: str 
                 await ctx.reply(embed=embed)
             elif setting.lower() == "embedcolor":
                 if value is None:
-                    await settings_embed(ctx, "EmbedColor", "Changes the color of all embed messages sent.")
+                    await settings_embed(ctx, "EmbedColor", "Changes the color of all embed messages sent.\n"
+                                                            "**All Available Colors**"
+                                                            "- Red\n"
+                                                            "- Light Red\n"
+                                                            "- Orange\n"
+                                                            "- Light Orange\n"
+                                                            "- Yellow\n"
+                                                            "- Green\n"
+                                                            "- Light Green\n"
+                                                            "- Blue\n"
+                                                            "- Light Blue\n"
+                                                            "- Purple\n"
+                                                            "- Light Purple\n"
+                                                            "- Pink\n"
+                                                            "- Light Pink")
                 elif value.lower() == "red":
                     config['CONFIGURATION']['embedcolor'] = "red"
                     write()
                     await ctx.reply(f"EmbedColor was set to {config['CONFIGURATION']['embedcolor']}!")
+                elif value.lower() == "light red":
+                    config['CONFIGURATION']['embedcolor'] = "light red"
+                    write()
+                    await ctx.reply(f"EmbedColor was set to {config['CONFIGURATION']['embedcolor']}!")
                 elif value.lower() == "orange":
                     config['CONFIGURATION']['embedcolor'] = "orange"
+                    write()
+                    await ctx.reply(f"EmbedColor was set to {config['CONFIGURATION']['embedcolor']}!")
+                elif value.lower() == "light orange":
+                    config['CONFIGURATION']['embedcolor'] = "light orange"
                     write()
                     await ctx.reply(f"EmbedColor was set to {config['CONFIGURATION']['embedcolor']}!")
                 elif value.lower() == "yellow":
@@ -828,16 +862,31 @@ async def settings(ctx, section: str = None, setting: str = None, *, value: str 
                     config['CONFIGURATION']['embedcolor'] = "green"
                     write()
                     await ctx.reply(f"EmbedColor was set to {config['CONFIGURATION']['embedcolor']}!")
+                elif value.lower() == "light green":
+                    config['CONFIGURATION']['embedcolor'] = "light green"
+                    write()
+                    await ctx.reply(f"EmbedColor was set to {config['CONFIGURATION']['embedcolor']}!")
                 elif value.lower() == "blue":
                     config['CONFIGURATION']['embedcolor'] = "blue"
+                    write()
+                    await ctx.reply(f"EmbedColor was set to {config['CONFIGURATION']['embedcolor']}!")
+                elif value.lower() == "light blue":
+                    config['CONFIGURATION']['embedcolor'] = "light blue"
                     write()
                     await ctx.reply(f"EmbedColor was set to {config['CONFIGURATION']['embedcolor']}!")
                 elif value.lower() == "purple":
                     config['CONFIGURATION']['embedcolor'] = "purple"
                     write()
                     await ctx.reply(f"EmbedColor was set to {config['CONFIGURATION']['embedcolor']}!")
+                elif value.lower() == "light purple":
+                    config['CONFIGURATION']['embedcolor'] = "light purple"
+                    await ctx.reply(f"EmbedColor was set to {config['CONFIGURATION']['embedcolor']}!")
                 elif value.lower() == "pink":
                     config['CONFIGURATION']['embedcolor'] = "pink"
+                    write()
+                    await ctx.reply(f"EmbedColor was set to {config['CONFIGURATION']['embedcolor']}!")
+                elif value.lower() == "light pink":
+                    config['CONFIGURATION']['embedcolor'] = "light pink"
                     write()
                     await ctx.reply(f"EmbedColor was set to {config['CONFIGURATION']['embedcolor']}!")
                 else:
@@ -849,12 +898,18 @@ async def settings(ctx, section: str = None, setting: str = None, *, value: str 
                     embed.add_field(
                         name="Colors",
                         value="- Red\n"
+                              "- Light Red\n"
                               "- Orange\n"
+                              "- Light Orange\n"
                               "- Yellow\n"
                               "- Green\n"
+                              "- Light Green\n"
                               "- Blue\n"
+                              "- Light Blue\n"
                               "- Purple\n"
-                              "- Pink"
+                              "- Light Purple\n"
+                              "- Pink\n"
+                              "- Light Pink"
                     )
                     embed.set_footer(
                         text=f"Logged in as {bot.user} | Lost-UB",
