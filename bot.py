@@ -956,17 +956,6 @@ async def rolladice(ctx):
     await ctx.reply(embed=embed)
 
 
-# who asked ============================================================================================================
-
-
-@bot.command()
-async def whoasked(ctx):
-    embed = discord.embeds.Embed(
-        title="I must be a rapist cause i dont remember asking",
-        colour=embedcolor())
-    await ctx.reply(embed=embed)
-
-
 # porn hub =============================================================================================================
 
 @bot.command()
