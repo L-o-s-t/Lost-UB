@@ -113,6 +113,8 @@ else:
 
 if not os.path.exists('data/avatars'):
     os.mkdir('data/avatars')
+if not os.path.exists('data/blacklist.txt'):
+    open('data/blacklist.txt', 'a+')
 
 
 def embedcolor():
@@ -1173,7 +1175,6 @@ async def serverinfo(ctx):
         await ctx.reply("You are blacklisted!")
     else:
         name = str(ctx.guild.name)
-        description = str(ctx.guild.description)
 
         owner = str(ctx.guild.owner)
         guild_id = str(ctx.guild.id)
