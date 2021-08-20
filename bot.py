@@ -166,6 +166,11 @@ async def info(ctx, module: str = None):
             value="Total Commands: 8",
             inline=True
         )
+        embed.add_field(
+            name="Admin",
+            value="Total Commands: 3",
+            inline=True
+        )
         embed.set_thumbnail(
             url="https://i.ibb.co/6PGdDFg/Logo2.png"
         )
@@ -237,6 +242,29 @@ async def info(ctx, module: str = None):
                   f"**ServerIcon** | {get_prefix()}servericon\n"
                   f"**UserInfo**   | {get_prefix()}userinfo [@member]\n"
                   f"**Calculate**  | {get_prefix()}calculate [number] [operator] [number]",
+            inline=True
+        )
+        embed.set_thumbnail(
+            url="https://i.ibb.co/6PGdDFg/Logo2.png"
+        )
+        embed.set_footer(
+            text=f"Logged in as {bot.user} | Lost-UB | Server Code: CFNKjPPUbW",
+            icon_url=bot.user.avatar_url
+        )
+        await ctx.reply(embed=embed)
+    elif module.lower() == "admin":
+        embed = discord.embeds.Embed(
+            title="Admin Commands",
+            description=f"Your prefix is: ``{get_prefix()}``\n"
+                        f"**[]** = required, **()** = optional.",
+            colour=embedcolor()
+        )
+        embed.add_field(
+            name="Admin",
+            value=f"**Kick**   | {get_prefix()}stealpfp [@member]\n"
+                  f"**Ban**    | {get_prefix()}savepfp [@member]\n"
+                  f"**Warn**        | {get_prefix()}pfp [@member]\n"
+                  f"**Warnings**        | {get_prefix()}afk",
             inline=True
         )
         embed.set_thumbnail(
