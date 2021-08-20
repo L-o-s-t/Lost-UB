@@ -3,7 +3,6 @@ import configparser
 import os
 import time
 import discord
-import requests
 import random
 from discord.ext import commands
 
@@ -34,6 +33,18 @@ def test(ctx):
     return print(f"{ctx.author}: {ctx.content}")
 
 
+def blacklist_check(ctx):
+    if config['CONFIGURATION']['blacklist'] == "True":
+        with open("data/blacklist.txt", "r") as file:
+            content = file.read().split("\n")
+            if f"{ctx.author.id}" in content:
+                return True
+            else:
+                return False
+    else:
+        return False
+
+
 # Checks to see if "config.ini" exists, if not then it will create one.
 if not os.path.exists('config.ini'):
     config['CONFIGURATION'] = {
@@ -46,6 +57,7 @@ if not os.path.exists('config.ini'):
         "silentsteal": "False",
         "silentsave": "False",
         "embedcolor": "light blue",
+        "blacklist": "False",
     }
     write()
     while True:
@@ -95,6 +107,9 @@ else:
     if not config.has_option("CONFIGURATION", "embedcolor"):
         config["CONFIGURATION"]["embedcolor"] = "red"
         write()
+    if not config.has_option("CONFIGURATION", "blacklist"):
+        config["CONFIGURATION"]["blacklist"] = "False"
+        write()
 
 if not os.path.exists('data/avatars'):
     os.mkdir('data/avatars')
@@ -130,7 +145,7 @@ def embedcolor():
 
 
 bot = commands.Bot(command_prefix=f"{config['CONFIGURATION']['prefix']}", help_command=None, user_bot=True,
-                   guild_subscriptions=False)
+                   guild_subscriptions=False, case_insensitive=True)
 
 
 # Prints message to console when bot is ready
@@ -144,137 +159,140 @@ async def on_ready():
 
 @bot.command(aliases=['help'])
 async def info(ctx, module: str = None):
-    if module is None:
-        embed = discord.embeds.Embed(
-            title="Command Categories\n",
-            description=f"Choose a category\n"
-                        f"Command usage: {get_prefix()}help [category]",
-            colour=embedcolor()
-        )
-        embed.add_field(
-            name="Games",
-            value="Total Commands: 1",
-            inline=True
-        )
-        embed.add_field(
-            name="Fun",
-            value="Total Commands: 6",
-            inline=True
-        )
-        embed.add_field(
-            name="Tools",
-            value="Total Commands: 8",
-            inline=True
-        )
-        embed.add_field(
-            name="Admin",
-            value="Total Commands: 3",
-            inline=True
-        )
-        embed.set_thumbnail(
-            url="https://i.ibb.co/6PGdDFg/Logo2.png"
-        )
-        embed.set_footer(
-            text=f"Logged in as {bot.user} | Lost-UB | Server Code: CFNKjPPUbW",
-            icon_url=bot.user.avatar_url
-        )
-        await ctx.reply(embed=embed)
-    elif module.lower() == "games" or module.lower() == "game":
-        embed = discord.embeds.Embed(
-            title="Game Commands",
-            description=f"Your prefix is: ``{get_prefix()}``\n"
-                        f"**[]** = required, **()** = optional.",
-            colour=embedcolor()
-        )
-        embed.add_field(
-            name="Games",
-            value=f"**Rock, Paper, Scissors** | {get_prefix()}rps",
-            inline=True
-        )
-        embed.set_thumbnail(
-            url="https://i.ibb.co/6PGdDFg/Logo2.png"
-        )
-        embed.set_footer(
-            text=f"Logged in as {bot.user} | Lost-UB | Server Code: CFNKjPPUbW",
-            icon_url=bot.user.avatar_url
-        )
-        await ctx.reply(embed=embed)
-    elif module.lower() == "fun":
-        embed = discord.embeds.Embed(
-            title="Fun Commands",
-            description=f"Your prefix is: ``{get_prefix()}``\n"
-                        f"**[]** = required, **()** = optional.",
-            colour=embedcolor()
-        )
-        embed.add_field(
-            name="Fun",
-            value=f"**DickSize**  | {get_prefix()}dicksize [@member]\n"
-                  f"**FlipCoin**  | {get_prefix()}flipcoin\n"
-                  f"**8Ball**     | {get_prefix()}8ball [question]\n"
-                  f"**GhostPing** | {get_prefix()}ghostping [@member]\n"
-                  f"**IQ Rating** | {get_prefix()}iq [@member]\n"
-                  f"**Dice Roll** | {get_prefix()}rolladice",
-            inline=True
+    if blacklist_check(ctx):
+        await ctx.reply("You are blacklisted!")
+    else:
+        if module is None:
+            embed = discord.embeds.Embed(
+                title="Command Categories\n",
+                description=f"Choose a category\n"
+                            f"Command usage: {get_prefix()}help [category]",
+                colour=embedcolor()
+            )
+            embed.add_field(
+                name="Games",
+                value="Total Commands: 1",
+                inline=True
+            )
+            embed.add_field(
+                name="Fun",
+                value="Total Commands: 6",
+                inline=True
+            )
+            embed.add_field(
+                name="Tools",
+                value="Total Commands: 8",
+                inline=True
+            )
+            embed.add_field(
+                name="Admin",
+                value="Total Commands: 3",
+                inline=True
+            )
+            embed.set_thumbnail(
+                url="https://i.ibb.co/6PGdDFg/Logo2.png"
+            )
+            embed.set_footer(
+                text=f"Logged in as {bot.user} | Lost-UB | Server Code: CFNKjPPUbW",
+                icon_url=bot.user.avatar_url
+            )
+            await ctx.reply(embed=embed)
+        elif module.lower() == "games" or module.lower() == "game":
+            embed = discord.embeds.Embed(
+                title="Game Commands",
+                description=f"Your prefix is: ``{get_prefix()}``\n"
+                            f"**[]** = required, **()** = optional.",
+                colour=embedcolor()
+            )
+            embed.add_field(
+                name="Games",
+                value=f"**Rock, Paper, Scissors** | {get_prefix()}rps",
+                inline=True
+            )
+            embed.set_thumbnail(
+                url="https://i.ibb.co/6PGdDFg/Logo2.png"
+            )
+            embed.set_footer(
+                text=f"Logged in as {bot.user} | Lost-UB | Server Code: CFNKjPPUbW",
+                icon_url=bot.user.avatar_url
+            )
+            await ctx.reply(embed=embed)
+        elif module.lower() == "fun":
+            embed = discord.embeds.Embed(
+                title="Fun Commands",
+                description=f"Your prefix is: ``{get_prefix()}``\n"
+                            f"**[]** = required, **()** = optional.",
+                colour=embedcolor()
+            )
+            embed.add_field(
+                name="Fun",
+                value=f"**DickSize**  | {get_prefix()}dicksize [@member]\n"
+                      f"**FlipCoin**  | {get_prefix()}flipcoin\n"
+                      f"**8Ball**     | {get_prefix()}8ball [question]\n"
+                      f"**GhostPing** | {get_prefix()}ghostping [@member]\n"
+                      f"**IQ Rating** | {get_prefix()}iq [@member]\n"
+                      f"**Dice Roll** | {get_prefix()}rolladice",
+                inline=True
 
-        )
-        embed.set_thumbnail(
-            url="https://i.ibb.co/6PGdDFg/Logo2.png"
-        )
-        embed.set_footer(
-            text=f"Logged in as {bot.user} | Lost-UB | Server Code: CFNKjPPUbW",
-            icon_url=bot.user.avatar_url
-        )
-        await ctx.reply(embed=embed)
-    elif module.lower() == "tools" or module.lower() == "tool":
-        embed = discord.embeds.Embed(
-            title="Tools Commands",
-            description=f"Your prefix is: ``{get_prefix()}``\n"
-                        f"**[]** = required, **()** = optional.",
-            colour=embedcolor()
-        )
-        embed.add_field(
-            name="Tools",
-            value=f"**StealPFP**   | {get_prefix()}stealpfp [@member]\n"
-                  f"**SavePFP**    | {get_prefix()}savepfp [@member]\n"
-                  f"**PFP**        | {get_prefix()}pfp [@member]\n"
-                  f"**AFK**        | {get_prefix()}afk\n"
-                  f"**ServerInfo** | {get_prefix()}serverinfo\n"
-                  f"**ServerIcon** | {get_prefix()}servericon\n"
-                  f"**UserInfo**   | {get_prefix()}userinfo [@member]\n"
-                  f"**Calculate**  | {get_prefix()}calculate [number] [operator] [number]",
-            inline=True
-        )
-        embed.set_thumbnail(
-            url="https://i.ibb.co/6PGdDFg/Logo2.png"
-        )
-        embed.set_footer(
-            text=f"Logged in as {bot.user} | Lost-UB | Server Code: CFNKjPPUbW",
-            icon_url=bot.user.avatar_url
-        )
-        await ctx.reply(embed=embed)
-    elif module.lower() == "admin":
-        embed = discord.embeds.Embed(
-            title="Admin Commands",
-            description=f"Your prefix is: ``{get_prefix()}``\n"
-                        f"**[]** = required, **()** = optional.",
-            colour=embedcolor()
-        )
-        embed.add_field(
-            name="Admin",
-            value=f"**Kick**   | {get_prefix()}stealpfp [@member]\n"
-                  f"**Ban**    | {get_prefix()}savepfp [@member]\n"
-                  f"**Warn**        | {get_prefix()}pfp [@member]\n"
-                  f"**Warnings**        | {get_prefix()}afk",
-            inline=True
-        )
-        embed.set_thumbnail(
-            url="https://i.ibb.co/6PGdDFg/Logo2.png"
-        )
-        embed.set_footer(
-            text=f"Logged in as {bot.user} | Lost-UB | Server Code: CFNKjPPUbW",
-            icon_url=bot.user.avatar_url
-        )
-        await ctx.reply(embed=embed)
+            )
+            embed.set_thumbnail(
+                url="https://i.ibb.co/6PGdDFg/Logo2.png"
+            )
+            embed.set_footer(
+                text=f"Logged in as {bot.user} | Lost-UB | Server Code: CFNKjPPUbW",
+                icon_url=bot.user.avatar_url
+            )
+            await ctx.reply(embed=embed)
+        elif module.lower() == "tools" or module.lower() == "tool":
+            embed = discord.embeds.Embed(
+                title="Tools Commands",
+                description=f"Your prefix is: ``{get_prefix()}``\n"
+                            f"**[]** = required, **()** = optional.",
+                colour=embedcolor()
+            )
+            embed.add_field(
+                name="Tools",
+                value=f"**StealPFP**   | {get_prefix()}stealpfp [@member]\n"
+                      f"**SavePFP**    | {get_prefix()}savepfp [@member]\n"
+                      f"**PFP**        | {get_prefix()}pfp [@member]\n"
+                      f"**AFK**        | {get_prefix()}afk\n"
+                      f"**ServerInfo** | {get_prefix()}serverinfo\n"
+                      f"**ServerIcon** | {get_prefix()}servericon\n"
+                      f"**UserInfo**   | {get_prefix()}userinfo [@member]\n"
+                      f"**Calculate**  | {get_prefix()}calculate [number] [operator] [number]",
+                inline=True
+            )
+            embed.set_thumbnail(
+                url="https://i.ibb.co/6PGdDFg/Logo2.png"
+            )
+            embed.set_footer(
+                text=f"Logged in as {bot.user} | Lost-UB | Server Code: CFNKjPPUbW",
+                icon_url=bot.user.avatar_url
+            )
+            await ctx.reply(embed=embed)
+        elif module.lower() == "admin":
+            embed = discord.embeds.Embed(
+                title="Admin Commands",
+                description=f"Your prefix is: ``{get_prefix()}``\n"
+                            f"**[]** = required, **()** = optional.",
+                colour=embedcolor()
+            )
+            embed.add_field(
+                name="Admin",
+                value=f"**Kick**   | {get_prefix()}stealpfp [@member]\n"
+                      f"**Ban**    | {get_prefix()}savepfp [@member]\n"
+                      f"**Warn**        | {get_prefix()}pfp [@member]\n"
+                      f"**Warnings**        | {get_prefix()}afk",
+                inline=True
+            )
+            embed.set_thumbnail(
+                url="https://i.ibb.co/6PGdDFg/Logo2.png"
+            )
+            embed.set_footer(
+                text=f"Logged in as {bot.user} | Lost-UB | Server Code: CFNKjPPUbW",
+                icon_url=bot.user.avatar_url
+            )
+            await ctx.reply(embed=embed)
 
 
 # Rock, paper, scissors ================================================================================================
@@ -282,74 +300,77 @@ async def info(ctx, module: str = None):
 
 @bot.command()
 async def rps(ctx):
-    if config['CONFIGURATION']['logging'] == "True":
-        print(f"[LOST-UB] rps command ran by {ctx.author.display_name}")
-    embed = discord.embeds.Embed(
-        title="Rock, Paper, Scissors Game",
-        description="What is your choice?",
-        colour=embedcolor()
-    )
-    embed.add_field(
-        name="Choices",
-        value="Rock, Paper, Scissors"
-    )
-    embed.set_footer(
-        text=f"Logged in as {bot.user} | Lost-UB",
-        icon_url=bot.user.avatar_url
-    )
-    await ctx.reply(embed=embed)
-
-    def check(m):
-        return m.author == ctx.author
-
-    try:
-        rps_choice = random.choice(['rock', 'paper', 'scissors'])
-        answer = await bot.wait_for("message", check=check, timeout=60.0)
-        result = ""
-        if answer.content.lower() == "rock":
-            if rps_choice == "rock":
-                result = "It's a tie!"
-            elif rps_choice == "paper":
-                result = "You lost!"
-            elif rps_choice == "scissors":
-                result = "You won!"
-        elif answer.content.lower() == "paper":
-            if rps_choice == "rock":
-                result = "You won!"
-            elif rps_choice == "paper":
-                result = "It's a tie!"
-            elif rps_choice == "scissors":
-                result = "You lost!"
-        elif answer.content.lower() == "scissors":
-            if rps_choice == "rock":
-                result = "You lost!"
-            elif rps_choice == "paper":
-                result = "You won!"
-            elif rps_choice == "scissors":
-                result = "It's a tie!"
-        else:
-            await answer.reply("Those weren't any of the choices!")
-            return
+    if blacklist_check(ctx):
+        await ctx.reply("You are blacklisted!")
+    else:
+        if config['CONFIGURATION']['logging'] == "True":
+            print(f"[LOST-UB] rps command ran by {ctx.author.display_name}")
         embed = discord.embeds.Embed(
-            title="Rock Paper Scissors Game Results!",
-            description=f"{result}",
+            title="Rock, Paper, Scissors Game",
+            description="What is your choice?",
             colour=embedcolor()
         )
         embed.add_field(
-            name="Your Choice",
-            value=f"{answer.content.lower()}"
-        )
-        embed.add_field(
-            name="CPU's Choice",
-            value=f"{rps_choice}"
+            name="Choices",
+            value="Rock, Paper, Scissors"
         )
         embed.set_footer(
             text=f"Logged in as {bot.user} | Lost-UB",
             icon_url=bot.user.avatar_url
         )
         await ctx.reply(embed=embed)
-    except asyncio.TimeoutError:
-        await ctx.reply("You took too long to respond!")
+
+        def check(m):
+            return m.author == ctx.author
+
+        try:
+            rps_choice = random.choice(['rock', 'paper', 'scissors'])
+            answer = await bot.wait_for("message", check=check, timeout=60.0)
+            result = ""
+            if answer.content.lower() == "rock":
+                if rps_choice == "rock":
+                    result = "It's a tie!"
+                elif rps_choice == "paper":
+                    result = "You lost!"
+                elif rps_choice == "scissors":
+                    result = "You won!"
+            elif answer.content.lower() == "paper":
+                if rps_choice == "rock":
+                    result = "You won!"
+                elif rps_choice == "paper":
+                    result = "It's a tie!"
+                elif rps_choice == "scissors":
+                    result = "You lost!"
+            elif answer.content.lower() == "scissors":
+                if rps_choice == "rock":
+                    result = "You lost!"
+                elif rps_choice == "paper":
+                    result = "You won!"
+                elif rps_choice == "scissors":
+                    result = "It's a tie!"
+            else:
+                await answer.reply("Those weren't any of the choices!")
+                return
+            embed = discord.embeds.Embed(
+                title="Rock Paper Scissors Game Results!",
+                description=f"{result}",
+                colour=embedcolor()
+            )
+            embed.add_field(
+                name="Your Choice",
+                value=f"{answer.content.lower()}"
+            )
+            embed.add_field(
+                name="CPU's Choice",
+                value=f"{rps_choice}"
+            )
+            embed.set_footer(
+                text=f"Logged in as {bot.user} | Lost-UB",
+                icon_url=bot.user.avatar_url
+            )
+            await ctx.reply(embed=embed)
+        except asyncio.TimeoutError:
+            await ctx.reply("You took too long to respond!")
 
 
 # Prefix ===============================================================================================================
@@ -378,91 +399,29 @@ async def prefix_error(ctx, error):
 
 @bot.command()
 async def dicksize(ctx, member: discord.Member):
-    desc = ''
-    if config['CONFIGURATION']['logging'] == "True":
-        print(f"[LOST-UB] dicksize command ran by {ctx.author.display_name}")
-    size = random.randrange(0, 12)
-    if size >= 6:
-        desc = "That's a schlong dong!"
-    elif size < 6:
-        desc = "so smol! 🥺"
-    embed = discord.embeds.Embed(
-        title=f"{member.display_name}'s Dick Size",
-        description=desc,
-        colour=embedcolor()
-    )
-    embed.add_field(
-        name="Size",
-        value=f"{size} inches"
-    )
-    embed.add_field(
-        name="Demonstration",
-        value=f"8{size * '='}D"
-    )
-    embed.set_footer(
-        text=f"Logged in as {bot.user} | Lost-UB",
-        icon_url=bot.user.avatar_url
-    )
-    await ctx.reply(embed=embed)
-
-
-@dicksize.error
-async def dicksize_error(ctx, error):
-    if isinstance(error, commands.MissingRequiredArgument):
-        await ctx.reply(f'Incorrect arguments | {config["CONFIGURATION"]["prefix"]}dicksize (@member)')
-    if isinstance(error, commands.MemberNotFound):
-        await ctx.reply(f'Incorrect arguments | {config["CONFIGURATION"]["prefix"]}dicksize (@member)')
-
-
-# Flipcoin =============================================================================================================
-
-
-@bot.command()
-async def flipcoin(ctx):
-    if config['CONFIGURATION']['logging'] == "True":
-        print(f"[LOST-UB] rps command ran by {ctx.author.display_name}")
-    side = random.choice(['heads', 'tails'])
-    await ctx.reply(f"it's {side}")
-
-
-# 8ball ================================================================================================================
-
-
-@bot.command(aliases=['8ball'])
-async def eightball(ctx, *, question: str = None):
-    if question is None:
-        await ctx.reply(f'Incorrect arguments | {config["CONFIGURATION"]["prefix"]}8ball (question)')
+    if blacklist_check(ctx):
+        await ctx.reply("You are blacklisted!")
     else:
+        desc = ''
         if config['CONFIGURATION']['logging'] == "True":
-            print(f"[LOST-UB] 8ball command ran by {ctx.author.display_name}")
-        answers = random.choice(['It is Certain.',
-                                 'It is decidedly so.',
-                                 'Without a doubt.',
-                                 'Yes definitely.',
-                                 'You may rely on it.',
-                                 'As I see it, yes.',
-                                 'Most likely.',
-                                 'Outlook good.',
-                                 'Yes.',
-                                 'Signs point to yes.',
-                                 'Reply hazy, try again.',
-                                 'Ask again later.',
-                                 'Better not tell you now.',
-                                 'Cannot predict now.',
-                                 'Concentrate and ask again.',
-                                 'Don\'t count on it.',
-                                 'My reply is no.',
-                                 'My sources say no.',
-                                 'Outlook not so good.',
-                                 'Very doubtful.'])
+            print(f"[LOST-UB] dicksize command ran by {ctx.author.display_name}")
+        size = random.randrange(0, 12)
+        if size >= 6:
+            desc = "That's a schlong dong!"
+        elif size < 6:
+            desc = "so smol! 🥺"
         embed = discord.embeds.Embed(
-            title="Eight Ball",
-            description=f"{question}",
+            title=f"{member.display_name}'s Dick Size",
+            description=desc,
             colour=embedcolor()
         )
         embed.add_field(
-            name="Answer",
-            value=f"{answers}"
+            name="Size",
+            value=f"{size} inches"
+        )
+        embed.add_field(
+            name="Demonstration",
+            value=f"8{size * '='}D"
         )
         embed.set_footer(
             text=f"Logged in as {bot.user} | Lost-UB",
@@ -471,80 +430,166 @@ async def eightball(ctx, *, question: str = None):
         await ctx.reply(embed=embed)
 
 
+@dicksize.error
+async def dicksize_error(ctx, error):
+    if blacklist_check(ctx):
+        await ctx.reply("You are blacklisted!")
+    else:
+        if isinstance(error, commands.MissingRequiredArgument):
+            await ctx.reply(f'Incorrect arguments | {config["CONFIGURATION"]["prefix"]}dicksize (@member)')
+        if isinstance(error, commands.MemberNotFound):
+            await ctx.reply(f'Incorrect arguments | {config["CONFIGURATION"]["prefix"]}dicksize (@member)')
+
+
+# Flipcoin =============================================================================================================
+
+
+@bot.command()
+async def flipcoin(ctx):
+    if blacklist_check(ctx):
+        await ctx.reply("You are blacklisted!")
+    else:
+        if config['CONFIGURATION']['logging'] == "True":
+            print(f"[LOST-UB] rps command ran by {ctx.author.display_name}")
+        side = random.choice(['heads', 'tails'])
+        await ctx.reply(f"it's {side}")
+
+
+# 8ball ================================================================================================================
+
+
+@bot.command(aliases=['8ball'])
+async def eightball(ctx, *, question: str = None):
+    if blacklist_check(ctx):
+        await ctx.reply("You are blacklisted!")
+    else:
+        if question is None:
+            await ctx.reply(f'Incorrect arguments | {config["CONFIGURATION"]["prefix"]}8ball (question)')
+        else:
+            if config['CONFIGURATION']['logging'] == "True":
+                print(f"[LOST-UB] 8ball command ran by {ctx.author.display_name}")
+            answers = random.choice(['It is Certain.',
+                                     'It is decidedly so.',
+                                     'Without a doubt.',
+                                     'Yes definitely.',
+                                     'You may rely on it.',
+                                     'As I see it, yes.',
+                                     'Most likely.',
+                                     'Outlook good.',
+                                     'Yes.',
+                                     'Signs point to yes.',
+                                     'Reply hazy, try again.',
+                                     'Ask again later.',
+                                     'Better not tell you now.',
+                                     'Cannot predict now.',
+                                     'Concentrate and ask again.',
+                                     'Don\'t count on it.',
+                                     'My reply is no.',
+                                     'My sources say no.',
+                                     'Outlook not so good.',
+                                     'Very doubtful.'])
+            embed = discord.embeds.Embed(
+                title="Eight Ball",
+                description=f"{question}",
+                colour=embedcolor()
+            )
+            embed.add_field(
+                name="Answer",
+                value=f"{answers}"
+            )
+            embed.set_footer(
+                text=f"Logged in as {bot.user} | Lost-UB",
+                icon_url=bot.user.avatar_url
+            )
+            await ctx.reply(embed=embed)
+
+
 # Ghost Ping ===========================================================================================================
 
 
 @bot.command()
 async def ghostping(ctx, member: discord.Member):
-    if config['CONFIGURATION']['logging'] == "True":
-        print(f"[LOST-UB] ghostping command ran by {ctx.author.display_name}")
-    msg = await ctx.send(f'{member}')
-    await msg.delete()
-    await ctx.message.delete()
+    if blacklist_check(ctx):
+        await ctx.reply("You are blacklisted!")
+    else:
+        if config['CONFIGURATION']['logging'] == "True":
+            print(f"[LOST-UB] ghostping command ran by {ctx.author.display_name}")
+        msg = await ctx.send(f'{member}')
+        await msg.delete()
+        await ctx.message.delete()
 
 
 @ghostping.error
 async def ghostping_error(ctx, error):
-    if isinstance(error, commands.MemberNotFound):
-        await ctx.reply(f'Incorrect arguments | {config["CONFIGURATION"]["prefix"]}ghostping (@member)')
-    if isinstance(error, commands.MissingRequiredArgument):
-        await ctx.reply(f'Incorrect arguments | {config["CONFIGURATION"]["prefix"]}ghostping (@member)')
+    if blacklist_check(ctx):
+        await ctx.reply("You are blacklisted!")
+    else:
+        if isinstance(error, commands.MemberNotFound):
+            await ctx.reply(f'Incorrect arguments | {config["CONFIGURATION"]["prefix"]}ghostping (@member)')
+        if isinstance(error, commands.MissingRequiredArgument):
+            await ctx.reply(f'Incorrect arguments | {config["CONFIGURATION"]["prefix"]}ghostping (@member)')
 
 
 # IQ Rating ============================================================================================================
 
 @bot.command()
 async def iq(ctx, member: discord.Member):
-    if config['CONFIGURATION']['logging'] == "True":
-        print(f"[LOST-UB] iq command ran by {ctx.author.display_name}")
-    result = ""
-    iq_rating = random.randrange(0, 199)
-    if iq_rating <= 69:
-        result = "Extremely Low"
-    elif 70 <= iq_rating <= 79:
-        result = "Borderline"
-    elif 80 <= iq_rating <= 89:
-        result = "Low Average"
-    elif 90 <= iq_rating <= 109:
-        result = "Average"
-    elif 110 <= iq_rating <= 119:
-        result = "High Average"
-    elif 120 <= iq_rating <= 129:
-        result = "Superior"
-    elif iq_rating >= 130:
-        result = "Very Superior"
-    embed = discord.embeds.Embed(
-        title="Official IQ Rating",
-        description=f"{member}'s IQ is {iq_rating}",
-        colour=embedcolor()
-    )
-    embed.add_field(
-        name="Rating",
-        value=f"{result}"
-    )
-    embed.add_field(
-        name="IQ Classification",
-        value="130 and above: Very Superior\n"
-              "120 - 129:     Superior\n"
-              "110 - 119:     High Average\n"
-              "90 - 109:      Average\n"
-              "80 - 89:       Low Average\n"
-              "70 - 79:       Borderline\n"
-              "69 and below:  Extremely Low"
-    )
-    embed.set_footer(
-        text=f"Logged in as {bot.user} | Lost-UB",
-        icon_url=bot.user.avatar_url
-    )
-    await ctx.reply(embed=embed)
+    if blacklist_check(ctx):
+        await ctx.reply("You are blacklisted!")
+    else:
+        if config['CONFIGURATION']['logging'] == "True":
+            print(f"[LOST-UB] iq command ran by {ctx.author.display_name}")
+        result = ""
+        iq_rating = random.randrange(0, 199)
+        if iq_rating <= 69:
+            result = "Extremely Low"
+        elif 70 <= iq_rating <= 79:
+            result = "Borderline"
+        elif 80 <= iq_rating <= 89:
+            result = "Low Average"
+        elif 90 <= iq_rating <= 109:
+            result = "Average"
+        elif 110 <= iq_rating <= 119:
+            result = "High Average"
+        elif 120 <= iq_rating <= 129:
+            result = "Superior"
+        elif iq_rating >= 130:
+            result = "Very Superior"
+        embed = discord.embeds.Embed(
+            title="Official IQ Rating",
+            description=f"{member}'s IQ is {iq_rating}",
+            colour=embedcolor()
+        )
+        embed.add_field(
+            name="Rating",
+            value=f"{result}"
+        )
+        embed.add_field(
+            name="IQ Classification",
+            value="130 and above: Very Superior\n"
+                  "120 - 129:     Superior\n"
+                  "110 - 119:     High Average\n"
+                  "90 - 109:      Average\n"
+                  "80 - 89:       Low Average\n"
+                  "70 - 79:       Borderline\n"
+                  "69 and below:  Extremely Low"
+        )
+        embed.set_footer(
+            text=f"Logged in as {bot.user} | Lost-UB",
+            icon_url=bot.user.avatar_url
+        )
+        await ctx.reply(embed=embed)
 
 
 @iq.error
 async def iq_error(ctx, error):
-    if isinstance(error, commands.MemberNotFound):
-        await ctx.reply(f'Incorrect arguments | {config["CONFIGURATION"]["prefix"]}iq (@member)')
-    if isinstance(error, commands.MissingRequiredArgument):
-        await ctx.reply(f'Incorrect arguments | {config["CONFIGURATION"]["prefix"]}iq (@member)')
+    if blacklist_check(ctx):
+        await ctx.reply("You are blacklisted!")
+    else:
+        if isinstance(error, commands.MemberNotFound):
+            await ctx.reply(f'Incorrect arguments | {config["CONFIGURATION"]["prefix"]}iq (@member)')
+        if isinstance(error, commands.MissingRequiredArgument):
+            await ctx.reply(f'Incorrect arguments | {config["CONFIGURATION"]["prefix"]}iq (@member)')
 
 
 # AFK ==================================================================================================================
@@ -617,26 +662,29 @@ async def stealpfp(ctx, member: discord.Member):
 
 @bot.command()
 async def pfp(ctx, member: discord.Member):
-    if config['CONFIGURATION']['logging'] == "True":
-        print(f"[LOST-UB] pfp command ran by {ctx.author.display_name}")
-    embed = discord.embeds.Embed(
-        title="Profile Picture",
-        colour=embedcolor()
-    )
-    embed.add_field(
-        name="Link",
-        value=f"[Click Me]({member.avatar_url_as(format='jpg')})"
-    )
-    embed.add_field(
-        name="User",
-        value=f"{member.display_name}"
-    )
-    embed.set_thumbnail(url=member.avatar_url)
-    embed.set_footer(
-        text=f"Logged in as {bot.user} | Lost-UB",
-        icon_url=bot.user.avatar_url
-    )
-    await ctx.reply(embed=embed)
+    if blacklist_check(ctx):
+        await ctx.reply("You are blacklisted!")
+    else:
+        if config['CONFIGURATION']['logging'] == "True":
+            print(f"[LOST-UB] pfp command ran by {ctx.author.display_name}")
+        embed = discord.embeds.Embed(
+            title="Profile Picture",
+            colour=embedcolor()
+        )
+        embed.add_field(
+            name="Link",
+            value=f"[Click Me]({member.avatar_url_as(format='jpg')})"
+        )
+        embed.add_field(
+            name="User",
+            value=f"{member.display_name}"
+        )
+        embed.set_thumbnail(url=member.avatar_url)
+        embed.set_footer(
+            text=f"Logged in as {bot.user} | Lost-UB",
+            icon_url=bot.user.avatar_url
+        )
+        await ctx.reply(embed=embed)
 
 
 @bot.command()
@@ -683,10 +731,13 @@ async def savepfp_error(ctx, error):
 
 @pfp.error
 async def pfp_error(ctx, error):
-    if isinstance(error, commands.MemberNotFound):
-        await ctx.reply("Member not found.")
-    if isinstance(error, commands.MissingRequiredArgument):
-        await ctx.reply(f"Missing arguments | {get_prefix()}pfp (@member)")
+    if blacklist_check(ctx):
+        await ctx.reply("You are blacklisted!")
+    else:
+        if isinstance(error, commands.MemberNotFound):
+            await ctx.reply("Member not found.")
+        if isinstance(error, commands.MissingRequiredArgument):
+            await ctx.reply(f"Missing arguments | {get_prefix()}pfp (@member)")
 
 
 # Settings =============================================================================================================
@@ -704,7 +755,8 @@ async def settings(ctx, section: str = None, setting: str = None, *, value: str 
             name="Sections",
             value="- afk\n"
                   "- pfp\n"
-                  "- customization"
+                  "- customization\n"
+                  "- configuration"
         )
         return context.reply(embed=section_embed)
 
@@ -1042,6 +1094,36 @@ async def settings(ctx, section: str = None, setting: str = None, *, value: str 
                     icon_url=bot.user.avatar_url
                 )
                 await ctx.reply(embed=embed)
+        elif section.lower() == "configuration" or section.lower() == "config":
+            if setting is None:
+                embed = discord.embeds.Embed(
+                    title="Configuration Section",
+                    description=f"Command usage: {get_prefix()}settings (section) (setting) (value)",
+                    colour=embedcolor()
+                )
+                embed.add_field(
+                    name="Settings",
+                    value=f"- blacklist | {config['CONFIGURATION']['blacklist']}"
+                )
+                embed.set_footer(
+                    text=f"Logged in as {bot.user} | Lost-UB",
+                    icon_url=bot.user.avatar_url
+                )
+                await ctx.reply(embed=embed)
+            elif setting.lower() == "blacklist":
+                if value is None:
+                    await settings_embed(ctx, "Blacklist", "Prevent users from using the bot.")
+                elif value.lower() == "true":
+                    config['CONFIGURATION']['blacklist'] = "True"
+                    write()
+                    await settings_embed(ctx, "Blacklist", "Blacklist has been turned on")
+                elif value.lower() == "false":
+                    config['CONFIGURATION']['blacklist'] = "False"
+                    write()
+                    await settings_embed(ctx, "Blacklist", "Blacklist has been turned off")
+                else:
+                    await settings_embed(ctx, "Blacklist", "Invalid value, must be ``true`` or ``false``")
+
         else:
             await sections_embed(ctx)
 
@@ -1051,81 +1133,95 @@ async def settings(ctx, section: str = None, setting: str = None, *, value: str 
 
 @bot.command()
 async def rolladice(ctx):
-    if config['CONFIGURATION']['logging'] == "True":
-        print(f"[LOST-UB] rps command ran by {ctx.author.display_name}")
-    number = random.randrange(1, 7)
-    embed = discord.embeds.Embed(
-        title="Dice Roll",
-        description=f"You rolled a {number}",
-        colour=embedcolor()
-    )
-    embed.set_footer(
-        text=f"Logged in as {bot.user} | Lost-UB",
-        icon_url=bot.user.avatar_url
-    )
-    await ctx.reply(embed=embed)
+    if blacklist_check(ctx):
+        await ctx.reply("You are blacklisted!")
+    else:
+        if config['CONFIGURATION']['logging'] == "True":
+            print(f"[LOST-UB] rps command ran by {ctx.author.display_name}")
+        number = random.randrange(1, 7)
+        embed = discord.embeds.Embed(
+            title="Dice Roll",
+            description=f"You rolled a {number}",
+            colour=embedcolor()
+        )
+        embed.set_footer(
+            text=f"Logged in as {bot.user} | Lost-UB",
+            icon_url=bot.user.avatar_url
+        )
+        await ctx.reply(embed=embed)
 
 
-# porn hub =============================================================================================================
+# Jesus ================================================================================================================
 
 @bot.command()
-async def pornhub(ctx):
-    embed = discord.embeds.Embed(
-        title="You need jesus. Come and receive some of my help my child",
-        colour=embedcolor())
-    embed.set_image(url='https://preventsatan.com/wp-content/uploads/2019/06/Jesus-name-powerful.jpg')
-    await ctx.reply(embed=embed)
+async def jesus(ctx):
+    if blacklist_check(ctx):
+        await ctx.reply("You are blacklisted!")
+    else:
+        embed = discord.embeds.Embed(
+            title="You need jesus. Come and receive some of my help my child",
+            colour=embedcolor())
+        embed.set_image(url='https://preventsatan.com/wp-content/uploads/2019/06/Jesus-name-powerful.jpg')
+        await ctx.reply(embed=embed)
 
 
 # server info ==========================================================================================================
 
 @bot.command()
-async def server(ctx):
-    name = str(ctx.guild.name)
-    description = str(ctx.guild.description)
+async def serverinfo(ctx):
+    if blacklist_check(ctx):
+        await ctx.reply("You are blacklisted!")
+    else:
+        name = str(ctx.guild.name)
+        description = str(ctx.guild.description)
 
-    owner = str(ctx.guild.owner)
-    guild_id = str(ctx.guild.id)
-    region = str(ctx.guild.region)
-    membercount = str(ctx.guild.member_count)
+        owner = str(ctx.guild.owner)
+        guild_id = str(ctx.guild.id)
+        region = str(ctx.guild.region)
+        membercount = str(ctx.guild.member_count)
 
-    icon = ctx.guild.icon_url
+        icon = ctx.guild.icon_url
 
-    embed = discord.Embed(
-        title=name + "Server Info",
-        description=description,
-        color=discord.Color.blue()
-    )
-    embed.set_thumbnail(url=icon)
-    embed.add_field(name="owner", value=owner, inline=True)
-    embed.add_field(name="Server ID", value=guild_id, inline=True)
-    embed.add_field(name="Server Region", value=region, inline=True)
-    embed.add_field(name="Member Count", value=membercount, inline=True)
+        embed = discord.Embed(
+            title=name + "Server Info",
+            color=embedcolor()
+        )
+        embed.set_thumbnail(url=icon)
+        embed.add_field(name="owner", value=owner, inline=True)
+        embed.add_field(name="Server ID", value=guild_id, inline=True)
+        embed.add_field(name="Server Region", value=region, inline=True)
+        embed.add_field(name="Member Count", value=membercount, inline=True)
 
-    await ctx.send(embed=embed)
+        await ctx.send(embed=embed)
 
 
 # abc ==================================================================================================================
 
 @bot.command()
 async def abc(ctx):
-    embed = discord.embeds.Embed(
-        colour=embedcolor(),
-        title="ABCDEFGHIJKLMNOPQRSTUVWXYZ")
-    await ctx.reply(embed=embed)
+    if blacklist_check(ctx):
+        await ctx.reply("You are blacklisted!")
+    else:
+        embed = discord.embeds.Embed(
+            colour=embedcolor(),
+            title="ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+        await ctx.reply(embed=embed)
 
 
 # server icon ==========================================================================================================
 
 @bot.command()
 async def servericon(ctx):
-    embed = discord.embeds.Embed()
+    if blacklist_check(ctx):
+        await ctx.reply("You are blacklisted!")
+    else:
+        embed = discord.embeds.Embed()
 
-    embed.add_field(
-        name="Server Icon Link",
-        value=f"[========>]({ctx.guild.icon_url_as(format='jpg')})")
-    embed.set_thumbnail(url=ctx.guild.icon_url)
-    await ctx.reply(embed=embed)
+        embed.add_field(
+            name="Server Icon Link",
+            value=f"[========>]({ctx.guild.icon_url_as(format='jpg')})")
+        embed.set_thumbnail(url=ctx.guild.icon_url)
+        await ctx.reply(embed=embed)
 
 
 # warnings =============================================================================================================
@@ -1182,44 +1278,47 @@ async def warn(ctx, member: discord.Member, *, reason: str = None):
 @bot.command()
 @commands.has_permissions(administrator=True)
 async def warnings(ctx, member: discord.Member):
-    if not os.path.exists(f"data/warnings/{ctx.guild.id}/{member.id}.txt"):
-        embed = discord.embeds.Embed(
-            title="User Warnings",
-            description="This user doesn't have any warnings yet",
-            colour=embedcolor()
-        )
-        await ctx.reply(embed=embed)
+    if blacklist_check(ctx):
+        await ctx.reply("You are blacklisted!")
     else:
-        with open(f"data/warnings/{ctx.guild.id}/{member.id}.txt", "r"):
-            warns = ""
-            warnings_file = open(f"data/warnings/{ctx.guild.id}/{member.id}.txt", "r")
-            count = 0
-            remainder = 0
-            warnings_file_content = warnings_file.read()
-            lines = warnings_file_content.split("\n")
-            for x in lines:
-                if x:
-                    count += 1
-                    if count <= 5:
-                        warns += f"{x}\n"
-                    else:
-                        remainder += 1
-            if remainder == 0:
-                embed = discord.embeds.Embed(
-                    title="User Warnings",
-                    description=f"{member} has {count} warnings"
-                                f"```{warns}```",
-                    colour=embedcolor()
-                )
-            else:
-                embed = discord.embeds.Embed(
-                    title="User Warnings",
-                    description=f"{member} has {count} warnings"
-                                f"```{warns}"
-                                f"+ {remainder} more```",
-                    colour=embedcolor()
-                )
+        if not os.path.exists(f"data/warnings/{ctx.guild.id}/{member.id}.txt"):
+            embed = discord.embeds.Embed(
+                title="User Warnings",
+                description="This user doesn't have any warnings yet",
+                colour=embedcolor()
+            )
             await ctx.reply(embed=embed)
+        else:
+            with open(f"data/warnings/{ctx.guild.id}/{member.id}.txt", "r"):
+                warns = ""
+                warnings_file = open(f"data/warnings/{ctx.guild.id}/{member.id}.txt", "r")
+                count = 0
+                remainder = 0
+                warnings_file_content = warnings_file.read()
+                lines = warnings_file_content.split("\n")
+                for x in lines:
+                    if x:
+                        count += 1
+                        if count <= 5:
+                            warns += f"{x}\n"
+                        else:
+                            remainder += 1
+                if remainder == 0:
+                    embed = discord.embeds.Embed(
+                        title="User Warnings",
+                        description=f"{member} has {count} warnings"
+                                    f"```{warns}```",
+                        colour=embedcolor()
+                    )
+                else:
+                    embed = discord.embeds.Embed(
+                        title="User Warnings",
+                        description=f"{member} has {count} warnings"
+                                    f"```{warns}"
+                                    f"+ {remainder} more```",
+                        colour=embedcolor()
+                    )
+                await ctx.reply(embed=embed)
 
 
 @warn.error
@@ -1232,10 +1331,13 @@ async def warn_error(ctx, error):
 
 @warnings.error
 async def warnings_error(ctx, error):
-    if isinstance(error, commands.MissingPermissions):
-        await ctx.reply('You are missing permissions!')
-    elif isinstance(error, commands.MemberNotFound):
-        await ctx.reply('Member not found!')
+    if blacklist_check(ctx):
+        await ctx.reply("You are blacklisted!")
+    else:
+        if isinstance(error, commands.MissingPermissions):
+            await ctx.reply('You are missing permissions!')
+        elif isinstance(error, commands.MemberNotFound):
+            await ctx.reply('Member not found!')
 
 
 # User info ============================================================================================================
@@ -1243,181 +1345,187 @@ async def warnings_error(ctx, error):
 
 @bot.command()
 async def userinfo(ctx, member: discord.Member):
-    if config['CONFIGURATION']['logging'] == "True":
-        print(f"[LOST-UB] userinfo command ran by {ctx.author.display_name}")
-    minute = ""
-    friends = ""
-    guilds = ""
-    roles = ""
-    gay = random.randrange(1, 101)
-    if member == bot.user:
-        gay = "very straight for using Lost-UB!"
-    elif gay >= 50:
-        gay = "yes"
-    elif gay <= 49:
-        gay = "no"
-    for role in member.roles:
-        roles += f"- {role}\n"
-    if member != bot.user:
-        list_of_guilds = await member.mutual_guilds()
-        for guild in list_of_guilds:
-            guilds += f"- {guild}\n"
+    if blacklist_check(ctx):
+        await ctx.reply("You are blacklisted!")
     else:
-        guilds = "None"
-    if member != bot.user and not member.bot:
-        list_of_friends = await member.mutual_friends()
-        for friend in list_of_friends:
-            friends += f"- {friend}\n"
-    elif member.bot:
-        friends = "bots don't have friends"
-    else:
-        friends = "no one"
-    suffix = ""
-    hour = ""
-    month = ""
-    a = member.created_at
-    if a.month == 1:
-        month = "Janurary"
-    elif a.month == 2:
-        month = "February"
-    elif a.month == 3:
-        month = "March"
-    elif a.month == 4:
-        month = "April"
-    elif a.month == 5:
-        month = "May"
-    elif a.month == 6:
-        month = "June"
-    elif a.month == 7:
-        month = "July"
-    elif a.month == 8:
-        month = "August"
-    elif a.month == 9:
-        month = "September"
-    elif a.month == 10:
-        month = "October"
-    elif a.month == 11:
-        month = "November"
-    elif a.month == 12:
-        month = "December"
-    if str(a.day).endswith("1"):
-        day = f"{a.day}st"
-    elif str(a.day).endswith("2"):
-        day = f"{a.day}nd"
-    elif str(a.day).endswith("3"):
-        day = f"{a.day}rd"
-    else:
-        day = f"{str(a.day)}th"
-    if 1 <= a.hour <= 11:
-        suffix = "am"
-        hour = f"{a.hour}"
-    elif 12 <= a.hour <= 23:
-        if a.hour == 13:
-            hour = "1"
-        elif a.hour == 14:
-            hour = "2"
-        elif a.hour == 15:
-            hour = "3"
-        elif a.hour == 16:
-            hour = "4"
-        elif a.hour == 17:
-            hour = "5"
-        elif a.hour == 18:
-            hour = "6"
-        elif a.hour == 19:
-            hour = "7"
-        elif a.hour == 20:
-            hour = "8"
-        elif a.hour == 21:
-            hour = "9"
-        elif a.hour == 22:
-            hour = "10"
-        elif a.hour == 23:
-            hour = "11"
-        elif a.hour == 24:
-            hour = "12"
-        suffix = "pm"
-    if 0 <= a.minute <= 9:
-        minute = f"0{a.minute}"
-    embed = discord.embeds.Embed(
-        title="User Info",
-        colour=embedcolor()
-    )
-    embed.add_field(
-        name="User",
-        value=str(member),
-        inline=True
-    )
-    embed.add_field(
-        name="Date Created",
-        value=f"{month} {day}, {a.year}",
-        inline=True
-    )
-    if 0 <= a.minute <= 9:
+        if config['CONFIGURATION']['logging'] == "True":
+            print(f"[LOST-UB] userinfo command ran by {ctx.author.display_name}")
+        minute = ""
+        friends = ""
+        guilds = ""
+        roles = ""
+        gay = random.randrange(1, 101)
+        if member == bot.user:
+            gay = "very straight for using Lost-UB!"
+        elif gay >= 50:
+            gay = "yes"
+        elif gay <= 49:
+            gay = "no"
+        for role in member.roles:
+            roles += f"- {role}\n"
+        if member != bot.user:
+            list_of_guilds = await member.mutual_guilds()
+            for guild in list_of_guilds:
+                guilds += f"- {guild}\n"
+        else:
+            guilds = "None"
+        if member != bot.user and not member.bot:
+            list_of_friends = await member.mutual_friends()
+            for friend in list_of_friends:
+                friends += f"- {friend}\n"
+        elif member.bot:
+            friends = "bots don't have friends"
+        else:
+            friends = "no one"
+        suffix = ""
+        hour = ""
+        month = ""
+        a = member.created_at
+        if a.month == 1:
+            month = "Janurary"
+        elif a.month == 2:
+            month = "February"
+        elif a.month == 3:
+            month = "March"
+        elif a.month == 4:
+            month = "April"
+        elif a.month == 5:
+            month = "May"
+        elif a.month == 6:
+            month = "June"
+        elif a.month == 7:
+            month = "July"
+        elif a.month == 8:
+            month = "August"
+        elif a.month == 9:
+            month = "September"
+        elif a.month == 10:
+            month = "October"
+        elif a.month == 11:
+            month = "November"
+        elif a.month == 12:
+            month = "December"
+        if str(a.day).endswith("1"):
+            day = f"{a.day}st"
+        elif str(a.day).endswith("2"):
+            day = f"{a.day}nd"
+        elif str(a.day).endswith("3"):
+            day = f"{a.day}rd"
+        else:
+            day = f"{str(a.day)}th"
+        if 1 <= a.hour <= 11:
+            suffix = "am"
+            hour = f"{a.hour}"
+        elif 12 <= a.hour <= 23:
+            if a.hour == 13:
+                hour = "1"
+            elif a.hour == 14:
+                hour = "2"
+            elif a.hour == 15:
+                hour = "3"
+            elif a.hour == 16:
+                hour = "4"
+            elif a.hour == 17:
+                hour = "5"
+            elif a.hour == 18:
+                hour = "6"
+            elif a.hour == 19:
+                hour = "7"
+            elif a.hour == 20:
+                hour = "8"
+            elif a.hour == 21:
+                hour = "9"
+            elif a.hour == 22:
+                hour = "10"
+            elif a.hour == 23:
+                hour = "11"
+            elif a.hour == 24:
+                hour = "12"
+            suffix = "pm"
+        if 0 <= a.minute <= 9:
+            minute = f"0{a.minute}"
+        embed = discord.embeds.Embed(
+            title="User Info",
+            colour=embedcolor()
+        )
         embed.add_field(
-            name="Time Created",
-            value=f"{hour}:{minute}{suffix}",
+            name="User",
+            value=str(member),
             inline=True
         )
-    else:
         embed.add_field(
-            name="Time Created",
-            value=f"{hour}:{a.minute}{suffix}",
+            name="Date Created",
+            value=f"{month} {day}, {a.year}",
             inline=True
         )
-    embed.set_footer(
-        text=f"Logged in as {ctx.author} | Lost-UB",
-        icon_url=bot.user.avatar_url
-    )
-    if member.is_avatar_animated():
+        if 0 <= a.minute <= 9:
+            embed.add_field(
+                name="Time Created",
+                value=f"{hour}:{minute}{suffix}",
+                inline=True
+            )
+        else:
+            embed.add_field(
+                name="Time Created",
+                value=f"{hour}:{a.minute}{suffix}",
+                inline=True
+            )
+        embed.set_footer(
+            text=f"Logged in as {ctx.author} | Lost-UB",
+            icon_url=bot.user.avatar_url
+        )
+        if member.is_avatar_animated():
+            embed.add_field(
+                name="Avatar Url",
+                value=f"[Link]({member.avatar_url_as(format='gif')})",
+                inline=True
+            )
+        else:
+            embed.add_field(
+                name="Avatar Url",
+                value=f"[Link]({member.avatar_url_as(format='png')})",
+                inline=True
+            )
         embed.add_field(
-            name="Avatar Url",
-            value=f"[Link]({member.avatar_url_as(format='gif')})",
+            name="Roles",
+            value=f"{roles}",
             inline=True
         )
-    else:
         embed.add_field(
-            name="Avatar Url",
-            value=f"[Link]({member.avatar_url_as(format='png')})",
+            name="User ID",
+            value=f"{member.id}",
             inline=True
         )
-    embed.add_field(
-        name="Roles",
-        value=f"{roles}",
-        inline=True
-    )
-    embed.add_field(
-        name="User ID",
-        value=f"{member.id}",
-        inline=True
-    )
-    embed.add_field(
-        name="Mutual Friends",
-        value=f"{friends}",
-        inline=True
-    )
-    embed.add_field(
-        name="Mutual Guilds",
-        value=f"{guilds}",
-        inline=True
-    )
-    embed.add_field(
-        name="Gay?",
-        value=f"{gay}",
-        inline=True
-    )
-    embed.set_thumbnail(
-        url=member.avatar_url
-    )
-    await ctx.reply(embed=embed)
+        embed.add_field(
+            name="Mutual Friends",
+            value=f"{friends}",
+            inline=True
+        )
+        embed.add_field(
+            name="Mutual Guilds",
+            value=f"{guilds}",
+            inline=True
+        )
+        embed.add_field(
+            name="Gay?",
+            value=f"{gay}",
+            inline=True
+        )
+        embed.set_thumbnail(
+            url=member.avatar_url
+        )
+        await ctx.reply(embed=embed)
 
 
 @userinfo.error
 async def userinfo_error(ctx, error):
-    if isinstance(error, commands.MissingRequiredArgument):
-        await ctx.reply(f"Incorrect arguments | {get_prefix()}userinfo (@member)")
+    if blacklist_check(ctx):
+        await ctx.reply("You are blacklisted!")
     else:
-        print("Error when running userinfo")
+        if isinstance(error, commands.MissingRequiredArgument):
+            await ctx.reply(f"Incorrect arguments | {get_prefix()}userinfo (@member)")
+        else:
+            print("Error when running userinfo")
 
 
 # Kick =================================================================================================================
@@ -1516,32 +1624,178 @@ async def ban_error(ctx, error):
 
 @bot.command(aliases=['calc'])
 async def calculate(ctx, first_number: str = None, operator: str = None, second_number: str = None):
-    operators = ['*', '/', '+', '-']
-    result = ""
-    if not first_number.isnumeric():
-        await ctx.reply(f"``{first_number}`` is not a number")
+    if blacklist_check(ctx):
+        await ctx.reply("You are blacklisted!")
     else:
-        if operator not in operators:
-            await ctx.reply(f"``{operator}`` is not an operator")
+        operators = ['*', '/', '+', '-']
+        result = ""
+        if not first_number.isnumeric():
+            await ctx.reply(f"``{first_number}`` is not a number")
         else:
-            if not second_number.isnumeric():
-                await ctx.reply(f"``{second_number}`` is not a number")
+            if operator not in operators:
+                await ctx.reply(f"``{operator}`` is not an operator")
             else:
-                if operator == "*":
-                    result = int(first_number) * int(second_number)
-                elif operator == "/":
-                    result = int(first_number) / int(second_number)
-                elif operator == "+":
-                    result = int(first_number) + int(second_number)
-                elif operator == "-":
-                    result = int(first_number) - int(second_number)
+                if not second_number.isnumeric():
+                    await ctx.reply(f"``{second_number}`` is not a number")
+                else:
+                    if operator == "*":
+                        result = int(first_number) * int(second_number)
+                    elif operator == "/":
+                        result = int(first_number) / int(second_number)
+                    elif operator == "+":
+                        result = int(first_number) + int(second_number)
+                    elif operator == "-":
+                        result = int(first_number) - int(second_number)
+                    embed = discord.embeds.Embed(
+                        title="Calculator",
+                        description=f"Equation: {first_number} {operator} {second_number}\n"
+                                    f"```{result}```",
+                        colour=embedcolor()
+                    )
+                    await ctx.reply(embed=embed)
+
+
+# Blacklist ============================================================================================================
+
+@bot.command()
+async def blacklist(ctx, action: str = None, member: discord.Member = None):
+    if ctx.author == bot.user:
+        if action is None:
+            count = 10
+            total = 0
+            remainder = 0
+            black_list = open("data/blacklist.txt", "r")
+            temp = ""
+            file_content = black_list.read()
+            lines = file_content.split("\n")
+            for x in lines:
+                if x:
+                    if count != 0:
+                        try:
+                            user = await bot.fetch_user(int(x))
+                        except discord.NotFound:
+                            user = "UNKNOWN USER"
+                        temp += f"- {user} ({x})\n"
+                        count -= 1
+                        total += 1
+                    else:
+                        remainder += 1
+                        total += 1
+
+            if remainder > 0:
                 embed = discord.embeds.Embed(
-                    title="Calculator",
-                    description=f"Equation: {first_number} {operator} {second_number}\n"
-                                f"```{result}```",
+                    title="Blacklisted Users",
+                    description=f"**These users are not allowed to use any commands.**\n"
+                                f"```{temp}"
+                                f"+ {remainder} more...```"
+                                f"Total Blacklisted Users: {total}",
                     colour=embedcolor()
                 )
-                await ctx.reply(embed=embed)
+            else:
+                if total == 0:
+                    embed = discord.embeds.Embed(
+                        title="Blacklisted Users",
+                        description=f"**No blacklisted users yet...**\n",
+                        colour=embedcolor()
+                    )
+                else:
+                    embed = discord.embeds.Embed(
+                        title="Blacklisted Users",
+                        description=f"**These users are not allowed to use any commands.**\n"
+                                    f"```{temp}\n```"
+                                    f"Total Blacklisted Users: {total}",
+                        colour=embedcolor()
+                    )
+            embed.set_footer(
+                text=f"Logged in as {bot.user} | Lost-UB",
+                icon_url=bot.user.avatar_url
+            )
+            await ctx.reply(embed=embed)
+        elif action.lower() == "add":
+            if member is None:
+                await ctx.reply(f"Command usage {get_prefix()}blacklist add (@member)")
+            else:
+                oldfile = open("data/blacklist.txt", "r")
+                oldfile_content = oldfile.read()
+                lines = oldfile_content.split("\n")
+                if f"{member.id}" in lines:
+                    await ctx.reply("That user is already blacklisted.")
+                else:
+                    with open("data/blacklist.txt", "a+") as oldfile:
+                        oldfile.write(f"{oldfile.read()}"
+                                      f"{member.id}\n")
+                    embed = discord.embeds.Embed(
+                        title="Blacklisted User Added",
+                        colour=embedcolor()
+                    )
+                    embed.add_field(
+                        name="User",
+                        value=f"{member}",
+                        inline=True
+                    )
+                    embed.add_field(
+                        name="ID",
+                        value=f"{member.id}",
+                        inline=True
+                    )
+                    embed.set_thumbnail(
+                        url=f"{member.avatar_url}"
+                    )
+                    embed.set_footer(
+                        text=f"Logged in as {bot.user} | Lost-UB",
+                        icon_url=bot.user.avatar_url
+                    )
+                    await ctx.reply(embed=embed)
+        elif action.lower() == "remove":
+            if member is None:
+                await ctx.reply(f"Command usage {get_prefix()}blacklist remove (@member)")
+            else:
+                temp = ""
+                black_list = open("data/blacklist.txt", "r")
+                black_list_content = black_list.read()
+                lines = black_list_content.split("\n")
+                if f"{member.id}" in lines:
+                    for x in lines:
+                        if x:
+                            if int(x) == member.id:
+                                pass
+                            else:
+                                temp += f"{x}\n"
+                                print(temp)
+                    with open("data/blacklist.txt", "w") as file:
+                        file.write(temp)
+                    embed = discord.embeds.Embed(
+                        title="Blacklisted User Removed",
+                        colour=embedcolor()
+                    )
+                    embed.add_field(
+                        name="User",
+                        value=f"{member}",
+                        inline=True
+                    )
+                    embed.add_field(
+                        name="ID",
+                        value=f"{member.id}",
+                        inline=True
+                    )
+                    embed.set_thumbnail(
+                        url=f"{member.avatar_url}"
+                    )
+                    embed.set_footer(
+                        text=f"Logged in as {bot.user} | Lost-UB",
+                        icon_url=bot.user.avatar_url
+                    )
+                    await ctx.reply(embed=embed)
+                else:
+                    await ctx.reply("That user isn't blacklisted.")
+
+
+@blacklist.error
+async def blacklist_error(ctx, error):
+    if isinstance(error, commands.MemberNotFound):
+        await ctx.reply("Member not found.")
+    else:
+        await ctx.reply(error)
 
 
 # ======================================================================================================================
