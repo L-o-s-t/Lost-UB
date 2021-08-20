@@ -45,6 +45,13 @@ def blacklist_check(ctx):
         return False
 
 
+def footer(embed):
+    return embed.set_footer(
+        text=f"Logged in as {bot.user} | Lost-UB",
+        icon_url=bot.user.avatar_url
+    )
+
+
 # Checks to see if "config.ini" exists, if not then it will create one.
 if not os.path.exists('config.ini'):
     config['CONFIGURATION'] = {
@@ -173,7 +180,7 @@ async def info(ctx, module: str = None):
             )
             embed.add_field(
                 name="Games",
-                value="Total Commands: 1",
+                value="Total Commands: 2",
                 inline=True
             )
             embed.add_field(
@@ -208,7 +215,8 @@ async def info(ctx, module: str = None):
             )
             embed.add_field(
                 name="Games",
-                value=f"**Rock, Paper, Scissors** | {get_prefix()}rps",
+                value=f"**Rock, Paper, Scissors** | {get_prefix()}rps\n"
+                      f"**Battle** | {get_prefix()}battle",
                 inline=True
             )
             embed.set_thumbnail(
@@ -1797,6 +1805,216 @@ async def blacklist_error(ctx, error):
         await ctx.reply("Member not found.")
     else:
         await ctx.reply(error)
+
+
+# Battle ===============================================================================================================
+
+@bot.command()
+async def battle(ctx):
+    if blacklist_check(ctx):
+        await ctx.reply("You are blacklisted!")
+    else:
+        player_hp = 100
+        enemy_hp = 100
+
+        embed = discord.embeds.Embed(
+            title="Battle",
+            description=f"You started a battle! What would you like to do?\n"
+                        f"- Attack\n"
+                        f"- Defend\n"
+                        f"- Run\n",
+            colour=embedcolor()
+        )
+        embed.add_field(
+            name="Your Health",
+            value=f"{player_hp}"
+        )
+        embed.add_field(
+            name="Enemy Health",
+            value=f"{enemy_hp}"
+        )
+        footer(embed)
+        await ctx.reply(embed=embed)
+
+        def check(m):
+            return m.author == ctx.author
+
+        while True:
+            if enemy_hp > 0 and player_hp > 0:
+                action = await bot.wait_for('message', check=check, timeout=60.0)
+                if action.content.lower() == "attack":
+                    enemy_action = random.randint(0, 100)
+                    player_damage = random.randint(0, 30)
+                    if enemy_action >= 50:  # Enemy will attack
+                        enemy_damage = random.randint(0, 30)
+                        enemy_hp -= player_damage
+                        player_hp -= enemy_damage
+                        embed = discord.embeds.Embed(
+                            title="Battle",
+                            description=f"You dealt {player_damage} damage to the enemy!\n"
+                                        f"The enemy also dealt {enemy_damage} damage to you!\n"
+                                        f"What would you like to do next?",
+                            colour=embedcolor()
+                        )
+                        embed.add_field(
+                            name="Your Health",
+                            value=f"{player_hp}"
+                        )
+                        embed.add_field(
+                            name="Enemy Health",
+                            value=f"{enemy_hp}"
+                        )
+                        footer(embed)
+                        await ctx.reply(embed=embed)
+                    elif enemy_action <= 49:  # Enemy will defend
+                        enemy_shield_effectiveness = random.choice([0.25, 0.50, 0.75, 1.0])
+                        player_damage = player_damage * enemy_shield_effectiveness
+                        enemy_hp -= player_damage
+                        embed = discord.embeds.Embed(
+                            title="Battle",
+                            description=f"The enemy blocked your attack, so your attack only dealt {player_damage} "
+                                        f"damage!"
+                                        f"\nWhat would you like to do next?",
+                            colour=embedcolor()
+                        )
+                        embed.add_field(
+                            name="Your Health",
+                            value=f"{player_hp}"
+                        )
+                        embed.add_field(
+                            name="Enemy Health",
+                            value=f"{enemy_hp}"
+                        )
+                        footer(embed)
+                        await ctx.reply(embed=embed)
+                elif action.content.lower() == "defend":
+                    enemy_action = random.randint(0, 100)
+                    enemy_damage = random.randint(0, 30)
+                    if enemy_action >= 50:  # Enemy will attack
+                        player_shield_effectiveness = random.choice([0.25, 0.50, 0.75, 1.0])
+                        enemy_damage = enemy_damage * player_shield_effectiveness
+                        player_hp -= enemy_damage
+                        embed = discord.embeds.Embed(
+                            title="Battle",
+                            description=f"You blocked the enemy's attack, so their attack only dealt {enemy_damage} "
+                                        f"damage!"
+                                        f"\nWhat would you like to do next?",
+                            colour=embedcolor()
+                        )
+                        embed.add_field(
+                            name="Your Health",
+                            value=f"{player_hp}"
+                        )
+                        embed.add_field(
+                            name="Enemy Health",
+                            value=f"{enemy_hp}"
+                        )
+                        footer(embed)
+                        await ctx.reply(embed=embed)
+                    elif enemy_action <= 49:  # Enemy will defend
+                        embed = discord.embeds.Embed(
+                            title="Battle",
+                            description=f"You both defended each other, blocking each other like idiots!\n"
+                                        f"What would you like to do next?",
+                            colour=embedcolor()
+                        )
+                        embed.add_field(
+                            name="Your Health",
+                            value=f"{player_hp}"
+                        )
+                        embed.add_field(
+                            name="Enemy Health",
+                            value=f"{enemy_hp}"
+                        )
+                        footer(embed)
+                        await ctx.reply(embed=embed)
+                elif action.content.lower() == "run":
+                    embed = discord.embeds.Embed(
+                        title="Battle",
+                        description=f"You forfeit! The enemy wins!",
+                        colour=embedcolor()
+                    )
+                    embed.add_field(
+                        name="Your Health",
+                        value=f"{player_hp}"
+                    )
+                    embed.add_field(
+                        name="Enemy Health",
+                        value=f"{enemy_hp}"
+                    )
+                    footer(embed)
+                    await ctx.reply(embed=embed)
+                    break
+                else:
+                    embed = discord.embeds.Embed(
+                        title="Battle",
+                        description=f"Invalid action!\n"
+                                    f"- Attack\n"
+                                    f"- Defend\n"
+                                    f"- Run",
+                        colour=embedcolor()
+                    )
+                    embed.add_field(
+                        name="Your Health",
+                        value=f"{player_hp}"
+                    )
+                    embed.add_field(
+                        name="Enemy Health",
+                        value=f"{enemy_hp}"
+                    )
+                    footer(embed)
+                    await ctx.reply(embed=embed)
+            elif enemy_hp > 0 and player_hp <= 0:
+                embed = discord.embeds.Embed(
+                    title="Battle",
+                    description=f"The enemy wins! You lose!",
+                    colour=embedcolor()
+                )
+                embed.add_field(
+                    name="Your Health",
+                    value=f"{player_hp}"
+                )
+                embed.add_field(
+                    name="Enemy Health",
+                    value=f"{enemy_hp}"
+                )
+                footer(embed)
+                await ctx.reply(embed=embed)
+                break
+            elif enemy_hp <= 0 and player_hp > 0:
+                embed = discord.embeds.Embed(
+                    title="Battle",
+                    description=f"You won! The enemy loses!",
+                    colour=embedcolor()
+                )
+                embed.add_field(
+                    name="Your Health",
+                    value=f"{player_hp}"
+                )
+                embed.add_field(
+                    name="Enemy Health",
+                    value=f"{enemy_hp}"
+                )
+                footer(embed)
+                await ctx.reply(embed=embed)
+                break
+            elif enemy_hp <= 0 and player_hp <= 0:
+                embed = discord.embeds.Embed(
+                    title="Battle",
+                    description=f"It's a tie!",
+                    colour=embedcolor()
+                )
+                embed.add_field(
+                    name="Your Health",
+                    value=f"{player_hp}"
+                )
+                embed.add_field(
+                    name="Enemy Health",
+                    value=f"{enemy_hp}"
+                )
+                footer(embed)
+                await ctx.reply(embed=embed)
+                break
 
 
 # ======================================================================================================================
