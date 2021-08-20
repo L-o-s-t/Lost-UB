@@ -45,7 +45,7 @@ if not os.path.exists('config.ini'):
         "afk_legit": "True",
         "silentsteal": "False",
         "silentsave": "False",
-        "embedcolor": "red"
+        "embedcolor": "light blue",
     }
     write()
     while True:
