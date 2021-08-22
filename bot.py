@@ -212,12 +212,12 @@ async def info(ctx, module: str = None):
             )
             embed.add_field(
                 name="Games",
-                value="Total Commands: 2",
+                value="Total Commands: 3",
                 inline=True
             )
             embed.add_field(
                 name="Fun",
-                value="Total Commands: 6",
+                value="Total Commands: 9",
                 inline=True
             )
             embed.add_field(
@@ -248,7 +248,8 @@ async def info(ctx, module: str = None):
             embed.add_field(
                 name="Games",
                 value=f"**Rock, Paper, Scissors** | {get_prefix()}rps\n"
-                      f"**Battle** | {get_prefix()}battle",
+                      f"**Battle** | {get_prefix()}battle\n"
+                      f"**Fight**  | {get_prefix()}fight [@member]",
                 inline=True
             )
             embed.set_thumbnail(
@@ -268,12 +269,15 @@ async def info(ctx, module: str = None):
             )
             embed.add_field(
                 name="Fun",
-                value=f"**DickSize**  | {get_prefix()}dicksize [@member]\n"
-                      f"**FlipCoin**  | {get_prefix()}flipcoin\n"
-                      f"**8Ball**     | {get_prefix()}8ball [question]\n"
-                      f"**GhostPing** | {get_prefix()}ghostping [@member]\n"
-                      f"**IQ Rating** | {get_prefix()}iq [@member]\n"
-                      f"**Dice Roll** | {get_prefix()}rolladice",
+                value=f"**DickSize**      | {get_prefix()}dicksize [@member]\n"
+                      f"**FlipCoin**      | {get_prefix()}flipcoin\n"
+                      f"**8Ball**         | {get_prefix()}8ball [question]\n"
+                      f"**GhostPing**     | {get_prefix()}ghostping [@member]\n"
+                      f"**GhostPingAll**  | {get_prefix()}ghostpingall [@member]\n"
+                      f"**IQ Rating**     | {get_prefix()}iq [@member]\n"
+                      f"**Dice Roll**     | {get_prefix()}rolladice\n"
+                      f"**Spam**          | {get_prefix()}spam [delay] [count] [message]\n"
+                      f"**SpamAll**       | {get_prefix()}spamall [message]",
                 inline=True
 
             )
