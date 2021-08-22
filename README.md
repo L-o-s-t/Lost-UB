@@ -2,25 +2,33 @@
  An open sourced, free, safe to use discord user bot.
 
 # Features
-### Trolling
-- [x] Ghost Ping
-- [x] Dick Size
-- [x] IQ Rating
+### Tools
+- StealPFP
+- SavePFP
+- PFP
+- AFK
+- ServerInfo
+- ServerIcon
+- Userinfo
+- Calculate
 
 ### Fun
-- [x] Rock Paper Scissors.
-- [x] Coin Toss
-- [x] Eight Ball
+- DickSize
+- FlipCoin
+- 8Ball
+- GhostPing
+- IQ Rating
+- Dice Roll
 
-### Utility
-- [x] Get User Info
-- [x] Get Profile Picture
-- [x] Save Profile Picture
-- [x] Settings
-- [x] Change Prefix | >prefix {desired_prefix}
-- [x] AFK
-- [x] AFKmsg
-- [x] StealPFP
+### Games
+- Rock, Paper, Scissors
+- Battle
+
+### Admin
+- Kick
+- Ban
+- Warn
+- Warnings
 
 # Installation
 ### 1. Required Python Libraries
