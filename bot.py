@@ -2374,6 +2374,34 @@ async def fight_error(ctx, error):
 
 
 # ======================================================================================================================
+
+@bot.command()
+async def spam(ctx, delay: str = None, count: str = None, *, message: str = None):
+    if bot.user == ctx.author:
+        await ctx.message.delete()
+        if delay is None:
+            print(f"[LOST-UB] Missing required arguments. {get_prefix()}spam [delay] [count] [message]")
+        elif not delay.isnumeric():
+            print(f"[LOST-UB] Invalid arguments, '{delay}' is not a number.")
+        else:
+            if count is None:
+                print(f"[LOST-UB] Missing required arguments. {get_prefix()}spam [delay] [count] [message]")
+            elif not count.isnumeric():
+                print(f"[LOST-UB] Invalid arguments, '{count}' is not a number.")
+            else:
+                if message is None:
+                    print(f"[LOST-UB] Missing required arguments. {get_prefix()}spam [delay] [count] [message]")
+                elif message is None:
+                    print(f"You have to specify what you want to spam!")
+                else:
+                    counter = 0
+                    while counter < int(count):
+                        await ctx.send(message)
+                        time.sleep(int(delay))
+                        counter += 1
+
+
+# ======================================================================================================================
 # ======================================================================================================================
 
 bot.run(config['CONFIGURATION']['token'])
