@@ -17,12 +17,16 @@
 - FlipCoin
 - 8Ball
 - GhostPing
+- GhostPingAll
 - IQ Rating
 - Dice Roll
+- Spam
+- SpamAll
 
 ### Games
 - Rock, Paper, Scissors
 - Battle
+- Fight
 
 ### Admin
 - Kick
