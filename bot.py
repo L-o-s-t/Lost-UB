@@ -4,6 +4,7 @@ import os
 import time
 import discord
 import random
+import subprocess
 from discord.ext import commands
 
 print("""                                                                                                               
@@ -17,6 +18,17 @@ print("""
                                  
 ################################################# LOST.#0404 ###########################################################
 """)
+
+try:
+    import pypresence
+except ModuleNotFoundError:
+    print("[LOST-UB] PyPresence is not found, installing package...")
+    process = subprocess.Popen("py -m pip install pypresence",
+                               stdout=subprocess.DEVNULL,
+                               stderr=subprocess.STDOUT)
+    process.wait()
+    print("[LOST-UB] Finished installing PyPresence")
+    import pypresence
 
 config = configparser.ConfigParser()
 
@@ -65,6 +77,7 @@ if not os.path.exists('config.ini'):
         "silentsave": "False",
         "embedcolor": "light blue",
         "blacklist": "False",
+        "rich_presence": "True"
     }
     write()
     while True:
@@ -117,6 +130,9 @@ else:
     if not config.has_option("CONFIGURATION", "blacklist"):
         config["CONFIGURATION"]["blacklist"] = "False"
         write()
+    if not config.has_option("CONFIGURATION", "rich_presence"):
+        config["CONFIGURATION"]["rich_presence"] = "True"
+        write()
 
 if not os.path.exists('data/avatars'):
     os.mkdir('data/avatars')
@@ -155,6 +171,22 @@ def embedcolor():
 
 bot = commands.Bot(command_prefix=f"{config['CONFIGURATION']['prefix']}", help_command=None, user_bot=True,
                    guild_subscriptions=False, case_insensitive=True)
+
+try:
+    if config['CONFIGURATION']['rich_presence'] == "True":
+        client_id = "878728783585226773"
+        start_time = time.time()
+        rpc = pypresence.Presence(client_id)
+        rpc.connect()
+        rpc.update(state="version 3.0",
+                   large_image="logo2",
+                   details="Free and Open Sourced!",
+                   start=int(start_time),
+                   buttons=[{"label": "Github Repo", "url": "https://github.com/L-o-s-t/Lost-UB"},
+                            {"label": "How to Install", "url": "https://www.youtube.com/watch?v=Fmbia_6jrI0"}])
+except pypresence.InvalidPipe:
+    print("[LOST-UB] Discord not installed? Rich Presence disabled.")
+    pass
 
 
 # Prints message to console when bot is ready
@@ -1113,7 +1145,8 @@ async def settings(ctx, section: str = None, setting: str = None, *, value: str 
                 )
                 embed.add_field(
                     name="Settings",
-                    value=f"- blacklist | {config['CONFIGURATION']['blacklist']}"
+                    value=f"- blacklist | {config['CONFIGURATION']['blacklist']}\n"
+                          f"- richpresence | {config['CONFIGURATION']['rich_presence']}"
                 )
                 embed.set_footer(
                     text=f"Logged in as {bot.user} | Lost-UB",
@@ -1133,6 +1166,22 @@ async def settings(ctx, section: str = None, setting: str = None, *, value: str 
                     await settings_embed(ctx, "Blacklist", "Blacklist has been turned off")
                 else:
                     await settings_embed(ctx, "Blacklist", "Invalid value, must be ``true`` or ``false``")
+            elif setting.lower() == "richpresence":
+                if value is None:
+                    await settings_embed(ctx, "Discord Rich Presence", "Enables Lost-UB's status in your profile.")
+                elif value.lower() == "true":
+                    config['CONFIGURATION']['rich_presence'] = "True"
+                    write()
+                    await settings_embed(ctx, "Discord Rich Presence",
+                                         "Rich Presence is now enabled. You will need to restart Lost-UB")
+                elif value.lower() == "false":
+                    config['CONFIGURATION']['rich_presence'] = "False"
+                    write()
+                    await settings_embed(ctx, "Discord Rich Presence",
+                                         "Rich Presence is now disabled. You will need to restart Lost-UB")
+                else:
+                    await settings_embed(ctx, "Discord Rich PResence",
+                                         "Invalid value, must be ``true`` or ``false``")
 
         else:
             await sections_embed(ctx)
