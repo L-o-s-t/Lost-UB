@@ -227,7 +227,7 @@ async def info(ctx, module: str = None):
             )
             embed.add_field(
                 name="Admin",
-                value="Total Commands: 3",
+                value="Total Commands: 4",
                 inline=True
             )
             embed.set_thumbnail(
