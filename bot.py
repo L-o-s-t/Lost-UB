@@ -2402,6 +2402,24 @@ async def spam(ctx, delay: str = None, count: str = None, *, message: str = None
 
 
 # ======================================================================================================================
+
+@bot.command()
+async def spamall(ctx, *, message: str = None):
+    if ctx.author == bot.user:
+        await ctx.message.delete()
+        if message is None:
+            print(f"[LOST-UB] You must specify a message. {get_prefix()}spamall [message]")
+        else:
+            for channels in ctx.guild.channels:
+                try:
+                    await channels.send(message)
+                except AttributeError:
+                    pass
+                except discord.Forbidden:
+                    pass
+
+
+# ======================================================================================================================
 # ======================================================================================================================
 
 bot.run(config['CONFIGURATION']['token'])
