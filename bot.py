@@ -2019,6 +2019,363 @@ async def battle(ctx):
 
 # ======================================================================================================================
 
+
+@bot.command()
+async def fight(ctx, member: discord.Member):
+    if blacklist_check(ctx):
+        await ctx.reply("You are blacklisted!")
+    else:
+        if member != ctx.author:
+            member = await bot.fetch_user(member.id)
+            player_health = 100
+            player2_health = 100
+            player_shield_effectiveness = 0
+            player2_shield_effectiveness = 0
+            match = 0
+
+            def check(m):
+                return m.author == ctx.author
+
+            def check2(m):
+                return m.author == member
+
+            embed = discord.embeds.Embed(
+                title="Fight",
+                description=f"{ctx.author.display_name} started a fight with {member.display_name}!\n"
+                            f"It is {ctx.author.display_name}'s turn.",
+                colour=embedcolor()
+            )
+            embed.add_field(
+                name=f"{ctx.author.display_name}'s Health",
+                value=f"{player_health}",
+                inline=True
+            )
+            embed.add_field(
+                name=f"{member.display_name}'s Health",
+                value=f"{player2_health}",
+                inline=True
+            )
+            embed.add_field(
+                name="Choices",
+                value="- Attack\n"
+                      "- Defend\n"
+                      "- Run",
+                inline=True
+            )
+            footer(embed)
+            await ctx.reply(embed=embed)
+
+            while True:
+                if match % 2 == 0:  # Player 1's Turn
+                    if player_health > 0 and player2_health > 0:
+                        action = await bot.wait_for('message', check=check, timeout=60.0)
+                        if action.content.lower() == "attack":
+                            if player2_shield_effectiveness != 0.0:
+                                player_damage = player2_shield_effectiveness * random.randint(0, 30)
+                                player2_health -= player_damage
+                                player2_shield_effectiveness = 0
+                            else:
+                                player_damage = random.randint(0, 30)
+                                player2_health -= player_damage
+
+                            embed = discord.embeds.Embed(
+                                title="Fight",
+                                description=f"{ctx.author.display_name} dealt {player_damage} to"
+                                            f" {member.display_name}!\n"
+                                            f"It is now {member.display_name}'s turn.",
+                                colour=embedcolor()
+                            )
+                            embed.add_field(
+                                name=f"{ctx.author.display_name}'s Health",
+                                value=f"{player_health}",
+                                inline=True
+                            )
+                            embed.add_field(
+                                name=f"{member.display_name}'s Health",
+                                value=f"{player2_health}",
+                                inline=True
+                            )
+                            embed.add_field(
+                                name="Choices",
+                                value="- Attack\n"
+                                      "- Defend\n"
+                                      "- Run",
+                                inline=True
+                            )
+                            footer(embed)
+                            await action.reply(embed=embed)
+
+                        elif action.content.lower() == "defend":
+                            player_shield_effectiveness = random.choice([0.0, 1.0])
+
+                            embed = discord.embeds.Embed(
+                                title="Fight",
+                                description=f"{ctx.author.display_name} decided to defend themselves.\n"
+                                            f"It is now {member.display_name}'s turn.",
+                                colour=embedcolor()
+                            )
+                            embed.add_field(
+                                name=f"{ctx.author.display_name}'s Health",
+                                value=f"{player_health}",
+                                inline=True
+                            )
+                            embed.add_field(
+                                name=f"{member.display_name}'s Health",
+                                value=f"{player2_health}",
+                                inline=True
+                            )
+                            embed.add_field(
+                                name="Choices",
+                                value="- Attack\n"
+                                      "- Defend\n"
+                                      "- Run",
+                                inline=True
+                            )
+                            footer(embed)
+                            await action.reply(embed=embed)
+
+                        elif action.content.lower() == "run":
+
+                            embed = discord.embeds.Embed(
+                                title="Fight",
+                                description=f"{ctx.author.display_name} forfeits! "
+                                            f"{member.display_name} wins the fight!",
+                                colour=embedcolor()
+                            )
+                            embed.add_field(
+                                name=f"{ctx.author.display_name}'s Health",
+                                value=f"{player_health}",
+                                inline=True
+                            )
+                            embed.add_field(
+                                name=f"{member.display_name}'s Health",
+                                value=f"{player2_health}",
+                                inline=True
+                            )
+                            footer(embed)
+                            await action.reply(embed=embed)
+
+                            break
+                    elif player_health > 0 and player2_health < 0:
+                        embed = discord.embeds.Embed(
+                            title="Fight",
+                            description=f"{ctx.author.display_name} wins the fight!",
+                            colour=embedcolor()
+                        )
+                        embed.add_field(
+                            name=f"{ctx.author.display_name}'s Health",
+                            value=f"{player_health}",
+                            inline=True
+                        )
+                        embed.add_field(
+                            name=f"{member.display_name}'s Health",
+                            value=f"{player2_health}",
+                            inline=True
+                        )
+                        embed.add_field(
+                            name="Choices",
+                            value="- Attack\n"
+                                  "- Defend\n"
+                                  "- Run",
+                            inline=True
+                        )
+                        footer(embed)
+                        await ctx.send(embed=embed)
+                        break
+                    elif player_health < 0 and player2_health > 0:
+                        embed = discord.embeds.Embed(
+                            title="Fight",
+                            description=f"{member.display_name} wins the fight!",
+                            colour=embedcolor()
+                        )
+                        embed.add_field(
+                            name=f"{ctx.author.display_name}'s Health",
+                            value=f"{player_health}",
+                            inline=True
+                        )
+                        embed.add_field(
+                            name=f"{member.display_name}'s Health",
+                            value=f"{player2_health}",
+                            inline=True
+                        )
+                        embed.add_field(
+                            name="Choices",
+                            value="- Attack\n"
+                                  "- Defend\n"
+                                  "- Run",
+                            inline=True
+                        )
+                        footer(embed)
+                        await ctx.send(embed=embed)
+                        break
+                    match += 1
+                elif match % 2 == 1:  # Player 2's Turn
+                    if player_health > 0 and player2_health > 0:
+                        action = await bot.wait_for('message', check=check2, timeout=60.0)
+                        if action.content.lower() == "attack":
+                            if player_shield_effectiveness != 0.0:
+                                player2_damage = player_shield_effectiveness * random.randint(0, 30)
+                                player_health -= player2_damage
+                                player_shield_effectiveness = 0
+                            else:
+                                player2_damage = random.randint(0, 30)
+                                player_health -= player2_damage
+
+                            embed = discord.embeds.Embed(
+                                title="Fight",
+                                description=f"{member.display_name} dealt {player2_damage} to "
+                                            f"{ctx.author.display_name}!\n"
+                                            f"It is now {ctx.author.display_name}'s turn.",
+                                colour=embedcolor()
+                            )
+                            embed.add_field(
+                                name=f"{ctx.author.display_name}'s Health",
+                                value=f"{player_health}",
+                                inline=True
+                            )
+                            embed.add_field(
+                                name=f"{member.display_name}'s Health",
+                                value=f"{player2_health}",
+                                inline=True
+                            )
+                            embed.add_field(
+                                name="Choices",
+                                value="- Attack\n"
+                                      "- Defend\n"
+                                      "- Run",
+                                inline=True
+                            )
+                            footer(embed)
+                            await action.reply(embed=embed)
+
+                        elif action.content.lower() == "defend":
+                            player2_shield_effectiveness = random.choice([0.0, 1.0])
+
+                            embed = discord.embeds.Embed(
+                                title="Fight",
+                                description=f"{member.display_name} decided to defend themselves.\n"
+                                            f"It is now {ctx.author.display_name}'s turn.",
+                                colour=embedcolor()
+                            )
+                            embed.add_field(
+                                name=f"{ctx.author.display_name}'s Health",
+                                value=f"{player_health}",
+                                inline=True
+                            )
+                            embed.add_field(
+                                name=f"{member.display_name}'s Health",
+                                value=f"{player2_health}",
+                                inline=True
+                            )
+                            embed.add_field(
+                                name="Choices",
+                                value="- Attack\n"
+                                      "- Defend\n"
+                                      "- Run",
+                                inline=True
+                            )
+                            footer(embed)
+                            await action.reply(embed=embed)
+
+                        elif action.content.lower() == "run":
+
+                            embed = discord.embeds.Embed(
+                                title="Fight",
+                                description=f"{member.display_name} forfeits! "
+                                            f"{ctx.author.display_name} wins the fight!",
+                                colour=embedcolor()
+                            )
+                            embed.add_field(
+                                name=f"{ctx.author.display_name}'s Health",
+                                value=f"{player_health}",
+                                inline=True
+                            )
+                            embed.add_field(
+                                name=f"{member.display_name}'s Health",
+                                value=f"{player2_health}",
+                                inline=True
+                            )
+                            embed.add_field(
+                                name="Choices",
+                                value="- Attack\n"
+                                      "- Defend\n"
+                                      "- Run",
+                                inline=True
+                            )
+                            footer(embed)
+                            await action.reply(embed=embed)
+
+                            break
+                    elif player_health > 0 and player2_health < 0:
+                        embed = discord.embeds.Embed(
+                            title="Fight",
+                            description=f"{ctx.author.display_name} wins the fight!",
+                            colour=embedcolor()
+                        )
+                        embed.add_field(
+                            name=f"{ctx.author.display_name}'s Health",
+                            value=f"{player_health}",
+                            inline=True
+                        )
+                        embed.add_field(
+                            name=f"{member.display_name}'s Health",
+                            value=f"{player2_health}",
+                            inline=True
+                        )
+                        embed.add_field(
+                            name="Choices",
+                            value="- Attack\n"
+                                  "- Defend\n"
+                                  "- Run",
+                            inline=True
+                        )
+                        footer(embed)
+                        await ctx.send(embed=embed)
+                        break
+                    elif player_health < 0 and player2_health > 0:
+                        embed = discord.embeds.Embed(
+                            title="Fight",
+                            description=f"{member.display_name} wins the fight!",
+                            colour=embedcolor()
+                        )
+                        embed.add_field(
+                            name=f"{ctx.author.display_name}'s Health",
+                            value=f"{player_health}",
+                            inline=True
+                        )
+                        embed.add_field(
+                            name=f"{member.display_name}'s Health",
+                            value=f"{player2_health}",
+                            inline=True
+                        )
+                        embed.add_field(
+                            name="Choices",
+                            value="- Attack\n"
+                                  "- Defend\n"
+                                  "- Run",
+                            inline=True
+                        )
+                        footer(embed)
+                        await ctx.send(embed=embed)
+                        break
+                    match += 1
+        else:
+            await ctx.reply("You can't fight yourself.")
+
+
+@fight.error
+async def fight_error(ctx, error):
+    if isinstance(error, commands.MemberNotFound):
+        await ctx.message.delete()
+        print("[LOST-UB] Member not found, they must be in at least one server with you for this to work.")
+    elif isinstance(error, commands.MissingRequiredArgument):
+        await ctx.message.delete()
+        print(f"[LOST-UB] Missing required arguments. {get_prefix()}fight [@member]")
+
+
+# ======================================================================================================================
+# ======================================================================================================================
+
 bot.run(config['CONFIGURATION']['token'])
 # for safety purposes and ease of access, your token will be stored in
 # config.ini. if for whatever reason you mess up the token, just go to
