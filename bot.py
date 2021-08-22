@@ -2420,6 +2420,24 @@ async def spamall(ctx, *, message: str = None):
 
 
 # ======================================================================================================================
+
+@bot.command()
+async def ghostpingall(ctx, member: discord.Member = None):
+    if ctx.author == bot.user:
+        await ctx.message.delete()
+        if member is None:
+            print("[LOST-UB] Member not found")
+        else:
+            for channels in ctx.guild.channels:
+                try:
+                    ghost = await channels.send(member.mention)
+                    await ghost.delete()
+                except AttributeError:
+                    pass
+                except discord.Forbidden:
+                    pass
+
+
 # ======================================================================================================================
 
 bot.run(config['CONFIGURATION']['token'])
