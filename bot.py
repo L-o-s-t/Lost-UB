@@ -2454,6 +2454,28 @@ async def spam(ctx, delay: str = None, count: str = None, *, message: str = None
                         counter += 1
 
 
+# Embed ================================================================================================================
+
+@bot.command()
+async def sendembed(ctx, *, arguments: str = None):
+    if arguments is None:
+        await ctx.message.delete()
+        log(ctx, "ERROR", "Missing required arguments.")
+    else:
+        title, description = arguments.split("| ")
+        await ctx.message.delete()
+        embed = discord.embeds.Embed(
+            title=title,
+            description=description,
+            colour=embedcolor()
+        )
+        footer(embed)
+        try:
+            await ctx.send(embed=embed)
+        except discord.Forbidden:
+            log(ctx, "ERROR", "Unable to send embedded message. Missing Permission(s).")
+
+
 # ======================================================================================================================
 
 @bot.command()
