@@ -894,19 +894,11 @@ async def rps(ctx):
 @bot.command()
 async def prefix(ctx, x):
     if ctx.author == bot.user:
-        if config['CONFIGURATION']['logging'] == "True":
-            print(f"[LOST-UB] prefix command ran by {ctx.author.display_name}")
+        log(ctx, "PREFIX")
         config["CONFIGURATION"]["prefix"] = x
         write()
         bot.command_prefix = x
         await ctx.reply(f'Prefix changed to: ``{x}``')
-
-
-@prefix.error
-async def prefix_error(ctx, error):
-    if ctx.author == bot.user:
-        if isinstance(error, commands.MissingRequiredArgument):
-            await ctx.reply(f'Incorrect arguments | {config["CONFIGURATION"]["prefix"]}prefix (desired_prefix)')
 
 
 # Dicksize =============================================================================================================
