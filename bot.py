@@ -2180,6 +2180,7 @@ async def calculate(ctx, first_number: str = None, operator: str = None, second_
 @bot.command()
 async def blacklist(ctx, action: str = None, member: discord.Member = None):
     if ctx.author == bot.user:
+        log(ctx, "BLACKLIST")
         if action is None:
             count = 10
             total = 0
@@ -2230,7 +2231,25 @@ async def blacklist(ctx, action: str = None, member: discord.Member = None):
                 text=f"Logged in as {bot.user} | Lost-UB",
                 icon_url=bot.user.avatar_url
             )
-            await ctx.reply(embed=embed)
+            try:
+                await ctx.reply(embed=embed)
+            except discord.Forbidden:
+                if remainder > 0:
+                    string = f"These users are not allowed to use any commands.\n" \
+                             f"```{temp}" \
+                             f"+ {remainder} more...```" \
+                             f"Total Blacklisted Users: {total}"
+                else:
+                    if total == 0:
+                        string = f"No blacklisted users yet...\n"
+                    else:
+                        string = f"These users are not allowed to use any commands:\n\n" \
+                                 f"{temp}\n" \
+                                 f"[ Total Blacklisted Users ]\n" \
+                                 f"{total}"
+                await simple_codeblock(ctx,
+                                       f"[ Blacklisted Users ]\n"
+                                       f"{string}")
         elif action.lower() == "add":
             if member is None:
                 await ctx.reply(f"Command usage {get_prefix()}blacklist add (@member)")
@@ -2265,7 +2284,15 @@ async def blacklist(ctx, action: str = None, member: discord.Member = None):
                         text=f"Logged in as {bot.user} | Lost-UB",
                         icon_url=bot.user.avatar_url
                     )
-                    await ctx.reply(embed=embed)
+                    try:
+                        await ctx.reply(embed=embed)
+                    except discord.Forbidden:
+                        await simple_codeblock(ctx,
+                                               f"[ Blacklisted User Added ]\n\n"
+                                               f"[ User ]\n"
+                                               f"{member}\n\n"
+                                               f"[ ID ]\n"
+                                               f"{member.id}")
         elif action.lower() == "remove":
             if member is None:
                 await ctx.reply(f"Command usage {get_prefix()}blacklist remove (@member)")
@@ -2281,7 +2308,6 @@ async def blacklist(ctx, action: str = None, member: discord.Member = None):
                                 pass
                             else:
                                 temp += f"{x}\n"
-                                print(temp)
                     with open("data/blacklist.txt", "w") as file:
                         file.write(temp)
                     embed = discord.embeds.Embed(
@@ -2305,17 +2331,17 @@ async def blacklist(ctx, action: str = None, member: discord.Member = None):
                         text=f"Logged in as {bot.user} | Lost-UB",
                         icon_url=bot.user.avatar_url
                     )
-                    await ctx.reply(embed=embed)
+                    try:
+                        await ctx.reply(embed=embed)
+                    except discord.Forbidden:
+                        await simple_codeblock(ctx,
+                                               f"[ Blacklisted User Removed ]\n\n"
+                                               f"[ User ]\n"
+                                               f"{member}\n\n"
+                                               f"[ ID ]\n"
+                                               f"{member.id}")
                 else:
                     await ctx.reply("That user isn't blacklisted.")
-
-
-@blacklist.error
-async def blacklist_error(ctx, error):
-    if isinstance(error, commands.MemberNotFound):
-        await ctx.reply("Member not found.")
-    else:
-        await ctx.reply(error)
 
 
 # Battle ===============================================================================================================
