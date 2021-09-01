@@ -1038,8 +1038,7 @@ async def iq(ctx, member: discord.Member):
     if blacklist_check(ctx):
         await ctx.reply("You are blacklisted!")
     else:
-        if config['CONFIGURATION']['logging'] == "True":
-            print(f"[LOST-UB] iq command ran by {ctx.author.display_name}")
+        log(ctx, "IQ")
         result = ""
         iq_rating = random.randrange(0, 199)
         if iq_rating <= 69:
@@ -1056,41 +1055,45 @@ async def iq(ctx, member: discord.Member):
             result = "Superior"
         elif iq_rating >= 130:
             result = "Very Superior"
-        embed = discord.embeds.Embed(
-            title="Official IQ Rating",
-            description=f"{member}'s IQ is {iq_rating}",
-            colour=embedcolor()
-        )
-        embed.add_field(
-            name="Rating",
-            value=f"{result}"
-        )
-        embed.add_field(
-            name="IQ Classification",
-            value="130 and above: Very Superior\n"
-                  "120 - 129:     Superior\n"
-                  "110 - 119:     High Average\n"
-                  "90 - 109:      Average\n"
-                  "80 - 89:       Low Average\n"
-                  "70 - 79:       Borderline\n"
-                  "69 and below:  Extremely Low"
-        )
-        embed.set_footer(
-            text=f"Logged in as {bot.user} | Lost-UB",
-            icon_url=bot.user.avatar_url
-        )
-        await ctx.reply(embed=embed)
-
-
-@iq.error
-async def iq_error(ctx, error):
-    if blacklist_check(ctx):
-        await ctx.reply("You are blacklisted!")
-    else:
-        if isinstance(error, commands.MemberNotFound):
-            await ctx.reply(f'Incorrect arguments | {config["CONFIGURATION"]["prefix"]}iq (@member)')
-        if isinstance(error, commands.MissingRequiredArgument):
-            await ctx.reply(f'Incorrect arguments | {config["CONFIGURATION"]["prefix"]}iq (@member)')
+        try:
+            embed = discord.embeds.Embed(
+                title=f"{member.display_name}'s IQ Rating",
+                description=f"{member}'s IQ is {iq_rating}",
+                colour=embedcolor()
+            )
+            embed.add_field(
+                name="Rating",
+                value=f"{result}"
+            )
+            embed.add_field(
+                name="IQ Classification",
+                value="130 and above: Very Superior\n"
+                      "120 - 129:     Superior\n"
+                      "110 - 119:     High Average\n"
+                      "90 - 109:      Average\n"
+                      "80 - 89:       Low Average\n"
+                      "70 - 79:       Borderline\n"
+                      "69 and below:  Extremely Low"
+            )
+            embed.set_footer(
+                text=f"Logged in as {bot.user} | Lost-UB",
+                icon_url=bot.user.avatar_url
+            )
+            await ctx.reply(embed=embed)
+        except discord.Forbidden:
+            await ctx.reply(f"```ini\n"
+                            f"[ {member.display_name}'s IQ Rating ]\n"
+                            f"{member.display_name}'s IQ is [ {iq_rating} ]\n\n"
+                            f"[ IQ Classification ]\n"
+                            "130 and above: Very Superior\n"
+                            f"120 - 129:     Superior\n"
+                            f"110 - 119:     High Average\n"
+                            f"90 - 109:      Average\n"
+                            f"80 - 89:       Low Average\n"
+                            f"70 - 79:       Borderline\n"
+                            f"69 and below:  Extremely Low\n\n"
+                            f"{codeblock_footer()}"
+                            f"```")
 
 
 # AFK ==================================================================================================================
