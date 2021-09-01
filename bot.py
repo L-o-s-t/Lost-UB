@@ -1131,10 +1131,38 @@ async def on_message(ctx):
 @bot.command()
 async def stealpfp(ctx, member: discord.Member):
     if ctx.author == bot.user:
-        if config['CONFIGURATION']['logging'] == "True":
-            print(f"[LOST-UB] Stole {member.display_name}'s avatar")
+        log(ctx, "STEALPFP")
         if config['CONFIGURATION']['silentsteal'] == "True":
             await ctx.message.delete()
+        elif config['CONFIGURATION']['silentsteal'] == "False":
+            try:
+                embed = discord.embeds.Embed(
+                    title="Avatar Stolen!",
+                    colour=embedcolor()
+                )
+                embed.add_field(
+                    name="User",
+                    value=member.display_name
+                )
+                embed.add_field(
+                    name="Avatar",
+                    value=f"[Link]({member.avatar_url})"
+                )
+                embed.set_thumbnail(url=member.avatar_url)
+                embed.set_footer(
+                    text=f"Logged in as {bot.user} | Lost-UB",
+                    icon_url=bot.user.avatar_url
+                )
+                await ctx.reply(embed=embed)
+            except discord.Forbidden:
+                await ctx.reply(f"```ini\n"
+                                f"[ Avatar Stolen! ]\n\n"
+                                f"[ User ]\n"
+                                f"{member.display_name}\n\n"
+                                f"[ Avatar ]\n"
+                                f"{member.avatar_url}\n\n"
+                                f"{codeblock_footer()}\n"
+                                f"```")
         if member.is_avatar_animated():
             await member.avatar_url.save(f"data\\avatars\\{member.id}.gif")
             with open(f'data/avatars/{member.id}.gif', 'rb') as image:
@@ -1143,25 +1171,6 @@ async def stealpfp(ctx, member: discord.Member):
             await member.avatar_url.save(f"data\\avatars\\{member.id}.png")
             with open(f'data/avatars/{member.id}.png', 'rb') as image:
                 await bot.user.edit(avatar=image.read())
-        if config['CONFIGURATION']['silentsteal'] == "False":
-            embed = discord.embeds.Embed(
-                title="Avatar Stolen!",
-                colour=embedcolor()
-            )
-            embed.add_field(
-                name="User",
-                value=member.display_name
-            )
-            embed.add_field(
-                name="Avatar",
-                value=f"[Link]({member.avatar_url})"
-            )
-            embed.set_thumbnail(url=member.avatar_url)
-            embed.set_footer(
-                text=f"Logged in as {bot.user} | Lost-UB",
-                icon_url=bot.user.avatar_url
-            )
-            await ctx.reply(embed=embed)
 
 
 @bot.command()
@@ -1169,52 +1178,19 @@ async def pfp(ctx, member: discord.Member):
     if blacklist_check(ctx):
         await ctx.reply("You are blacklisted!")
     else:
-        if config['CONFIGURATION']['logging'] == "True":
-            print(f"[LOST-UB] pfp command ran by {ctx.author.display_name}")
-        embed = discord.embeds.Embed(
-            title="Profile Picture",
-            colour=embedcolor()
-        )
-        embed.add_field(
-            name="Link",
-            value=f"[Click Me]({member.avatar_url_as(format='jpg')})"
-        )
-        embed.add_field(
-            name="User",
-            value=f"{member.display_name}"
-        )
-        embed.set_thumbnail(url=member.avatar_url)
-        embed.set_footer(
-            text=f"Logged in as {bot.user} | Lost-UB",
-            icon_url=bot.user.avatar_url
-        )
-        await ctx.reply(embed=embed)
-
-
-@bot.command()
-async def savepfp(ctx, member: discord.Member):
-    if ctx.author == bot.user:
-        if config['CONFIGURATION']['logging'] == "True":
-            print(f"[LOST-UB] {member.display_name}'s avatar was saved as {member.id}.png.")
-        if config['CONFIGURATION']['silentsave'] == "True":
-            await ctx.message.delete()
-        if member.is_avatar_animated():
-            await member.avatar_url.save(f"data\\avatars\\{member.id}.gif")
-        else:
-            await member.avatar_url.save(f"data\\avatars\\{member.id}.png")
-        if config['CONFIGURATION']['silentsave'] == "False":
+        log(ctx, "PFP")
+        try:
             embed = discord.embeds.Embed(
-                title="Avatar Saved!",
-                description=f"{member.display_name}'s avatar was saved.",
+                title="Profile Picture",
                 colour=embedcolor()
             )
             embed.add_field(
-                name="User",
-                value=str(member)
+                name="Link",
+                value=f"[Click Me]({member.avatar_url_as(format='jpg')})"
             )
             embed.add_field(
-                name="Avatar",
-                value=f"[Link]({member.avatar_url})"
+                name="User",
+                value=f"{member.display_name}"
             )
             embed.set_thumbnail(url=member.avatar_url)
             embed.set_footer(
@@ -1222,26 +1198,55 @@ async def savepfp(ctx, member: discord.Member):
                 icon_url=bot.user.avatar_url
             )
             await ctx.reply(embed=embed)
+        except discord.Forbidden:
+            await ctx.reply(f"```ini\n"
+                            f"[ Profile Picture ]\n\n"
+                            f"[ Link ]\n"
+                            f"{member.avatar_url}\n\n"
+                            f"[ User ]\n"
+                            f"{member.display_name}\n\n"
+                            f"{codeblock_footer()}\n"
+                            f"```")
 
 
-@savepfp.error
-async def savepfp_error(ctx, error):
+@bot.command()
+async def savepfp(ctx, member: discord.Member):
     if ctx.author == bot.user:
-        if isinstance(error, commands.MemberNotFound):
-            await ctx.reply("Member not found.")
-        if isinstance(error, commands.MissingRequiredArgument):
-            await ctx.reply(f"Missing arguments | {get_prefix()}savepfp (@member)")
-
-
-@pfp.error
-async def pfp_error(ctx, error):
-    if blacklist_check(ctx):
-        await ctx.reply("You are blacklisted!")
-    else:
-        if isinstance(error, commands.MemberNotFound):
-            await ctx.reply("Member not found.")
-        if isinstance(error, commands.MissingRequiredArgument):
-            await ctx.reply(f"Missing arguments | {get_prefix()}pfp (@member)")
+        log(ctx, "PFP")
+        if config['CONFIGURATION']['silentsave'] == "True":
+            await ctx.message.delete()
+        elif config['CONFIGURATION']['silentsave'] == "False":
+            try:
+                embed = discord.embeds.Embed(
+                    title="Avatar Saved!",
+                    description=f"{member.display_name}'s avatar was saved.",
+                    colour=embedcolor()
+                )
+                embed.add_field(
+                    name="User",
+                    value=str(member)
+                )
+                embed.add_field(
+                    name="Avatar",
+                    value=f"[Link]({member.avatar_url})"
+                )
+                embed.set_thumbnail(url=member.avatar_url)
+                embed.set_footer(
+                    text=f"Logged in as {bot.user} | Lost-UB",
+                    icon_url=bot.user.avatar_url
+                )
+                await ctx.reply(embed=embed)
+            except discord.Forbidden:
+                await simple_codeblock(ctx, f"[ Avatar Saved! ]\n"
+                                            f"{member.display_name}'s avatar was saved.\n\n"
+                                            f"[ User ]\n"
+                                            f"{member}\n\n"
+                                            f"[ Avatar ]\n"
+                                            f"{member.avatar_url}")
+        if member.is_avatar_animated():
+            await member.avatar_url.save(f"data\\avatars\\{member.id}.gif")
+        else:
+            await member.avatar_url.save(f"data\\avatars\\{member.id}.png")
 
 
 # Settings =============================================================================================================
