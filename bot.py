@@ -29,6 +29,36 @@ except ModuleNotFoundError:
     process.wait()
     print("[LOST-UB] Finished installing PyPresence")
     import pypresence
+try:
+    from colorama import Fore, Back, Style, init
+
+    init(convert=True)
+except ModuleNotFoundError:
+    print("[LOST-UB] Colorama is not found, installing package...")
+    process = subprocess.Popen("py -m pip install colorama",
+                               stdout=subprocess.DEVNULL,
+                               stderr=subprocess.STDOUT)
+    process.wait()
+    print("[LOST-UB] Finished installing Colorama")
+    from colorama import Fore, Back, Style, init
+
+    init(convert=True)
+
+os.system('cls')
+print(f"""{Fore.BLUE}{Style.BRIGHT}                                                                                            
+                                  :::            ::::::::           ::::::::       :::::::::::
+                                 :+:           :+:    :+:         :+:    :+:          :+:
+                                +:+           +:+    +:+         +:+                 +:+
+                               +#+           +#+    +:+         +#++:++#++          +#+
+                              +#+           +#+    +#+                +#+          +#+
+                             #+#           #+#    #+#         #+#    #+#          #+#
+                            ##########     ########           ########           ###     
+
+{Fore.LIGHTBLUE_EX}
+################################################# LOST.#0404 ###########################################################
+""")
+
+# Functions & Setters ==================================================================================================
 
 config = configparser.ConfigParser()
 
