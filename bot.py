@@ -955,8 +955,7 @@ async def flipcoin(ctx):
     if blacklist_check(ctx):
         await ctx.reply("You are blacklisted!")
     else:
-        if config['CONFIGURATION']['logging'] == "True":
-            print(f"[LOST-UB] rps command ran by {ctx.author.display_name}")
+        log(ctx, "FLIPCOIN")
         side = random.choice(['heads', 'tails'])
         await ctx.reply(f"it's {side}")
 
@@ -969,11 +968,10 @@ async def eightball(ctx, *, question: str = None):
     if blacklist_check(ctx):
         await ctx.reply("You are blacklisted!")
     else:
+        log(ctx, "8BALL")
         if question is None:
             await ctx.reply(f'Incorrect arguments | {config["CONFIGURATION"]["prefix"]}8ball (question)')
         else:
-            if config['CONFIGURATION']['logging'] == "True":
-                print(f"[LOST-UB] 8ball command ran by {ctx.author.display_name}")
             answers = random.choice(['It is Certain.',
                                      'It is decidedly so.',
                                      'Without a doubt.',
@@ -994,20 +992,29 @@ async def eightball(ctx, *, question: str = None):
                                      'My sources say no.',
                                      'Outlook not so good.',
                                      'Very doubtful.'])
-            embed = discord.embeds.Embed(
-                title="Eight Ball",
-                description=f"{question}",
-                colour=embedcolor()
-            )
-            embed.add_field(
-                name="Answer",
-                value=f"{answers}"
-            )
-            embed.set_footer(
-                text=f"Logged in as {bot.user} | Lost-UB",
-                icon_url=bot.user.avatar_url
-            )
-            await ctx.reply(embed=embed)
+            try:
+                embed = discord.embeds.Embed(
+                    title="Eight Ball",
+                    description=f"{question}",
+                    colour=embedcolor()
+                )
+                embed.add_field(
+                    name="Answer",
+                    value=f"{answers}"
+                )
+                embed.set_footer(
+                    text=f"Logged in as {bot.user} | Lost-UB",
+                    icon_url=bot.user.avatar_url
+                )
+                await ctx.reply(embed=embed)
+            except discord.Forbidden:
+                await ctx.reply(f"```ini\n"
+                                f"[ Eight Ball ]\n"
+                                f"{question}\n\n"
+                                f"[ Answer ]\n"
+                                f"{answers}\n\n"
+                                f"{codeblock_footer()}"
+                                f"```")
 
 
 # Ghost Ping ===========================================================================================================
