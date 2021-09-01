@@ -1102,8 +1102,7 @@ async def iq(ctx, member: discord.Member):
 @bot.command()
 async def afk(ctx):
     if ctx.author == bot.user:
-        if config['CONFIGURATION']['logging'] == "True":
-            print(f"[LOST-UB] afk command ran by {ctx.author.display_name}")
+        log(ctx, "AFK")
         if config["CONFIGURATION"]["AFK"] == "True":
             config["CONFIGURATION"]["AFK"] = "False"
             write()
