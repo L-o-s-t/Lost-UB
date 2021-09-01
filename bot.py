@@ -2889,21 +2889,23 @@ async def fight_error(ctx, error):
 @bot.command()
 async def spam(ctx, delay: str = None, count: str = None, *, message: str = None):
     if bot.user == ctx.author:
+        log(ctx, "SPAM")
         await ctx.message.delete()
         if delay is None:
-            print(f"[LOST-UB] Missing required arguments. {get_prefix()}spam [delay] [count] [message]")
+            log(ctx, "ERROR", f"Missing required arguments. {get_prefix()}spam [delay] [count] [message]")
         elif not delay.isnumeric():
-            print(f"[LOST-UB] Invalid arguments, '{delay}' is not a number.")
+            log(ctx, "ERROR", f"Invalid arguments, '{delay}' is not a number.")
         else:
             if count is None:
-                print(f"[LOST-UB] Missing required arguments. {get_prefix()}spam [delay] [count] [message]")
+                log(ctx, "ERROR", f"Missing required arguments. {get_prefix()}spam [delay] [count] [message]")
             elif not count.isnumeric():
-                print(f"[LOST-UB] Invalid arguments, '{count}' is not a number.")
+                log(ctx, "ERROR", f"Invalid arguments, '{count}' is not a number.")
             else:
                 if message is None:
-                    print(f"[LOST-UB] Missing required arguments. {get_prefix()}spam [delay] [count] [message]")
+                    log(ctx, "ERROR", f"Missing required arguments. "
+                                      f"{get_prefix()}spam [delay] [count] [message]")
                 elif message is None:
-                    print(f"You have to specify what you want to spam!")
+                    log(ctx, "ERROR", f"You have to specify what you want to spam!")
                 else:
                     counter = 0
                     while counter < int(count):
