@@ -1025,22 +1025,10 @@ async def ghostping(ctx, member: discord.Member):
     if blacklist_check(ctx):
         await ctx.reply("You are blacklisted!")
     else:
-        if config['CONFIGURATION']['logging'] == "True":
-            print(f"[LOST-UB] ghostping command ran by {ctx.author.display_name}")
+        log(ctx, "GHOSTPING")
         msg = await ctx.send(f'{member}')
         await msg.delete()
         await ctx.message.delete()
-
-
-@ghostping.error
-async def ghostping_error(ctx, error):
-    if blacklist_check(ctx):
-        await ctx.reply("You are blacklisted!")
-    else:
-        if isinstance(error, commands.MemberNotFound):
-            await ctx.reply(f'Incorrect arguments | {config["CONFIGURATION"]["prefix"]}ghostping (@member)')
-        if isinstance(error, commands.MissingRequiredArgument):
-            await ctx.reply(f'Incorrect arguments | {config["CONFIGURATION"]["prefix"]}ghostping (@member)')
 
 
 # IQ Rating ============================================================================================================
