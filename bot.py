@@ -910,42 +910,41 @@ async def dicksize(ctx, member: discord.Member):
         await ctx.reply("You are blacklisted!")
     else:
         desc = ''
-        if config['CONFIGURATION']['logging'] == "True":
-            print(f"[LOST-UB] dicksize command ran by {ctx.author.display_name}")
+        log(ctx, "DICKSIZE")
         size = random.randrange(0, 12)
         if size >= 6:
             desc = "That's a schlong dong!"
         elif size < 6:
             desc = "so smol! 🥺"
-        embed = discord.embeds.Embed(
-            title=f"{member.display_name}'s Dick Size",
-            description=desc,
-            colour=embedcolor()
-        )
-        embed.add_field(
-            name="Size",
-            value=f"{size} inches"
-        )
-        embed.add_field(
-            name="Demonstration",
-            value=f"8{size * '='}D"
-        )
-        embed.set_footer(
-            text=f"Logged in as {bot.user} | Lost-UB",
-            icon_url=bot.user.avatar_url
-        )
-        await ctx.reply(embed=embed)
-
-
-@dicksize.error
-async def dicksize_error(ctx, error):
-    if blacklist_check(ctx):
-        await ctx.reply("You are blacklisted!")
-    else:
-        if isinstance(error, commands.MissingRequiredArgument):
-            await ctx.reply(f'Incorrect arguments | {config["CONFIGURATION"]["prefix"]}dicksize (@member)')
-        if isinstance(error, commands.MemberNotFound):
-            await ctx.reply(f'Incorrect arguments | {config["CONFIGURATION"]["prefix"]}dicksize (@member)')
+        try:
+            embed = discord.embeds.Embed(
+                title=f"{member.display_name}'s Dick Size",
+                description=desc,
+                colour=embedcolor()
+            )
+            embed.add_field(
+                name="Size",
+                value=f"{size} inches"
+            )
+            embed.add_field(
+                name="Demonstration",
+                value=f"8{size * '='}D"
+            )
+            embed.set_footer(
+                text=f"Logged in as {bot.user} | Lost-UB",
+                icon_url=bot.user.avatar_url
+            )
+            await ctx.reply(embed=embed)
+        except discord.Forbidden:
+            await ctx.reply(f"```ini\n"
+                            f"[ {member.display_name}'s Dick Size ]\n"
+                            f"{desc}\n\n"
+                            f"[ Size ]\n"
+                            f"{size} inches\n\n"
+                            f"[ Demonstration ]\n"
+                            f"8{size * '='}D\n\n"
+                            f"{codeblock_footer()}"
+                            f"```")
 
 
 # Flipcoin =============================================================================================================
