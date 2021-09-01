@@ -11,6 +11,9 @@
 - ServerIcon
 - Userinfo
 - Calculate
+- SendEmbed
+- Poll
+- Blacklist
 
 ### Fun
 - DickSize
