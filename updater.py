@@ -1,7 +1,14 @@
 import os
 import shutil
 import subprocess
-from git import Repo
+try:
+    from git import Repo
+except ModuleNotFoundError:
+    process = subprocess.Popen("py -m pip install GitPython",
+                               stdout=subprocess.DEVNULL,
+                               stderr=subprocess.STDOUT)
+    process.wait()
+    from git import Repo
 
 print("""
                                   :::            ::::::::           ::::::::       :::::::::::
