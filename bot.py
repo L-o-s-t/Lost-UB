@@ -1753,6 +1753,7 @@ async def warn(ctx, member: discord.Member, *, reason: str = None):
         if reason is None:
             await ctx.reply("You must enter a reason for this warning.")
         else:
+            log(ctx, "WARN")
             if not os.path.exists("data/warnings"):
                 os.mkdir("data/warnings")
             if not os.path.exists(f"data/warnings/{ctx.guild.id}"):
@@ -1769,30 +1770,41 @@ async def warn(ctx, member: discord.Member, *, reason: str = None):
                 for x in lines:
                     if x:
                         count += 1
-            embed = discord.embeds.Embed(
-                title="User Warned",
-                description=f"Command Author: {ctx.author}",
-                colour=embedcolor()
-            )
-            embed.add_field(
-                name="User",
-                value=f"{member}",
-                inline=True
-            )
-            embed.add_field(
-                name="Reason",
-                value=reason,
-                inline=True
-            )
-            embed.add_field(
-                name="Warnings",
-                value=f"{count + 1}",
-                inline=True
-            )
-            embed.set_thumbnail(
-                url=member.avatar_url
-            )
-            await ctx.reply(embed=embed)
+            try:
+                embed = discord.embeds.Embed(
+                    title="User Warned",
+                    description=f"Command Author: {ctx.author}",
+                    colour=embedcolor()
+                )
+                embed.add_field(
+                    name="User",
+                    value=f"{member}",
+                    inline=True
+                )
+                embed.add_field(
+                    name="Reason",
+                    value=reason,
+                    inline=True
+                )
+                embed.add_field(
+                    name="Warnings",
+                    value=f"{count + 1}",
+                    inline=True
+                )
+                embed.set_thumbnail(
+                    url=member.avatar_url
+                )
+                await ctx.reply(embed=embed)
+            except discord.Forbidden:
+                await simple_codeblock(ctx,
+                                       f"[ User Warned ]\n"
+                                       f"Command author: {ctx.author}\n\n"
+                                       f"[ User ]\n"
+                                       f"{member}\n\n"
+                                       f"[ Reason ]\n"
+                                       f"{reason}\n\n"
+                                       f"[ Warnings ]\n"
+                                       f"{count + 1}")
 
 
 @bot.command()
@@ -1801,6 +1813,7 @@ async def warnings(ctx, member: discord.Member):
     if blacklist_check(ctx):
         await ctx.reply("You are blacklisted!")
     else:
+        log(ctx, "WARNINGS")
         if not os.path.exists(f"data/warnings/{ctx.guild.id}/{member.id}.txt"):
             embed = discord.embeds.Embed(
                 title="User Warnings",
@@ -1838,26 +1851,22 @@ async def warnings(ctx, member: discord.Member):
                                     f"+ {remainder} more```",
                         colour=embedcolor()
                     )
-                await ctx.reply(embed=embed)
-
-
-@warn.error
-async def warn_error(ctx, error):
-    if isinstance(error, commands.MissingPermissions):
-        await ctx.reply('You are missing permissions!')
-    elif isinstance(error, commands.MemberNotFound):
-        await ctx.reply('Member not found!')
-
-
-@warnings.error
-async def warnings_error(ctx, error):
-    if blacklist_check(ctx):
-        await ctx.reply("You are blacklisted!")
-    else:
-        if isinstance(error, commands.MissingPermissions):
-            await ctx.reply('You are missing permissions!')
-        elif isinstance(error, commands.MemberNotFound):
-            await ctx.reply('Member not found!')
+                try:
+                    await ctx.reply(embed=embed)
+                except discord.Forbidden:
+                    if remainder == 0:
+                        await simple_codeblock(ctx,
+                                               f"[ User Warnings ]\n"
+                                               f"{member} has {count} warnings\n\n"
+                                               f"[ Warns ]\n"
+                                               f"{warns}")
+                    else:
+                        await simple_codeblock(ctx,
+                                               f"[ User Warnings ]\n"
+                                               f"{member} has {count} warnings\n\n"
+                                               f"[ Warns ]\n"
+                                               f"{warns}"
+                                               f"+ {remainder} more")
 
 
 # User info ============================================================================================================
