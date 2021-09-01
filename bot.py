@@ -94,6 +94,127 @@ def footer(embed):
     )
 
 
+def codeblock_footer():
+    return f"# Logged in as {bot.user.display_name} | Lost-UB"
+
+
+def embedcolor():
+    if config['CONFIGURATION']['embedcolor'].lower() == "red":
+        return discord.Colour.from_rgb(255, 0, 0)
+    elif config['CONFIGURATION']['embedcolor'].lower() == "light red":
+        return discord.Colour.from_rgb(255, 76, 76)
+    elif config['CONFIGURATION']['embedcolor'].lower() == "orange":
+        return discord.Colour.from_rgb(255, 165, 0)
+    elif config['CONFIGURATION']['embedcolor'].lower() == "light orange":
+        return discord.Colour.from_rgb(255, 192, 76)
+    elif config['CONFIGURATION']['embedcolor'].lower() == "yellow":
+        return discord.Colour.from_rgb(255, 255, 0)
+    elif config['CONFIGURATION']['embedcolor'].lower() == "green":
+        return discord.Colour.from_rgb(0, 128, 0)
+    elif config['CONFIGURATION']['embedcolor'].lower() == "light green":
+        return discord.Colour.from_rgb(76, 166, 76)
+    elif config['CONFIGURATION']['embedcolor'].lower() == "blue":
+        return discord.Colour.from_rgb(0, 0, 255)
+    elif config['CONFIGURATION']['embedcolor'].lower() == "light blue":
+        return discord.Colour.from_rgb(76, 76, 255)
+    elif config['CONFIGURATION']['embedcolor'].lower() == "purple":
+        return discord.Colour.from_rgb(128, 0, 128)
+    elif config['CONFIGURATION']['embedcolor'].lower() == "light purple":
+        return discord.Colour.from_rgb(128, 0, 128)
+    elif config['CONFIGURATION']['embedcolor'].lower() == "pink":
+        return discord.Colour.from_rgb(255, 192, 203)
+    elif config['CONFIGURATION']['embedcolor'].lower() == "light pink":
+        return discord.Colour.from_rgb(255, 210, 218)
+
+
+def simple_embed(context, title, description, thumbnail: str = None, reply: bool = True):
+    embed = discord.embeds.Embed(
+        title=title,
+        description=description,
+        colour=embedcolor()
+    )
+    if thumbnail is None:
+        pass
+    else:
+        embed.set_thumbnail(url=thumbnail)
+    footer(embed)
+    if reply is True:
+        return context.reply(embed=embed)
+    else:
+        return context.send(embed=embed)
+
+
+def simple_codeblock(context, text, reply: bool = True):
+    if reply is True:
+        return context.reply(f"```ini\n"
+                             f"{text}\n\n"
+                             f"{codeblock_footer()}\n"
+                             f"```")
+    else:
+        return context.send(f"```ini\n"
+                            f"{text}\n\n"
+                            f"{codeblock_footer()}\n"
+                            f"```")
+
+
+def timestamp():
+    current_time = time.localtime()
+    if current_time.tm_hour > 12:
+        hour = current_time.tm_hour - 12
+        suffix = "pm"
+    else:
+        hour = current_time.tm_hour
+        suffix = "am"
+    count = 0
+    for x in str(current_time.tm_min):
+        count += 1
+    if count == 1:
+        minute = f"0{current_time.tm_min}"
+    else:
+        minute = current_time.tm_min
+    return f"{hour}:{minute}{suffix}"
+
+
+def log(context, command_name, message: str = None):
+    if context.guild is None:
+        context.guild = "dms"
+    if message is None:
+        if command_name.lower() == "error":
+            string = f"{Fore.LIGHTBLUE_EX}[LOST-UB]" \
+                     f"{Fore.LIGHTCYAN_EX}[{f'{context.guild}'.upper()}]" \
+                     f"[{f'{context.author}'.upper()}]" \
+                     f"{Fore.LIGHTRED_EX}[{command_name}]{Fore.RESET}> " \
+                     f"{context.message.content}"
+        else:
+            string = f"{Fore.LIGHTBLUE_EX}[LOST-UB]" \
+                     f"{Fore.LIGHTCYAN_EX}[{f'{context.guild}'.upper()}]" \
+                     f"[{f'{context.author}'.upper()}]" \
+                     f"{Fore.LIGHTGREEN_EX}[{command_name}]{Fore.RESET}> " \
+                     f"{context.message.content}"
+    else:
+        if command_name.lower() == "error":
+            string = f"{Fore.LIGHTBLUE_EX}[LOST-UB]" \
+                     f"{Fore.LIGHTCYAN_EX}[{f'{context.guild}'.upper()}]" \
+                     f"[{f'{context.author}'.upper()}]" \
+                     f"{Fore.LIGHTRED_EX}[{command_name}]{Fore.RESET}> " \
+                     f"{message}"
+        else:
+            string = f"{Fore.LIGHTBLUE_EX}[LOST-UB]" \
+                     f"{Fore.LIGHTCYAN_EX}[{f'{context.guild}'.upper()}]" \
+                     f"[{f'{context.author}'.upper()}]" \
+                     f"{Fore.LIGHTGREEN_EX}[{command_name}]{Fore.RESET}> " \
+                     f"{message}"
+    return print(string)
+
+
+games = 3
+fun = 9
+tools = 8
+admin = 4
+
+# Checks ===============================================================================================================
+
+
 # Checks to see if "config.ini" exists, if not then it will create one.
 if not os.path.exists('config.ini'):
     config['CONFIGURATION'] = {
