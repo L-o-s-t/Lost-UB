@@ -323,7 +323,7 @@ def embedcolor():
 
 
 bot = commands.Bot(command_prefix=f"{config['CONFIGURATION']['prefix']}", help_command=None, user_bot=True,
-                   guild_subscriptions=False, case_insensitive=True)
+                   guild_subscriptions=False, case_insensitive=True, chunk_guilds_at_startup=False)
 
 try:
     if config['CONFIGURATION']['rich_presence'] == "True":
