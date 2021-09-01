@@ -2964,9 +2964,10 @@ async def sendembed(ctx, *, arguments: str = None):
 @bot.command()
 async def spamall(ctx, *, message: str = None):
     if ctx.author == bot.user:
+        log(ctx, "SPAMALL")
         await ctx.message.delete()
         if message is None:
-            print(f"[LOST-UB] You must specify a message. {get_prefix()}spamall [message]")
+            log(ctx, "ERROR", f"You must specify a message. {get_prefix()}spamall [message]")
         else:
             for channels in ctx.guild.channels:
                 try:
