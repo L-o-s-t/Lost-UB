@@ -1868,13 +1868,12 @@ async def userinfo(ctx, member: discord.Member):
     if blacklist_check(ctx):
         await ctx.reply("You are blacklisted!")
     else:
-        if config['CONFIGURATION']['logging'] == "True":
-            print(f"[LOST-UB] userinfo command ran by {ctx.author.display_name}")
+        log(ctx, "USERINFO")
         minute = ""
         friends = ""
         guilds = ""
         roles = ""
-        gay = random.randrange(1, 101)
+        gay = random.randint(0, 100)
         if member == bot.user:
             gay = "very straight for using Lost-UB!"
         elif gay >= 50:
@@ -1964,88 +1963,107 @@ async def userinfo(ctx, member: discord.Member):
             suffix = "pm"
         if 0 <= a.minute <= 9:
             minute = f"0{a.minute}"
-        embed = discord.embeds.Embed(
-            title="User Info",
-            colour=embedcolor()
-        )
-        embed.add_field(
-            name="User",
-            value=str(member),
-            inline=True
-        )
-        embed.add_field(
-            name="Date Created",
-            value=f"{month} {day}, {a.year}",
-            inline=True
-        )
-        if 0 <= a.minute <= 9:
+        try:
+            embed = discord.embeds.Embed(
+                title="User Info",
+                colour=embedcolor()
+            )
             embed.add_field(
-                name="Time Created",
-                value=f"{hour}:{minute}{suffix}",
+                name="User",
+                value=str(member),
                 inline=True
             )
-        else:
             embed.add_field(
-                name="Time Created",
-                value=f"{hour}:{a.minute}{suffix}",
+                name="Date Created",
+                value=f"{month} {day}, {a.year}",
                 inline=True
             )
-        embed.set_footer(
-            text=f"Logged in as {ctx.author} | Lost-UB",
-            icon_url=bot.user.avatar_url
-        )
-        if member.is_avatar_animated():
+            if 0 <= a.minute <= 9:
+                embed.add_field(
+                    name="Time Created",
+                    value=f"{hour}:{minute}{suffix}",
+                    inline=True
+                )
+            else:
+                embed.add_field(
+                    name="Time Created",
+                    value=f"{hour}:{a.minute}{suffix}",
+                    inline=True
+                )
+            embed.set_footer(
+                text=f"Logged in as {ctx.author} | Lost-UB",
+                icon_url=bot.user.avatar_url
+            )
+            if member.is_avatar_animated():
+                embed.add_field(
+                    name="Avatar Url",
+                    value=f"[Link]({member.avatar_url_as(format='gif')})",
+                    inline=True
+                )
+            else:
+                embed.add_field(
+                    name="Avatar Url",
+                    value=f"[Link]({member.avatar_url_as(format='png')})",
+                    inline=True
+                )
             embed.add_field(
-                name="Avatar Url",
-                value=f"[Link]({member.avatar_url_as(format='gif')})",
+                name="Roles",
+                value=f"{roles}",
                 inline=True
             )
-        else:
             embed.add_field(
-                name="Avatar Url",
-                value=f"[Link]({member.avatar_url_as(format='png')})",
+                name="User ID",
+                value=f"{member.id}",
                 inline=True
             )
-        embed.add_field(
-            name="Roles",
-            value=f"{roles}",
-            inline=True
-        )
-        embed.add_field(
-            name="User ID",
-            value=f"{member.id}",
-            inline=True
-        )
-        embed.add_field(
-            name="Mutual Friends",
-            value=f"{friends}",
-            inline=True
-        )
-        embed.add_field(
-            name="Mutual Guilds",
-            value=f"{guilds}",
-            inline=True
-        )
-        embed.add_field(
-            name="Gay?",
-            value=f"{gay}",
-            inline=True
-        )
-        embed.set_thumbnail(
-            url=member.avatar_url
-        )
-        await ctx.reply(embed=embed)
-
-
-@userinfo.error
-async def userinfo_error(ctx, error):
-    if blacklist_check(ctx):
-        await ctx.reply("You are blacklisted!")
-    else:
-        if isinstance(error, commands.MissingRequiredArgument):
-            await ctx.reply(f"Incorrect arguments | {get_prefix()}userinfo (@member)")
-        else:
-            print("Error when running userinfo")
+            embed.add_field(
+                name="Mutual Friends",
+                value=f"{friends}",
+                inline=True
+            )
+            embed.add_field(
+                name="Mutual Guilds",
+                value=f"{guilds}",
+                inline=True
+            )
+            embed.add_field(
+                name="Gay?",
+                value=f"{gay}",
+                inline=True
+            )
+            embed.set_thumbnail(
+                url=member.avatar_url
+            )
+            await ctx.reply(embed=embed)
+        except discord.Forbidden:
+            if 0 <= a.minute <= 9:
+                time_created = f"{hour}:{minute}{suffix}"
+            else:
+                time_created = f"{hour}:{a.minute}{suffix}"
+            if member.is_avatar_animated():
+                avatar = f"{member.avatar_url_as(format='gif')}"
+            else:
+                avatar = f"{member.avatar_url_as(format='png')}"
+            await simple_codeblock(ctx,
+                                   f"[ User Info ]\n\n"
+                                   f"[ User ]\n"
+                                   f"{member}\n\n"
+                                   f"[ Date Created ]\n"
+                                   f"{month} {day}, {a.year}\n\n"
+                                   f"[ Time Created ]\n"
+                                   f"{time_created}\n\n"
+                                   f"[ Avatar Url ]\n"
+                                   f"{avatar}\n\n"
+                                   f"[ Roles ]\n"
+                                   f"{roles}\n"
+                                   f"[ User ID ]\n"
+                                   f"{member.id}\n\n"
+                                   f"[ Mutual Friends ]\n"
+                                   f"{friends}\n\n"
+                                   f"[ Mutual Guilds ]\n"
+                                   f"{guilds}\n"
+                                   f"[ Gay? ]\n"
+                                   f"{gay}")
 
 
 # Kick =================================================================================================================
