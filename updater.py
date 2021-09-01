@@ -55,41 +55,9 @@ elif os.path.exists("bot.py"):
     elif newbot == oldbot:
         print("[LOST] No updates found...")
 
-# Checks if bot.exe exists, if not it will create it
-if not os.path.exists("bot.exe"):
-
-    # Starts creating bot executable file
-    print("[LOST] Bot executable not found, creating new one...")
-    process = subprocess.Popen("pyinstaller --icon data\\bot.ico --onefile bot.py",
-                               stdout=subprocess.DEVNULL,
-                               stderr=subprocess.STDOUT)
-    process.wait()
-
-    # Cleans up unncessary files from the creation of the bot executable file
-    os.remove("bot.spec")
-    shutil.rmtree("build")
-    shutil.rmtree("__pycache__")
-    os.replace("dist/bot.exe", "bot.exe")
-    shutil.rmtree("dist")
-    print("[LOST] Successfully created bot executable")
-
-# If bot.exe does exist, and bot.py isn't up to date
-elif os.path.exists("bot.exe"):
-
-    # updates bot executable file
-    os.remove("bot.exe")
-    process = subprocess.Popen("pyinstaller --icon data\\bot.ico --onefile bot.py",
-                               stdout=subprocess.DEVNULL,
-                               stderr=subprocess.STDOUT)
-    process.wait()
-
-    # Cleans up unncessary files from the creation of the bot executable file
-    os.remove("bot.spec")
-    shutil.rmtree("build")
-    shutil.rmtree("__pycache__")
-    os.replace("dist/bot.exe", "bot.exe")
-    shutil.rmtree("dist")
-    print("[LOST] Successfully updated bot executable")
+if os.path.exists("commands"):
+    shutil.rmtree("commands")
+shutil.move("repo/commands", "commands")
 
 process = subprocess.run("echo y | rmdir /s repo",
                          shell=True,
