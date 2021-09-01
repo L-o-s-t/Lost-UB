@@ -218,9 +218,9 @@ admin = 4
 # Checks to see if "config.ini" exists, if not then it will create one.
 if not os.path.exists('config.ini'):
     config['CONFIGURATION'] = {
-        "token": f"{input('Welcome, please enter in your token: ')}",
-        "prefix": f"{input('Please enter in your desired prefix: ')}",
         "logging": f"{input('Enable logs? (true/false): ')}",
+        "token": f"{input(f'{Fore.LIGHTBLUE_EX}[LOST-UB]{Fore.RESET} Please enter in your token: ')}",
+        "prefix": f"{input(f'{Fore.LIGHTBLUE_EX}[LOST-UB]{Fore.RESET} Please enter in your prefix: ')}",
         "AFK": "False",
         "afk_msg": "I'm afk",
         "afk_legit": "True",
