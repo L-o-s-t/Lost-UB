@@ -2982,9 +2982,10 @@ async def spamall(ctx, *, message: str = None):
 @bot.command()
 async def ghostpingall(ctx, member: discord.Member = None):
     if ctx.author == bot.user:
+        log(ctx, "GHOSTPINGALL")
         await ctx.message.delete()
         if member is None:
-            print("[LOST-UB] Member not found")
+            log(ctx, "ERROR", "Member not found")
         else:
             for channels in ctx.guild.channels:
                 try:
