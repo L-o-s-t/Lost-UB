@@ -2454,6 +2454,31 @@ async def spam(ctx, delay: str = None, count: str = None, *, message: str = None
                         counter += 1
 
 
+# Poll =================================================================================================================
+
+@bot.command()
+async def poll(ctx, *, arguments: str = None):
+    if arguments is None:
+        await ctx.message.delete()
+        log(ctx, "ERROR", "Missing required arguments.")
+    else:
+        title, description = arguments.split(', ')
+        await ctx.message.delete()
+        embed = discord.embeds.Embed(
+            title=title,
+            description=description,
+            colour=embedcolor()
+        )
+        footer(embed)
+        try:
+            msg = await ctx.send(embed=embed)
+        except discord.Forbidden:
+            msg = await simple_codeblock(ctx, f"[ {title} ]\n"
+                                              f"{description}", reply=False)
+        await msg.add_reaction('✅')
+        await msg.add_reaction('❎')
+
+
 # Embed ================================================================================================================
 
 @bot.command()
