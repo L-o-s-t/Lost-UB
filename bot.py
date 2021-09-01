@@ -1657,19 +1657,22 @@ async def rolladice(ctx):
     if blacklist_check(ctx):
         await ctx.reply("You are blacklisted!")
     else:
-        if config['CONFIGURATION']['logging'] == "True":
-            print(f"[LOST-UB] rps command ran by {ctx.author.display_name}")
+        log(ctx, "ROLLADICE")
         number = random.randrange(1, 7)
-        embed = discord.embeds.Embed(
-            title="Dice Roll",
-            description=f"You rolled a {number}",
-            colour=embedcolor()
-        )
-        embed.set_footer(
-            text=f"Logged in as {bot.user} | Lost-UB",
-            icon_url=bot.user.avatar_url
-        )
-        await ctx.reply(embed=embed)
+        try:
+            embed = discord.embeds.Embed(
+                title="Dice Roll",
+                description=f"You rolled a {number}",
+                colour=embedcolor()
+            )
+            embed.set_footer(
+                text=f"Logged in as {bot.user} | Lost-UB",
+                icon_url=bot.user.avatar_url
+            )
+            await ctx.reply(embed=embed)
+        except discord.Forbidden:
+            await simple_codeblock(ctx, f"[ Dice Roll ]\n"
+                                        f"You rolled a {number}")
 
 
 # Jesus ================================================================================================================
