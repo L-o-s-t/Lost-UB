@@ -2920,7 +2920,7 @@ async def poll(ctx, *, arguments: str = None):
         await ctx.message.delete()
         log(ctx, "ERROR", "Missing required arguments.")
     else:
-        title, description = arguments.split(', ')
+        title, description = arguments.split('| ')
         await ctx.message.delete()
         embed = discord.embeds.Embed(
             title=title,
