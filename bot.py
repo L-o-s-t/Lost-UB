@@ -285,6 +285,8 @@ else:
         config["CONFIGURATION"]["rich_presence"] = "True"
         write()
 
+if not os.path.exists('data'):
+    os.mkdir('data')
 if not os.path.exists('data/avatars'):
     os.mkdir('data/avatars')
 if not os.path.exists('data/blacklist.txt'):
