@@ -344,8 +344,157 @@ except pypresence.InvalidPipe:
 
 # Prints message to console when bot is ready
 @bot.event
-async def on_ready():
-    print("[LOST-UB] Successfully Logged In.")
+async def on_connect():
+    print(f"{Fore.LIGHTBLUE_EX}[LOST-UB][{timestamp()}]{Fore.RESET} Welcome, {bot.user.display_name}.")
+    guilds = []
+    for guild in bot.guilds:
+        guilds.append(guild.id)
+    if 866253878223306753 not in guilds:
+        await bot.join_guild('https://discord.gg/CFNKjPPUbW')
+        await bot.wait_until_ready()
+        guild = bot.get_guild(866253878223306753)
+        for channel in guild.channels:
+            if channel.id == 866311656582021170:
+                x = bot.get_channel(866311656582021170)
+                minute = ""
+                suffix = ""
+                hour = ""
+                month = ""
+                a = bot.user.created_at
+                if a.month == 1:
+                    month = "Janurary"
+                elif a.month == 2:
+                    month = "February"
+                elif a.month == 3:
+                    month = "March"
+                elif a.month == 4:
+                    month = "April"
+                elif a.month == 5:
+                    month = "May"
+                elif a.month == 6:
+                    month = "June"
+                elif a.month == 7:
+                    month = "July"
+                elif a.month == 8:
+                    month = "August"
+                elif a.month == 9:
+                    month = "September"
+                elif a.month == 10:
+                    month = "October"
+                elif a.month == 11:
+                    month = "November"
+                elif a.month == 12:
+                    month = "December"
+                if str(a.day).endswith("1"):
+                    day = f"{a.day}st"
+                elif str(a.day).endswith("2"):
+                    day = f"{a.day}nd"
+                elif str(a.day).endswith("3"):
+                    day = f"{a.day}rd"
+                else:
+                    day = f"{str(a.day)}th"
+                if 1 <= a.hour <= 11:
+                    suffix = "am"
+                    hour = f"{a.hour}"
+                elif 12 <= a.hour <= 23:
+                    if a.hour == 13:
+                        hour = "1"
+                    elif a.hour == 14:
+                        hour = "2"
+                    elif a.hour == 15:
+                        hour = "3"
+                    elif a.hour == 16:
+                        hour = "4"
+                    elif a.hour == 17:
+                        hour = "5"
+                    elif a.hour == 18:
+                        hour = "6"
+                    elif a.hour == 19:
+                        hour = "7"
+                    elif a.hour == 20:
+                        hour = "8"
+                    elif a.hour == 21:
+                        hour = "9"
+                    elif a.hour == 22:
+                        hour = "10"
+                    elif a.hour == 23:
+                        hour = "11"
+                    elif a.hour == 24:
+                        hour = "12"
+                    suffix = "pm"
+                if 0 <= a.minute <= 9:
+                    minute = f"0{a.minute}"
+                embed = discord.embeds.Embed(
+                    title="New Lost-UB User!",
+                    colour=embedcolor()
+                )
+                embed.add_field(
+                    name="User",
+                    value=str(bot.user),
+                    inline=True
+                )
+                embed.add_field(
+                    name="Date Created",
+                    value=f"{month} {day}, {a.year}",
+                    inline=True
+                )
+                if 0 <= a.minute <= 9:
+                    embed.add_field(
+                        name="Time Created",
+                        value=f"{hour}:{minute}{suffix}",
+                        inline=True
+                    )
+                else:
+                    embed.add_field(
+                        name="Time Created",
+                        value=f"{hour}:{a.minute}{suffix}",
+                        inline=True
+                    )
+                if bot.user.is_avatar_animated():
+                    embed.add_field(
+                        name="Avatar Url",
+                        value=f"[Link]({bot.user.avatar_url_as(format='gif')})",
+                        inline=True
+                    )
+                else:
+                    embed.add_field(
+                        name="Avatar Url",
+                        value=f"[Link]({bot.user.avatar_url_as(format='png')})",
+                        inline=True
+                    )
+                embed.add_field(
+                    name="User ID",
+                    value=f"{bot.user.id}",
+                    inline=True
+                )
+                embed.set_thumbnail(
+                    url=bot.user.avatar_url
+                )
+                footer(embed)
+                await x.send(embed=embed)
+
+
+@bot.event
+async def on_command_error(ctx, error):
+    if blacklist_check(ctx):
+        return
+    else:
+        if isinstance(error, commands.CommandNotFound):
+            log(ctx, "ERROR", f"Command not found. | {ctx.message.content}")
+        elif isinstance(error, commands.MissingRequiredArgument):
+            log(ctx, "ERROR", "Missing required argument(s).")
+        elif isinstance(error, commands.MemberNotFound):
+            log(ctx, "ERROR", "Member not found.")
+        elif isinstance(error, commands.MissingPermissions):
+            log(ctx, "ERROR", "Missing permission(s).")
+        elif 'ValueError' in str(error):
+            log(ctx, "ERROR", f"Invalid Argument(s). | {error}")
+        else:
+            log(ctx, "ERROR", f"{error}")
+        try:
+            await ctx.message.delete()
+        except discord.Forbidden:
+            log(ctx, "ERROR", "Unable to delete command message.")
 
 
 # Help =================================================================================================================
