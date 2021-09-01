@@ -44,9 +44,9 @@ if not os.path.exists("bot.py"):
     print("[LOST] Bot.py not found, creating new one")
     os.replace("repo/bot.py", "bot.py")
 elif os.path.exists("bot.py"):
-    with open("repo/bot.py", "r") as new:
+    with open("repo/bot.py", "r", encoding="utf8") as new:
         newbot = new.read()
-    with open("bot.py", "r") as old:
+    with open("bot.py", "r", encoding="utf8") as old:
         oldbot = old.read()
     if newbot != oldbot:
         print("[LOST] Update found, please do not close the window until it is done updating...")

@@ -9,30 +9,34 @@ import random
 import subprocess
 from discord.ext import commands
 
-try:
-    import pypresence
-except ModuleNotFoundError:
-    print("[LOST-UB] PyPresence is not found, installing package...")
-    process = subprocess.Popen("py -m pip install pypresence",
-                               stdout=subprocess.DEVNULL,
-                               stderr=subprocess.STDOUT)
-    process.wait()
-    print("[LOST-UB] Finished installing PyPresence")
-    import pypresence
-try:
-    from colorama import Fore, Back, Style, init
+while True:
+    try:
+        import pypresence
+        break
+    except ModuleNotFoundError:
+        print("[LOST-UB] PyPresence is not found, installing package...")
+        process = subprocess.Popen("py -m pip install pypresence",
+                                   stdout=subprocess.DEVNULL,
+                                   stderr=subprocess.STDOUT)
+        process.wait()
+        print("[LOST-UB] Finished installing PyPresence")
+        import pypresence
 
-    init(convert=True)
-except ModuleNotFoundError:
-    print("[LOST-UB] Colorama is not found, installing package...")
-    process = subprocess.Popen("py -m pip install colorama",
-                               stdout=subprocess.DEVNULL,
-                               stderr=subprocess.STDOUT)
-    process.wait()
-    print("[LOST-UB] Finished installing Colorama")
-    from colorama import Fore, Back, Style, init
+while True:
+    try:
+        from colorama import Fore, Back, Style, init
+        init(convert=True)
+        break
+    except ModuleNotFoundError:
+        print("[LOST-UB] Colorama is not found, installing package...")
+        process = subprocess.Popen("py -m pip install colorama",
+                                   stdout=subprocess.DEVNULL,
+                                   stderr=subprocess.STDOUT)
+        process.wait()
+        print("[LOST-UB] Finished installing Colorama")
+        from colorama import Fore, Back, Style, init
 
-    init(convert=True)
+        init(convert=True)
 
 os.system('cls')
 print(f"""{Fore.BLUE}{Style.BRIGHT}                                                                                            
