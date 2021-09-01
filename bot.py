@@ -2536,6 +2536,7 @@ async def fight(ctx, member: discord.Member):
     if blacklist_check(ctx):
         await ctx.reply("You are blacklisted!")
     else:
+        log(ctx, "FIGHT")
         if member != ctx.author:
             member = await bot.fetch_user(member.id)
             player_health = 100
@@ -2574,7 +2575,21 @@ async def fight(ctx, member: discord.Member):
                 inline=True
             )
             footer(embed)
-            await ctx.reply(embed=embed)
+            try:
+                await ctx.reply(embed=embed)
+            except discord.Forbidden:
+                await simple_codeblock(ctx,
+                                       f"[ Fight ]\n"
+                                       f"{ctx.author.display_name} started a fight with {member.display_name}!\n"
+                                       f"It is {ctx.author.display_name}'s turn.\n\n"
+                                       f"[ {ctx.author.display_name}'s Health ]\n"
+                                       f"{player_health}\n\n"
+                                       f"[ {member.display_name}'s Health ]\n"
+                                       f"{player2_health}\n\n"
+                                       f"[ Choices ]\n"
+                                       f"- Attack\n"
+                                       f"- Defend\n"
+                                       f"- Run")
 
             while True:
                 if match % 2 == 0:  # Player 1's Turn
@@ -2614,7 +2629,22 @@ async def fight(ctx, member: discord.Member):
                                 inline=True
                             )
                             footer(embed)
-                            await action.reply(embed=embed)
+                            try:
+                                await action.reply(embed=embed)
+                            except discord.Forbidden:
+                                await simple_codeblock(ctx,
+                                                       f"[ Fight ]\n"
+                                                       f"{ctx.author.display_name} dealt {player_damage} to"
+                                                       f" {member.display_name}!\n"
+                                                       f"It is now {member.display_name}'s turn.\n\n"
+                                                       f"[ {ctx.author.display_name}'s Health ]\n"
+                                                       f"{player_health}\n\n"
+                                                       f"[ {member.display_name}'s Health ]\n"
+                                                       f"{player2_health}\n\n"
+                                                       f"[ Choices ]\n"
+                                                       f"- Attack\n"
+                                                       f"- Defend\n"
+                                                       f"- Run")
 
                         elif action.content.lower() == "defend":
                             player_shield_effectiveness = random.choice([0.0, 1.0])
@@ -2643,7 +2673,21 @@ async def fight(ctx, member: discord.Member):
                                 inline=True
                             )
                             footer(embed)
-                            await action.reply(embed=embed)
+                            try:
+                                await action.reply(embed=embed)
+                            except discord.Forbidden:
+                                await simple_codeblock(ctx,
+                                                       f"[ Fight ]\n"
+                                                       f"{member.display_name} decided to defend themselves.\n"
+                                                       f"It is now {ctx.author.display_name}'s turn.\n\n"
+                                                       f"[ {ctx.author.display_name}'s Health ]\n"
+                                                       f"{player_health}\n\n"
+                                                       f"[ {member.display_name}'s Health ]\n"
+                                                       f"{player2_health}\n\n"
+                                                       f"[ Choices ]\n"
+                                                       f"- Attack\n"
+                                                       f"- Defend\n"
+                                                       f"- Run")
 
                         elif action.content.lower() == "run":
 
@@ -2664,7 +2708,17 @@ async def fight(ctx, member: discord.Member):
                                 inline=True
                             )
                             footer(embed)
-                            await action.reply(embed=embed)
+                            try:
+                                await action.reply(embed=embed)
+                            except discord.Forbidden:
+                                await simple_codeblock(ctx,
+                                                       f"[ Fight ]\n"
+                                                       f"{member.display_name} forfeits! "
+                                                       f"{ctx.author.display_name} wins the fight!\n\n"
+                                                       f"[ {ctx.author.display_name}'s Health ]\n"
+                                                       f"{player_health}\n\n"
+                                                       f"[ {member.display_name}'s Health ]\n"
+                                                       f"{player2_health}")
 
                             break
                     elif player_health > 0 and player2_health < 0:
@@ -2691,12 +2745,21 @@ async def fight(ctx, member: discord.Member):
                             inline=True
                         )
                         footer(embed)
-                        await ctx.send(embed=embed)
+                        try:
+                            await ctx.send(embed=embed)
+                        except discord.Forbidden:
+                            await simple_codeblock(ctx,
+                                                   f"[ Fight ]\n"
+                                                   f"{member.display_name} wins the fight!\n\n"
+                                                   f"[ {ctx.author.display_name}'s Health ]\n"
+                                                   f"{player_health}\n\n"
+                                                   f"[ {member.display_name}'s Health ]\n"
+                                                   f"{player2_health}")
                         break
                     elif player_health < 0 and player2_health > 0:
                         embed = discord.embeds.Embed(
                             title="Fight",
-                            description=f"{member.display_name} wins the fight!",
+                            description=f"{ctx.author.display_name} wins the fight!",
                             colour=embedcolor()
                         )
                         embed.add_field(
@@ -2709,15 +2772,17 @@ async def fight(ctx, member: discord.Member):
                             value=f"{player2_health}",
                             inline=True
                         )
-                        embed.add_field(
-                            name="Choices",
-                            value="- Attack\n"
-                                  "- Defend\n"
-                                  "- Run",
-                            inline=True
-                        )
                         footer(embed)
-                        await ctx.send(embed=embed)
+                        try:
+                            await ctx.send(embed=embed)
+                        except discord.Forbidden:
+                            await simple_codeblock(ctx,
+                                                   f"[ Fight ]\n"
+                                                   f"{member.display_name} wins the fight!\n\n"
+                                                   f"[ {ctx.author.display_name}'s Health ]\n"
+                                                   f"{player_health}\n\n"
+                                                   f"[ {member.display_name}'s Health ]\n"
+                                                   f"{player2_health}")
                         break
                     match += 1
                 elif match % 2 == 1:  # Player 2's Turn
@@ -2757,7 +2822,22 @@ async def fight(ctx, member: discord.Member):
                                 inline=True
                             )
                             footer(embed)
-                            await action.reply(embed=embed)
+                            try:
+                                await action.reply(embed=embed)
+                            except discord.Forbidden:
+                                await simple_codeblock(ctx,
+                                                       f"[ Fight ]\n"
+                                                       f"{member.display_name} dealt {player2_damage} to"
+                                                       f" {ctx.author.display_name}!\n"
+                                                       f"It is now {ctx.author.display_name}'s turn.\n\n"
+                                                       f"[ {ctx.author.display_name}'s Health ]\n"
+                                                       f"{player_health}\n\n"
+                                                       f"[ {member.display_name}'s Health ]\n"
+                                                       f"{player2_health}\n\n"
+                                                       f"[ Choices ]\n"
+                                                       f"- Attack\n"
+                                                       f"- Defend\n"
+                                                       f"- Run")
 
                         elif action.content.lower() == "defend":
                             player2_shield_effectiveness = random.choice([0.0, 1.0])
@@ -2786,7 +2866,21 @@ async def fight(ctx, member: discord.Member):
                                 inline=True
                             )
                             footer(embed)
-                            await action.reply(embed=embed)
+                            try:
+                                await action.reply(embed=embed)
+                            except discord.Forbidden:
+                                await simple_codeblock(ctx,
+                                                       f"[ Fight ]\n"
+                                                       f"{ctx.author.display_name} decided to defend themselves.\n"
+                                                       f"It is now {member.display_name}'s turn.\n\n"
+                                                       f"[ {ctx.author.display_name}'s Health ]\n"
+                                                       f"{player_health}\n\n"
+                                                       f"[ {member.display_name}'s Health ]\n"
+                                                       f"{player2_health}\n\n"
+                                                       f"[ Choices ]\n"
+                                                       f"- Attack\n"
+                                                       f"- Defend\n"
+                                                       f"- Run")
 
                         elif action.content.lower() == "run":
 
@@ -2814,7 +2908,17 @@ async def fight(ctx, member: discord.Member):
                                 inline=True
                             )
                             footer(embed)
-                            await action.reply(embed=embed)
+                            try:
+                                await action.reply(embed=embed)
+                            except discord.Forbidden:
+                                await simple_codeblock(ctx,
+                                                       f"[ Fight ]\n"
+                                                       f"{ctx.author.display_name} forfeits! "
+                                                       f"{member.display_name} wins the fight!\n\n"
+                                                       f"[ {ctx.author.display_name}'s Health ]\n"
+                                                       f"{player_health}\n\n"
+                                                       f"[ {member.display_name}'s Health ]\n"
+                                                       f"{player2_health}")
 
                             break
                     elif player_health > 0 and player2_health < 0:
@@ -2833,15 +2937,17 @@ async def fight(ctx, member: discord.Member):
                             value=f"{player2_health}",
                             inline=True
                         )
-                        embed.add_field(
-                            name="Choices",
-                            value="- Attack\n"
-                                  "- Defend\n"
-                                  "- Run",
-                            inline=True
-                        )
                         footer(embed)
-                        await ctx.send(embed=embed)
+                        try:
+                            await ctx.send(embed=embed)
+                        except discord.Forbidden:
+                            await simple_codeblock(ctx,
+                                                   f"[ Fight ]\n"
+                                                   f"{ctx.author.display_name} wins the fight!\n\n"
+                                                   f"[ {ctx.author.display_name}'s Health ]\n"
+                                                   f"{player_health}\n\n"
+                                                   f"[ {member.display_name}'s Health ]\n"
+                                                   f"{player2_health}")
                         break
                     elif player_health < 0 and player2_health > 0:
                         embed = discord.embeds.Embed(
@@ -2867,21 +2973,20 @@ async def fight(ctx, member: discord.Member):
                             inline=True
                         )
                         footer(embed)
-                        await ctx.send(embed=embed)
+                        try:
+                            await ctx.send(embed=embed)
+                        except discord.Forbidden:
+                            await simple_codeblock(ctx,
+                                                   f"[ Fight ]\n"
+                                                   f"{ctx.author.display_name} wins the fight!\n\n"
+                                                   f"[ {ctx.author.display_name}'s Health ]\n"
+                                                   f"{player_health}\n\n"
+                                                   f"[ {member.display_name}'s Health ]\n"
+                                                   f"{player2_health}")
                         break
                     match += 1
         else:
             await ctx.reply("You can't fight yourself.")
-
-
-@fight.error
-async def fight_error(ctx, error):
-    if isinstance(error, commands.MemberNotFound):
-        await ctx.message.delete()
-        print("[LOST-UB] Member not found, they must be in at least one server with you for this to work.")
-    elif isinstance(error, commands.MissingRequiredArgument):
-        await ctx.message.delete()
-        print(f"[LOST-UB] Missing required arguments. {get_prefix()}fight [@member]")
 
 
 # ======================================================================================================================
