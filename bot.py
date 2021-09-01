@@ -2493,7 +2493,13 @@ async def ghostpingall(ctx, member: discord.Member = None):
 
 # ======================================================================================================================
 
-bot.run(config['CONFIGURATION']['token'])
+try:
+    bot.run(config['CONFIGURATION']['token'])
+except discord.LoginFailure:
+    input(f"{Fore.LIGHTBLUE_EX}[LOST-UB]"
+          f"{Fore.LIGHTRED_EX}[ERROR] "
+          f"{Fore.RESET}Invalid Token. Please enter in a valid token in \"config.ini\" for Lost-UB to work.")
+    exit()
 # for safety purposes and ease of access, your token will be stored in
 # config.ini. if for whatever reason you mess up the token, just go to
 # config.ini and edit the token value.
