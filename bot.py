@@ -2054,6 +2054,7 @@ async def userinfo_error(ctx, error):
 @commands.has_permissions(administrator=True)
 async def kick(ctx, member: discord.Member, *, reason: str = None):
     if ctx.author == bot.user:
+        log(ctx, "KICK")
         embed = discord.embeds.Embed(
             title="User Kicked",
             description=f"Command Author: {ctx.author}",
@@ -2076,22 +2077,18 @@ async def kick(ctx, member: discord.Member, *, reason: str = None):
         else:
             await member.kick(reason=f"You have been kicked by {ctx.author} for: {reason}")
             await member.send(f"You have been kicked from {ctx.guild} for: {reason}")
-        await ctx.reply(embed=embed)
+        try:
+            await ctx.reply(embed=embed)
+        except discord.Forbidden:
+            await simple_codeblock(ctx,
+                                   f"[ User Kicked ]\n"
+                                   f"Command author: {ctx.author}\n\n"
+                                   f"[ User ]\n"
+                                   f"{member}\n\n"
+                                   f"[ Reason ]\n"
+                                   f"{reason}")
     else:
         return
-
-
-@kick.error
-async def kick_error(ctx, error):
-    if ctx.author == bot.user:
-        if isinstance(error, commands.MissingRequiredArgument):
-            await ctx.reply(f"Invalid arguments | {get_prefix()}kick (@member)")
-        elif isinstance(error, commands.MemberNotFound):
-            await ctx.reply("Member not found")
-        elif isinstance(error, commands.MissingPermissions):
-            await ctx.reply("Missing permissions")
-        else:
-            await ctx.reply(error)
 
 
 # Ban ==================================================================================================================
