@@ -1,3 +1,5 @@
+# Libraries ============================================================================================================
+
 import asyncio
 import configparser
 import os
@@ -6,18 +8,6 @@ import discord
 import random
 import subprocess
 from discord.ext import commands
-
-print("""                                                                                                               
-                                  :::            ::::::::           ::::::::       :::::::::::
-                                 :+:           :+:    :+:         :+:    :+:          :+:
-                                +:+           +:+    +:+         +:+                 +:+
-                               +#+           +#+    +:+         +#++:++#++          +#+
-                              +#+           +#+    +#+                +#+          +#+
-                             #+#           #+#    #+#         #+#    #+#          #+#
-                            ##########     ########           ########           ###     
-                                 
-################################################# LOST.#0404 ###########################################################
-""")
 
 try:
     import pypresence
@@ -209,7 +199,7 @@ def log(context, command_name, message: str = None):
 
 games = 3
 fun = 9
-tools = 8
+tools = 11
 admin = 4
 
 # Checks ===============================================================================================================
@@ -218,7 +208,6 @@ admin = 4
 # Checks to see if "config.ini" exists, if not then it will create one.
 if not os.path.exists('config.ini'):
     config['CONFIGURATION'] = {
-        "logging": f"{input('Enable logs? (true/false): ')}",
         "token": f"{input(f'{Fore.LIGHTBLUE_EX}[LOST-UB]{Fore.RESET} Please enter in your token: ')}",
         "prefix": f"{input(f'{Fore.LIGHTBLUE_EX}[LOST-UB]{Fore.RESET} Please enter in your prefix: ')}",
         "AFK": "False",
@@ -231,15 +220,6 @@ if not os.path.exists('config.ini'):
         "rich_presence": "True"
     }
     write()
-    while True:
-        if config['CONFIGURATION']['logging'].lower() != "true" and \
-                config['CONFIGURATION']['logging'].lower() != "false":
-            config['CONFIGURATION']['logging'] = input("Enable logs? Yes or No?: ")
-        elif config['CONFIGURATION']['logging'].lower() == "true":
-            break
-        elif config['CONFIGURATION']['logging'].lower() == "false":
-            break
-    write()
 else:
     config.read('config.ini')
     if not config.has_option("CONFIGURATION", "AFK"):
@@ -250,12 +230,6 @@ else:
         write()
     elif config["CONFIGURATION"]["AFK"] != "True" or config["CONFIGURATION"]["AFK"] != "False":
         config["CONFIGURATION"]["AFK"] = "False"
-        write()
-    if not config.has_option("CONFIGURATION", "logging"):
-        config["CONFIGURATION"]["logging"] = "True"
-        write()
-    elif config["CONFIGURATION"]["logging"] != "True" or config["CONFIGURATION"]["logging"] != "False":
-        config["CONFIGURATION"]["logging"] = "True"
         write()
     if not config.has_option("CONFIGURATION", "prefix"):
         config["CONFIGURATION"]["prefix"] = ">"
@@ -291,36 +265,6 @@ if not os.path.exists('data/avatars'):
     os.mkdir('data/avatars')
 if not os.path.exists('data/blacklist.txt'):
     open('data/blacklist.txt', 'a+')
-
-
-def embedcolor():
-    if config['CONFIGURATION']['embedcolor'].lower() == "red":
-        return discord.Colour.from_rgb(255, 0, 0)
-    elif config['CONFIGURATION']['embedcolor'].lower() == "light red":
-        return discord.Colour.from_rgb(255, 76, 76)
-    elif config['CONFIGURATION']['embedcolor'].lower() == "orange":
-        return discord.Colour.from_rgb(255, 165, 0)
-    elif config['CONFIGURATION']['embedcolor'].lower() == "light orange":
-        return discord.Colour.from_rgb(255, 192, 76)
-    elif config['CONFIGURATION']['embedcolor'].lower() == "yellow":
-        return discord.Colour.from_rgb(255, 255, 0)
-    elif config['CONFIGURATION']['embedcolor'].lower() == "green":
-        return discord.Colour.from_rgb(0, 128, 0)
-    elif config['CONFIGURATION']['embedcolor'].lower() == "light green":
-        return discord.Colour.from_rgb(76, 166, 76)
-    elif config['CONFIGURATION']['embedcolor'].lower() == "blue":
-        return discord.Colour.from_rgb(0, 0, 255)
-    elif config['CONFIGURATION']['embedcolor'].lower() == "light blue":
-        return discord.Colour.from_rgb(76, 76, 255)
-    elif config['CONFIGURATION']['embedcolor'].lower() == "purple":
-        return discord.Colour.from_rgb(128, 0, 128)
-    elif config['CONFIGURATION']['embedcolor'].lower() == "light purple":
-        return discord.Colour.from_rgb(128, 0, 128)
-    elif config['CONFIGURATION']['embedcolor'].lower() == "pink":
-        return discord.Colour.from_rgb(255, 192, 203)
-    elif config['CONFIGURATION']['embedcolor'].lower() == "light pink":
-        return discord.Colour.from_rgb(255, 210, 218)
-
 
 bot = commands.Bot(command_prefix=f"{config['CONFIGURATION']['prefix']}", help_command=None, user_bot=True,
                    guild_subscriptions=False, case_insensitive=True, chunk_guilds_at_startup=False)
