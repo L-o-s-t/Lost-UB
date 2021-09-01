@@ -1722,6 +1722,7 @@ async def abc(ctx):
     if blacklist_check(ctx):
         await ctx.reply("You are blacklisted!")
     else:
+        log(ctx, "ABC")
         embed = discord.embeds.Embed(
             colour=embedcolor(),
             title="ABCDEFGHIJKLMNOPQRSTUVWXYZ")
@@ -1735,13 +1736,21 @@ async def servericon(ctx):
     if blacklist_check(ctx):
         await ctx.reply("You are blacklisted!")
     else:
-        embed = discord.embeds.Embed()
-
-        embed.add_field(
-            name="Server Icon Link",
-            value=f"[========>]({ctx.guild.icon_url_as(format='jpg')})")
-        embed.set_thumbnail(url=ctx.guild.icon_url)
-        await ctx.reply(embed=embed)
+        log(ctx, "SERVERICON")
+        try:
+            embed = discord.embeds.Embed(colour=embedcolor())
+            embed.add_field(
+                name="Server Icon Link",
+                value=f"[========>]({ctx.guild.icon_url_as(format='png')})")
+            embed.set_thumbnail(url=ctx.guild.icon_url)
+            await ctx.reply(embed=embed)
+        except discord.Forbidden:
+            if '.png' in str(ctx.guild.icon_url_as(format='png')):
+                await simple_codeblock(ctx, f"[ Server Icon Link ]\n"
+                                            f"{ctx.guild.icon_url_as(format='png')}")
+            else:
+                await simple_codeblock(ctx, f"[ Server Icon Link ]\n"
+                                            f"This guild does not have an icon.")
 
 
 # warnings =============================================================================================================
