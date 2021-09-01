@@ -2678,8 +2678,8 @@ async def fight(ctx, member: discord.Member):
                             except discord.Forbidden:
                                 await simple_codeblock(ctx,
                                                        f"[ Fight ]\n"
-                                                       f"{member.display_name} decided to defend themselves.\n"
-                                                       f"It is now {ctx.author.display_name}'s turn.\n\n"
+                                                       f"{ctx.author.display_name} decided to defend themselves.\n"
+                                                       f"It is now {member.display_name}'s turn.\n\n"
                                                        f"[ {ctx.author.display_name}'s Health ]\n"
                                                        f"{player_health}\n\n"
                                                        f"[ {member.display_name}'s Health ]\n"
@@ -2713,8 +2713,8 @@ async def fight(ctx, member: discord.Member):
                             except discord.Forbidden:
                                 await simple_codeblock(ctx,
                                                        f"[ Fight ]\n"
-                                                       f"{member.display_name} forfeits! "
-                                                       f"{ctx.author.display_name} wins the fight!\n\n"
+                                                       f"{ctx.author.display_name} forfeits! "
+                                                       f"{member.display_name} wins the fight!\n\n"
                                                        f"[ {ctx.author.display_name}'s Health ]\n"
                                                        f"{player_health}\n\n"
                                                        f"[ {member.display_name}'s Health ]\n"
@@ -2737,20 +2737,13 @@ async def fight(ctx, member: discord.Member):
                             value=f"{player2_health}",
                             inline=True
                         )
-                        embed.add_field(
-                            name="Choices",
-                            value="- Attack\n"
-                                  "- Defend\n"
-                                  "- Run",
-                            inline=True
-                        )
                         footer(embed)
                         try:
                             await ctx.send(embed=embed)
                         except discord.Forbidden:
                             await simple_codeblock(ctx,
                                                    f"[ Fight ]\n"
-                                                   f"{member.display_name} wins the fight!\n\n"
+                                                   f"{ctx.author.display_name} wins the fight!\n\n"
                                                    f"[ {ctx.author.display_name}'s Health ]\n"
                                                    f"{player_health}\n\n"
                                                    f"[ {member.display_name}'s Health ]\n"
@@ -2759,7 +2752,7 @@ async def fight(ctx, member: discord.Member):
                     elif player_health < 0 and player2_health > 0:
                         embed = discord.embeds.Embed(
                             title="Fight",
-                            description=f"{ctx.author.display_name} wins the fight!",
+                            description=f"{member.display_name} wins the fight!",
                             colour=embedcolor()
                         )
                         embed.add_field(
@@ -2871,8 +2864,8 @@ async def fight(ctx, member: discord.Member):
                             except discord.Forbidden:
                                 await simple_codeblock(ctx,
                                                        f"[ Fight ]\n"
-                                                       f"{ctx.author.display_name} decided to defend themselves.\n"
-                                                       f"It is now {member.display_name}'s turn.\n\n"
+                                                       f"{member.display_name} decided to defend themselves.\n"
+                                                       f"It is now {ctx.author.display_name}'s turn.\n\n"
                                                        f"[ {ctx.author.display_name}'s Health ]\n"
                                                        f"{player_health}\n\n"
                                                        f"[ {member.display_name}'s Health ]\n"
@@ -2913,8 +2906,8 @@ async def fight(ctx, member: discord.Member):
                             except discord.Forbidden:
                                 await simple_codeblock(ctx,
                                                        f"[ Fight ]\n"
-                                                       f"{ctx.author.display_name} forfeits! "
-                                                       f"{member.display_name} wins the fight!\n\n"
+                                                       f"{member.display_name} forfeits! "
+                                                       f"{ctx.author.display_name} wins the fight!\n\n"
                                                        f"[ {ctx.author.display_name}'s Health ]\n"
                                                        f"{player_health}\n\n"
                                                        f"[ {member.display_name}'s Health ]\n"
@@ -2937,13 +2930,20 @@ async def fight(ctx, member: discord.Member):
                             value=f"{player2_health}",
                             inline=True
                         )
+                        embed.add_field(
+                            name="Choices",
+                            value="- Attack\n"
+                                  "- Defend\n"
+                                  "- Run",
+                            inline=True
+                        )
                         footer(embed)
                         try:
                             await ctx.send(embed=embed)
                         except discord.Forbidden:
                             await simple_codeblock(ctx,
                                                    f"[ Fight ]\n"
-                                                   f"{ctx.author.display_name} wins the fight!\n\n"
+                                                   f"{member.display_name} wins the fight!\n\n"
                                                    f"[ {ctx.author.display_name}'s Health ]\n"
                                                    f"{player_health}\n\n"
                                                    f"[ {member.display_name}'s Health ]\n"
@@ -2952,7 +2952,7 @@ async def fight(ctx, member: discord.Member):
                     elif player_health < 0 and player2_health > 0:
                         embed = discord.embeds.Embed(
                             title="Fight",
-                            description=f"{member.display_name} wins the fight!",
+                            description=f"{ctx.author.display_name} wins the fight!",
                             colour=embedcolor()
                         )
                         embed.add_field(
