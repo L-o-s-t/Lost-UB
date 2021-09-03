@@ -282,7 +282,8 @@ extensions = [
     'commands.fight',
     'commands.spam',
     'commands.poll',
-    'commands.embed'
+    'commands.embed',
+    'commands.mock',
 ]
 
 for extension in extensions:
