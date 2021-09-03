@@ -285,7 +285,8 @@ extensions = [
     'commands.embed',
     'commands.mock',
     'commands.cursive',
-    'commands.monospace'
+    'commands.monospace',
+    'commands.space'
 ]
 
 for extension in extensions:
