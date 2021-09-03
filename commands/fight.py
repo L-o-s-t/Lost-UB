@@ -9,7 +9,7 @@ class Fight(commands.Cog):
     @commands.command()
     async def fight(self, ctx, member: discord.Member):
         if blacklist_check(ctx):
-            await ctx.reply("You are blacklisted!")
+            log(ctx, "BLACKLIST", f"{ctx.author.display_name} tried to use the command FIGHT.")
         else:
             log(ctx, "FIGHT")
             if member != ctx.author:

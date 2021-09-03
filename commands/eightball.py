@@ -8,7 +8,7 @@ class EightBall(commands.Cog):
     @commands.command(aliases=['8ball'])
     async def eightball(self, ctx, *, question: str = None):
         if blacklist_check(ctx):
-            await ctx.reply("You are blacklisted!")
+            log(ctx, "BLACKLIST", f"{ctx.author.display_name} tried to use the command EIGHTBALL.")
         else:
             log(ctx, "8BALL")
             if question is None:

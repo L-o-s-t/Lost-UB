@@ -9,7 +9,7 @@ class Help(commands.Cog):
     @commands.command(aliases=['help'])
     async def info(self, ctx, module: str = None):
         if blacklist_check(ctx):
-            await ctx.reply("You are blacklisted!")
+            log(ctx, "BLACKLIST", f"{ctx.author.display_name} tried to use the command HELP.")
         else:
             log(ctx, "HELP")
             if module is None:

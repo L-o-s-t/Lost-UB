@@ -9,7 +9,7 @@ class ABC(commands.Cog):
     @commands.command()
     async def abc(self, ctx):
         if blacklist_check(ctx):
-            await ctx.reply("You are blacklisted!")
+            log(ctx, "BLACKLIST", f"{ctx.author.display_name} tried to use the command ABC.")
         else:
             log(ctx, "ABC")
             embed = discord.embeds.Embed(

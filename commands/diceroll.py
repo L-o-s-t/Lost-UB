@@ -7,9 +7,9 @@ class DiceRoll(commands.Cog):
         self.bot = userbot
 
     @commands.command()
-    async def rolladice(self, ctx):
+    async def diceroll(self, ctx):
         if blacklist_check(ctx):
-            await ctx.reply("You are blacklisted!")
+            log(ctx, "BLACKLIST", f"{ctx.author.display_name} tried to use the command DICEROLL.")
         else:
             log(ctx, "ROLLADICE")
             number = random.randrange(1, 7)

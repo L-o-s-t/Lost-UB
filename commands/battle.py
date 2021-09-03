@@ -9,7 +9,7 @@ class Battle(commands.Cog):
     @commands.command()
     async def battle(self, ctx):
         if blacklist_check(ctx):
-            await ctx.reply("You are blacklisted!")
+            log(ctx, "BLACKLIST", f"{ctx.author.display_name} tried to use the command BATTLE.")
         else:
             log(ctx, "BATTLE")
             player_hp = 100
@@ -126,7 +126,8 @@ class Battle(commands.Cog):
                             player_hp -= enemy_damage
                             embed = discord.embeds.Embed(
                                 title="Battle",
-                                description=f"You blocked the enemy's attack, so their attack only dealt {enemy_damage} "
+                                description=f"You blocked the enemy's attack, "
+                                            f"so their attack only dealt {enemy_damage} "
                                             f"damage!\n"
                                             f"What would you like to do next?",
                                 colour=embedcolor()
@@ -174,7 +175,8 @@ class Battle(commands.Cog):
                             except discord.Forbidden:
                                 await simple_codeblock(ctx,
                                                        f" [ Battle ]\n"
-                                                       f"You both defended each other, blocking each other like idiots!\n"
+                                                       f"You both defended each other, "
+                                                       f"blocking each other like idiots!\n"
                                                        f"What would you like to do next?\n\n"
                                                        f"[ Your Health ]\n"
                                                        f"{player_hp}\n\n"

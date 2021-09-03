@@ -8,19 +8,29 @@ class Mock(commands.Cog):
 
     @commands.command()
     async def mock(self, ctx, *, message: str = None):
-        if message is None:
-            log(ctx, f"ERROR", "You must specify a message to mock!")
+        if blacklist_check(ctx):
+            log(ctx, "BLACKLIST", f"{ctx.author.display_name} tried to use the command MOCK.")
         else:
-            count = 0
-            mocked_msg = ""
-            for x in message:
-                if count % 2 == 0:
-                    mocked_msg += f"{x.upper()}"
-                else:
-                    mocked_msg += f"{x.lower()}"
-                count += 1
-            await ctx.send(mocked_msg)
-        await ctx.message.delete()
+            if message is None:
+                log(ctx, f"ERROR", "You must specify a message to mock!")
+            else:
+                count = 0
+                mocked_msg = ""
+                for x in message:
+                    if count % 2 == 0:
+                        mocked_msg += f"{x.upper()}"
+                    else:
+                        mocked_msg += f"{x.lower()}"
+                    count += 1
+                if ctx.author != bot.user:
+                    await ctx.reply(f"> {ctx.author}: {ctx.message.content}\n"
+                                    f"{mocked_msg}")
+                elif ctx.author == bot.user:
+                    await ctx.send(mocked_msg)
+            if ctx.author == bot.user:
+                await ctx.message.delete()
+            else:
+                pass
 
 
 def setup(userbot):

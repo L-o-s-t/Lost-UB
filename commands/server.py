@@ -9,7 +9,7 @@ class Server(commands.Cog):
     @commands.command()
     async def serverinfo(self, ctx):
         if blacklist_check(ctx):
-            await ctx.reply("You are blacklisted!")
+            log(ctx, "BLACKLIST", f"{ctx.author.display_name} tried to use the command SERVERINFO.")
         else:
             log(ctx, "SERVERINFO")
             name = str(ctx.guild.name)
@@ -48,7 +48,7 @@ class Server(commands.Cog):
     @commands.command()
     async def servericon(self, ctx):
         if blacklist_check(ctx):
-            await ctx.reply("You are blacklisted!")
+            log(ctx, "BLACKLIST", f"{ctx.author.display_name} tried to use the command SERVERICON.")
         else:
             log(ctx, "SERVERICON")
             try:

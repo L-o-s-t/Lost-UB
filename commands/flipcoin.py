@@ -8,7 +8,7 @@ class FlipCoin(commands.Cog):
     @commands.command()
     async def flipcoin(self, ctx):
         if blacklist_check(ctx):
-            await ctx.reply("You are blacklisted!")
+            log(ctx, "BLACKLIST", f"{ctx.author.display_name} tried to use the command FLIPCOIN.")
         else:
             log(ctx, "FLIPCOIN")
             side = random.choice(['heads', 'tails'])

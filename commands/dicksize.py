@@ -7,7 +7,7 @@ class DickSize(commands.Cog):
     async def dicksize(self, ctx, member: discord.Member):
 
         if blacklist_check(ctx):
-            await ctx.reply("You are blacklisted!")
+            log(ctx, "BLACKLIST", f"{ctx.author.display_name} tried to use the command DICKSIZE.")
         else:
             desc = ''
             log(ctx, "DICKSIZE")

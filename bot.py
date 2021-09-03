@@ -7,6 +7,7 @@ import discord
 import random
 import subprocess
 from discord.ext import commands
+import asyncio
 
 os.system("title " + "Lost.")
 
@@ -156,7 +157,7 @@ def log(context, command_name, message: str = None):
     if context.guild is None:
         context.guild = "dms"
     if message is None:
-        if command_name.lower() == "error":
+        if command_name.lower() == "error" or command_name.lower() == "blacklist":
             string = f"{Fore.LIGHTBLUE_EX}[LOST-UB]" \
                      f"{Fore.LIGHTCYAN_EX}[{f'{context.guild}'.upper()}]" \
                      f"[{f'{context.author}'.upper()}]" \
@@ -169,7 +170,7 @@ def log(context, command_name, message: str = None):
                      f"{Fore.LIGHTGREEN_EX}[{command_name}]{Fore.RESET}> " \
                      f"{context.message.content}"
     else:
-        if command_name.lower() == "error":
+        if command_name.lower() == "error" or command_name.lower() == "blacklist":
             string = f"{Fore.LIGHTBLUE_EX}[LOST-UB]" \
                      f"{Fore.LIGHTCYAN_EX}[{f'{context.guild}'.upper()}]" \
                      f"[{f'{context.author}'.upper()}]" \
@@ -286,7 +287,9 @@ extensions = [
     'commands.mock',
     'commands.cursive',
     'commands.monospace',
-    'commands.space'
+    'commands.space',
+    'commands.type',
+    'commands.hack'
 ]
 
 for extension in extensions:

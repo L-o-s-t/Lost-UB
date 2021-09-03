@@ -9,7 +9,7 @@ class IQ(commands.Cog):
     @commands.command()
     async def iq(self, ctx, member: discord.Member):
         if blacklist_check(ctx):
-            await ctx.reply("You are blacklisted!")
+            log(ctx, "BLACKLIST", f"{ctx.author.display_name} tried to use the command IQ.")
         else:
             log(ctx, "IQ")
             result = ""
