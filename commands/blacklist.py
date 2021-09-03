@@ -1,3 +1,5 @@
+import discord.ext.commands
+
 from bot import *
 
 
@@ -7,9 +9,14 @@ class Blacklist(commands.Cog):
         self.bot = userbot
 
     @commands.command()
-    async def blacklist(self, ctx, action: str = None, member=None):
+    async def blacklist(self, ctx, action: str = None, member: discord.Member = None):
+
+        # if command author is the bot user then...
         if ctx.author == bot.user:
-            log(ctx, "BLACKLIST")
+
+            log(ctx, "BLACKLIST")  # logs to console
+
+            # if action is nothing, it will fetch the blacklisted users
             if action is None:
                 count = 10
                 total = 0
@@ -79,10 +86,12 @@ class Blacklist(commands.Cog):
                     await simple_codeblock(ctx,
                                            f"[ Blacklisted Users ]\n"
                                            f"{string}")
+
+            # if action is add, it will add the specified user
             elif action.lower() == "add":
                 if member is None:
                     await ctx.reply(f"Command usage {get_prefix()}blacklist add (@member)")
-                elif member is discord.Member:
+                elif '#' in str(member):
                     oldfile = open("data/blacklist.txt", "r")
                     oldfile_content = oldfile.read()
                     lines = oldfile_content.split("\n")
@@ -127,7 +136,12 @@ class Blacklist(commands.Cog):
                     for x in str(member):
                         count += 1
                     if count == 18:
-                        member = await bot.fetch_user(member)
+                        notfound = False
+                        try:
+                            member = await bot.fetch_user(member)
+                        except discord.errors.NotFound:
+                            notfound = True
+                            pass
                         oldfile = open("data/blacklist.txt", "r")
                         oldfile_content = oldfile.read()
                         lines = oldfile_content.split("\n")
@@ -135,25 +149,39 @@ class Blacklist(commands.Cog):
                             await ctx.reply("That user is already blacklisted.")
                         else:
                             with open("data/blacklist.txt", "a+") as oldfile:
-                                oldfile.write(f"{oldfile.read()}"
-                                              f"{member.id}\n")
+                                if notfound:
+                                    oldfile.write(f"{oldfile.read()}"
+                                                  f"{member}\n")
+                                else:
+                                    oldfile.write(f"{oldfile.read()}"
+                                                  f"{member.id}\n")
                             embed = discord.embeds.Embed(
                                 title="Blacklisted User Added",
                                 colour=embedcolor()
                             )
                             embed.add_field(
                                 name="User",
-                                value=f"{member}",
+                                value="UNKNOWN",
                                 inline=True
                             )
-                            embed.add_field(
-                                name="ID",
-                                value=f"{member.id}",
-                                inline=True
-                            )
-                            embed.set_thumbnail(
-                                url=f"{member.avatar_url}"
-                            )
+                            if notfound:
+                                embed.add_field(
+                                    name="ID",
+                                    value=f"{member}",
+                                    inline=True
+                                )
+                                embed.set_thumbnail(
+                                    url=f"https://cdn.drawception.com/drawings/848910/l0ZT9m55a0.png"
+                                )
+                            else:
+                                embed.add_field(
+                                    name="ID",
+                                    value=f"{member.id}",
+                                    inline=True
+                                )
+                                embed.set_thumbnail(
+                                    url=f"{member.avatar_url}"
+                                )
                             embed.set_footer(
                                 text=f"Logged in as {bot.user} | Lost-UB",
                                 icon_url=bot.user.avatar_url
@@ -169,11 +197,13 @@ class Blacklist(commands.Cog):
                                                        f"{member.id}")
                     else:
                         await ctx.message.delete()
-                        log(ctx, "ERROR", "Invalid User ID.")
+                        log(ctx, "ERROR", f"Invalid User ID.")
+
+            # if action is remove, it will add the specified user
             elif action.lower() == "remove":
                 if member is None:
                     await ctx.reply(f"Command usage {get_prefix()}blacklist remove (@member)")
-                elif member is discord.Member:
+                elif '#' in str(member):
                     temp = ""
                     black_list = open("data/blacklist.txt", "r")
                     black_list_content = black_list.read()
@@ -224,6 +254,7 @@ class Blacklist(commands.Cog):
                     for x in f"{member}":
                         count += 1
                     if count == 18:
+                        member = int
                         temp = ""
                         black_list = open("data/blacklist.txt", "r")
                         black_list_content = black_list.read()
@@ -232,31 +263,49 @@ class Blacklist(commands.Cog):
                             for x in lines:
                                 if x:
                                     if int(x) == int(member):
-                                        print(f"{x} is {member}")
                                         pass
                                     else:
-                                        print(f"{x} is not {member}")
                                         temp += f"{x}\n"
                             with open("data/blacklist.txt", "w") as file:
                                 file.write(temp)
-                            user = await bot.fetch_user(member)
+                            notfound = False
+                            user = None
+                            try:
+                                user = await bot.fetch_user(member)
+                            except discord.errors.NotFound:
+                                notfound = True
                             embed = discord.embeds.Embed(
                                 title="Blacklisted User Removed",
                                 colour=embedcolor()
                             )
-                            embed.add_field(
-                                name="User",
-                                value=f"{user}",
-                                inline=True
-                            )
-                            embed.add_field(
-                                name="ID",
-                                value=f"{user.id}",
-                                inline=True
-                            )
-                            embed.set_thumbnail(
-                                url=f"{user.avatar_url}"
-                            )
+                            if not notfound:
+                                embed.add_field(
+                                    name="User",
+                                    value=f"{user}",
+                                    inline=True
+                                )
+                                embed.add_field(
+                                    name="ID",
+                                    value=f"{user.id}",
+                                    inline=True
+                                )
+                                embed.set_thumbnail(
+                                    url=f"{user.avatar_url}"
+                                )
+                            else:
+                                embed.add_field(
+                                    name="User",
+                                    value="UNKNOWN",
+                                    inline=True
+                                )
+                                embed.add_field(
+                                    name="ID",
+                                    value=f"{member}",
+                                    inline=True
+                                )
+                                embed.set_thumbnail(
+                                    url=f"https://cdn.drawception.com/drawings/848910/l0ZT9m55a0.png"
+                                )
                             embed.set_footer(
                                 text=f"Logged in as {bot.user} | Lost-UB",
                                 icon_url=bot.user.avatar_url
@@ -274,7 +323,13 @@ class Blacklist(commands.Cog):
                             await ctx.reply("That user isn't blacklisted.")
                     else:
                         await ctx.message.delete()
-                        log(ctx, "ERROR", "Invalid User ID.")
+                        log(ctx, "ERROR", f"Invalid User ID.")
+
+            # if action is none of the above, it will send an error to console
+            else:
+                log(ctx, "ERROR", f"{action.lower()} is not an action. "
+                                  f"{get_prefix()}blacklist (add/remove) (@member/member_id)")
+                await ctx.message.delete()
 
 
 def setup(userbot):
