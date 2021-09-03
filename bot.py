@@ -284,6 +284,7 @@ extensions = [
     'commands.poll',
     'commands.embed',
     'commands.mock',
+    'commands.cursive'
 ]
 
 for extension in extensions:
