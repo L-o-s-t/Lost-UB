@@ -288,8 +288,6 @@ extensions = [
     'commands.cursive',
     'commands.monospace',
     'commands.space',
-    'commands.type',
-    'commands.hack'
 ]
 
 for extension in extensions:
