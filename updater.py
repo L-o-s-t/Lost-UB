@@ -28,14 +28,6 @@ print("[LOST] Checking for updates...")
 Repo.clone_from("https://github.com/L-o-s-t/Lost-UB", "repo/").index.remove(['.github'],
                                                                             True, r=True)
 
-# Checks if data/bot.ico exists, if not it will create it
-if not os.path.exists("data") and not os.path.exists("data/bot.ico"):
-    print("[LOST] data folder not found, creating new one...")
-    os.replace("repo/data", "data")
-elif os.path.exists("data") and not os.path.exists("data/bot.ico"):
-    print("[LOST] bot.ico not found, creating new one...")
-    os.replace("repo/data/bot.ico", "data/bot.ico")
-
 # Checks if README.md exists, if not it will create it
 if not os.path.exists("README.md"):
     print("[LOST] Readme.md not found, creating new one...")
