@@ -9,8 +9,6 @@ import subprocess
 from discord.ext import commands
 import asyncio
 
-os.system("title " + "Lost.")
-
 try:
     import pypresence
 except ModuleNotFoundError:
@@ -38,7 +36,14 @@ except ModuleNotFoundError:
 
 # Functions & Setters ==================================================================================================
 
+os.system("title " + "Lost.")
+
 config = configparser.ConfigParser()
+
+games = 3
+fun = 13
+tools = 11
+admin = 4
 
 
 def write():
@@ -185,16 +190,20 @@ def log(context, command_name, message: str = None):
     return print(string)
 
 
-games = 3
-fun = 9
-tools = 11
-admin = 4
-
 # Checks ===============================================================================================================
 
-
-# Checks to see if "config.ini" exists, if not then it will create one.
 if not os.path.exists('config.ini'):
+    print(f"""{Fore.LIGHTBLUE_EX}{Style.BRIGHT}                                                                                            
+                                  :::            ::::::::           ::::::::       :::::::::::
+                                 :+:           :+:    :+:         :+:    :+:          :+:
+                                +:+           +:+    +:+         +:+                 +:+
+                               +#+           +#+    +:+         +#++:++#++          +#+
+                              +#+           +#+    +#+                +#+          +#+
+                             #+#           #+#    #+#         #+#    #+#          #+#
+                            ##########     ########           ########           ###     
+
+                                                   LOST.#0404
+    """)
     config['CONFIGURATION'] = {
         "token": f"{input(f'{Fore.LIGHTBLUE_EX}[LOST-UB]{Fore.RESET} Please enter in your token: ')}",
         "prefix": f"{input(f'{Fore.LIGHTBLUE_EX}[LOST-UB]{Fore.RESET} Please enter in your prefix: ')}",
@@ -205,7 +214,8 @@ if not os.path.exists('config.ini'):
         "silentsave": "False",
         "embedcolor": "light blue",
         "blacklist": "False",
-        "rich_presence": "True"
+        "rich_presence": "True",
+        "automock": "False"
     }
     write()
 else:
@@ -246,6 +256,9 @@ else:
     if not config.has_option("CONFIGURATION", "rich_presence"):
         config["CONFIGURATION"]["rich_presence"] = "True"
         write()
+    if not config.has_option("CONFIGURATION", "automock"):
+        config["CONFIGURATION"]["automock"] = "False"
+        write()
 
 if not os.path.exists('data'):
     os.mkdir('data')
@@ -253,45 +266,13 @@ if not os.path.exists('data/avatars'):
     os.mkdir('data/avatars')
 if not os.path.exists('data/blacklist.txt'):
     open('data/blacklist.txt', 'a+')
+if not os.path.exists('data/automock.txt'):
+    open('data/automock.txt', 'a+')
+
+# Bot ==================================================================================================================
 
 bot = commands.Bot(command_prefix=f"{config['CONFIGURATION']['prefix']}", help_command=None, user_bot=True,
                    guild_subscriptions=False, case_insensitive=True, chunk_guilds_at_startup=False)
-
-extensions = [
-    'commands.help',
-    'commands.rps',
-    'commands.dicksize',
-    'commands.prefix',
-    'commands.flipcoin',
-    'commands.eightball',
-    'commands.ghostping',
-    'commands.iq',
-    'commands.afk',
-    'commands.pfp',
-    'commands.settings',
-    'commands.diceroll',
-    'commands.jesus',
-    'commands.server',
-    'commands.abc',
-    'commands.warnings',
-    'commands.userinfo',
-    'commands.kick',
-    'commands.ban',
-    'commands.calculate',
-    'commands.blacklist',
-    'commands.battle',
-    'commands.fight',
-    'commands.spam',
-    'commands.poll',
-    'commands.embed',
-    'commands.mock',
-    'commands.cursive',
-    'commands.monospace',
-    'commands.space',
-]
-
-for extension in extensions:
-    bot.load_extension(extension)
 
 os.system('cls')
 print(f"""{Fore.BLUE}{Style.BRIGHT}                                                                                            
@@ -303,9 +284,49 @@ print(f"""{Fore.BLUE}{Style.BRIGHT}
                              #+#           #+#    #+#         #+#    #+#          #+#
                             ##########     ########           ########           ###     
 
-{Fore.LIGHTBLUE_EX}
-################################################# LOST.#0404 ###########################################################
+                                                   LOST.#0404
 """)
+
+try:
+    extensions = [
+        'commands.help',
+        'commands.rps',
+        'commands.dicksize',
+        'commands.prefix',
+        'commands.flipcoin',
+        'commands.eightball',
+        'commands.ghostping',
+        'commands.iq',
+        'commands.afk',
+        'commands.pfp',
+        'commands.settings',
+        'commands.diceroll',
+        'commands.jesus',
+        'commands.server',
+        'commands.abc',
+        'commands.warnings',
+        'commands.userinfo',
+        'commands.kick',
+        'commands.ban',
+        'commands.calculate',
+        'commands.blacklist',
+        'commands.battle',
+        'commands.fight',
+        'commands.spam',
+        'commands.poll',
+        'commands.embed',
+        'commands.mock',
+        'commands.cursive',
+        'commands.monospace',
+        'commands.space'
+    ]
+    for extension in extensions:
+        bot.load_extension(extension)
+except ModuleNotFoundError:
+    input(f"{Fore.LIGHTBLUE_EX}[LOST-UB]{Fore.LIGHTRED_EX}[ERROR]> "
+          f"{Fore.RESET}Lost-Ub was unable to load extensions properly, please launch "
+          f"updater.py to fix the issue.")
+    exit()
 
 try:
     if config['CONFIGURATION']['rich_presence'] == "True":
@@ -327,7 +348,7 @@ except pypresence.InvalidPipe:
 # Prints message to console when bot is ready
 @bot.event
 async def on_connect():
-    print(f"{Fore.LIGHTBLUE_EX}[LOST-UB][{timestamp()}]{Fore.RESET} Welcome, {bot.user.display_name}.")
+    print(f"{Fore.LIGHTBLUE_EX}[LOST-UB][{timestamp()}]{Fore.RESET} Welcome, {bot.user.display_name}")
     guilds = []
     for guild in bot.guilds:
         guilds.append(guild.id)
@@ -483,9 +504,10 @@ async def on_command_error(ctx, error):
 try:
     bot.run(config['CONFIGURATION']['token'])
 except discord.LoginFailure:
-    input(f"{Fore.LIGHTBLUE_EX}[LOST-UB]"
-          f"{Fore.LIGHTRED_EX}[ERROR] "
-          f"{Fore.RESET}Invalid Token. Please enter in a valid token in \"config.ini\" for Lost-UB to work.")
+    config['CONFIGURATION']['token'] = input(f"{Fore.LIGHTBLUE_EX}[LOST-UB]"
+                                             f"{Fore.LIGHTRED_EX}[ERROR] "
+                                             f"{Fore.RESET}> Invalid token, please enter in a valid token: ")
+    os.startfile("bot.py")
     exit()
 # for safety purposes and ease of access, your token will be stored in
 # config.ini. if for whatever reason you mess up the token, just go to
