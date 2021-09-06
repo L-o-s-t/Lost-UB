@@ -115,7 +115,11 @@ class Help(commands.Cog):
                               f"**IQ Rating**     | {get_prefix()}iq [@member]\n"
                               f"**Dice Roll**     | {get_prefix()}rolladice\n"
                               f"**Spam**          | {get_prefix()}spam [delay] [count] [message]\n"
-                              f"**SpamAll**       | {get_prefix()}spamall [message]",
+                              f"**SpamAll**       | {get_prefix()}spamall [message]\n"
+                              f"**Mock**          | {get_prefix()}mock [message]\n"
+                              f"**Cursive**       | {get_prefix()}cursive [message]\n"
+                              f"**Monospace**     | {get_prefix()}monospace [message]\n"
+                              f"**Space**         | {get_prefix()}space [message]",
                         inline=True
 
                     )
@@ -141,7 +145,11 @@ class Help(commands.Cog):
                                     f"IQ Rating     | {get_prefix()}iq [@member]\n"
                                     f"Dice Roll     | {get_prefix()}rolladice\n"
                                     f"Spam          | {get_prefix()}spam [delay] [count] [message]\n"
-                                    f"SpamAll       | {get_prefix()}spamall [message]\n\n"
+                                    f"SpamAll       | {get_prefix()}spamall [message]\n"
+                                    f"Mock          | {get_prefix()}mock [message]\n"
+                                    f"Cursive       | {get_prefix()}cursive [message]\n"
+                                    f"Monospace     | {get_prefix()}monospace [message]\n"
+                                    f"Space         | {get_prefix()}space [message]\n\n"
                                     f"{codeblock_footer()}"
                                     f"```")
             elif module.lower() == "tools" or module.lower() == "tool":
