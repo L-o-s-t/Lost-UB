@@ -209,10 +209,10 @@ class Help(commands.Cog):
                     )
                     embed.add_field(
                         name="Admin",
-                        value=f"**Kick**   | {get_prefix()}stealpfp [@member]\n"
-                              f"**Ban**    | {get_prefix()}savepfp [@member]\n"
-                              f"**Warn**        | {get_prefix()}pfp [@member]\n"
-                              f"**Warnings**        | {get_prefix()}afk",
+                        value=f"**Kick**   | {get_prefix()}kick [member] [reason]\n"
+                              f"**Ban**    | {get_prefix()}ban [member] [reason]\n"
+                              f"**Warn**        | {get_prefix()}warn [member] [reason]\n"
+                              f"**Warnings**        | {get_prefix()}warnings [member] [reason]",
                         inline=True
                     )
                     embed.set_thumbnail(
@@ -229,10 +229,10 @@ class Help(commands.Cog):
                                     f"Your prefix is: {get_prefix()}\n"
                                     f"[] = required, () = optional.\n\n"
                                     f"[ Admin ]\n"
-                                    f"Kick   | {get_prefix()}stealpfp [@member]\n"
-                                    f"Ban    | {get_prefix()}savepfp [@member]\n"
-                                    f"Warn        | {get_prefix()}pfp [@member]\n"
-                                    f"Warnings        | {get_prefix()}afk\n\n"
+                                    f"Kick   | {get_prefix()}kick [member] [reason]\n"
+                                    f"Ban    | {get_prefix()}ban [member] [reason]\n"
+                                    f"Warn        | {get_prefix()}warn [member] [reason]\n"
+                                    f"Warnings        | {get_prefix()}warnings [member] [reason]\n\n"
                                     f"{codeblock_footer()}"
                                     f"```")
             else:
