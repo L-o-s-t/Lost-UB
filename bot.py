@@ -507,6 +507,7 @@ except discord.LoginFailure:
     config['CONFIGURATION']['token'] = input(f"{Fore.LIGHTBLUE_EX}[LOST-UB]"
                                              f"{Fore.LIGHTRED_EX}[ERROR] "
                                              f"{Fore.RESET}> Invalid token, please enter in a valid token: ")
+    write()
     os.startfile("bot.py")
     exit()
 # for safety purposes and ease of access, your token will be stored in
