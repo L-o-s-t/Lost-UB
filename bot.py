@@ -42,7 +42,7 @@ config = configparser.ConfigParser()
 
 games = 3
 fun = 13
-tools = 11
+tools = 8
 admin = 4
 
 
