@@ -18,6 +18,7 @@ class Settings(commands.Cog):
                 name="Sections",
                 value="- afk\n"
                       "- pfp\n"
+                      "- mock\n"
                       "- customization\n"
                       "- configuration"
             )
@@ -31,6 +32,7 @@ class Settings(commands.Cog):
                                  f"[ Sections ]\n"
                                  f"- afk\n"
                                  f"- pfp\n"
+                                 f"- mock\n"
                                  f"- customization\n"
                                  f"- configuration\n\n"
                                  f"{codeblock_footer()}\n"
@@ -192,6 +194,82 @@ class Settings(commands.Cog):
                                                f"[ Settings ]\n"
                                                f"- legit | {config['CONFIGURATION']['afk_legit']}\n"
                                                f"- message | {config['CONFIGURATION']['afk_msg']}")
+            elif section.lower() == "mock":
+                if setting is None:
+                    try:
+                        embed = discord.embeds.Embed(
+                            title="Mock Section",
+                            description=f"Command usage: {get_prefix()}settings (section) (setting) (value)",
+                            colour=embedcolor()
+                        )
+                        embed.add_field(
+                            name="Settings",
+                            value=f"- automock | {config['CONFIGURATION']['automock']}\n"
+                        )
+                        embed.set_footer(
+                            text=f"Logged in as {bot.user} | Lost-UB",
+                            icon_url=bot.user.avatar_url
+                        )
+                        await ctx.reply(embed=embed)
+                    except discord.Forbidden:
+                        await ctx.reply(f"```ini\n"
+                                        f"[ Mock Section ]\n"
+                                        f"Command usage: {get_prefix()}settings (section) (setting) (value)\n\n"
+                                        f"[ Settings ]\n"
+                                        f"- automock | {config['CONFIGURATION']['automock']}\n\n"
+                                        f"{codeblock_footer()}\n"
+                                        f"```")
+                elif setting.lower() == "automock":
+                    if value is None:
+                        try:
+                            await settings_embed(ctx, "AutoMock",
+                                                 "Automatically mocks a user's message when sent.")
+                        except discord.Forbidden:
+                            await codeblock_settings_embed(ctx, "AutoMock",
+                                                           "Automatically mocks a user's message when sent.")
+                    elif value.lower() == "true":
+                        config['CONFIGURATION']['automock'] = "True"
+                        write()
+                        try:
+                            await confirmation(ctx, "AutoMock", "on")
+                        except discord.Forbidden:
+                            await codeblock_confirmation(ctx, "AutoMock", "on")
+                    elif value.lower() == "false":
+                        config['CONFIGURATION']['automock'] = "False"
+                        write()
+                        try:
+                            await confirmation(ctx, "AutoMock", "off")
+                        except discord.Forbidden:
+                            await codeblock_confirmation(ctx, "AutoMock", "off")
+                    else:
+                        try:
+                            await setting_error(ctx, "AutoMock")
+                        except discord.Forbidden:
+                            await codeblock_setting_error(ctx, "AutoMock")
+                else:
+                    try:
+                        embed = discord.embeds.Embed(
+                            title="Mock Section",
+                            description=f"Setting not found.\n"
+                                        f"Command usage: {get_prefix()}settings (section) (setting) (value)",
+                            colour=embedcolor()
+                        )
+                        embed.add_field(
+                            name="Settings",
+                            value=f"- automock | {config['CONFIGURATION']['automock']}\n"
+                        )
+                        embed.set_footer(
+                            text=f"Logged in as {bot.user} | Lost-UB",
+                            icon_url=bot.user.avatar_url
+                        )
+                        await ctx.reply(embed=embed)
+                    except discord.Forbidden:
+                        await simple_codeblock(ctx,
+                                               f"[ Mock Section ]\n"
+                                               f"Setting not found.\n"
+                                               f"Command usage: {get_prefix()}settings (section) (setting) (value)\n\n"
+                                               f"[ Settings ]\n"
+                                               f"- automock | {config['CONFIGURATION']['automock']}")
             elif section.lower() == "pfp":
                 if setting is None:
                     try:
