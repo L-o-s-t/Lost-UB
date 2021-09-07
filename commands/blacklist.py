@@ -344,6 +344,18 @@ class Blacklist(commands.Cog):
                                                            f"{user.id}")
                         else:
                             await ctx.reply(f"That user isn't blacklisted.")
+                    elif count == 3:
+                        if str(member).lower() == "all":
+                            with open('data/blacklist.txt', 'w+', encoding='utf8') as file:
+                                file.write("")
+                                try:
+                                    await simple_embed(ctx,
+                                                       title="Blacklist",
+                                                       description="**Successfully removed all users.**")
+                                except discord.Forbidden:
+                                    await simple_codeblock(ctx,
+                                                           "[ Blacklist ]\n"
+                                                           "Successfully removed all users.")
                     else:
                         await ctx.message.delete()
                         log(ctx, "ERROR", f"Invalid User ID.")
