@@ -274,19 +274,6 @@ if not os.path.exists('data/automock.txt'):
 bot = commands.Bot(command_prefix=f"{config['CONFIGURATION']['prefix']}", help_command=None, user_bot=True,
                    guild_subscriptions=False, case_insensitive=True, chunk_guilds_at_startup=False)
 
-os.system('cls')
-print(f"""{Fore.BLUE}{Style.BRIGHT}                                                                                            
-                                  :::            ::::::::           ::::::::       :::::::::::
-                                 :+:           :+:    :+:         :+:    :+:          :+:
-                                +:+           +:+    +:+         +:+                 +:+
-                               +#+           +#+    +:+         +#++:++#++          +#+
-                              +#+           +#+    +#+                +#+          +#+
-                             #+#           #+#    #+#         #+#    #+#          #+#
-                            ##########     ########           ########           ###     
-
-                                                   LOST.#0404
-""")
-
 try:
     extensions = [
         'commands.help',
@@ -327,6 +314,19 @@ except ModuleNotFoundError:
           f"{Fore.RESET}Lost-Ub was unable to load extensions properly, please launch "
           f"updater.py to fix the issue.")
     exit()
+
+os.system('cls')
+print(f"""{Fore.BLUE}{Style.BRIGHT}                                                                                            
+                                  :::            ::::::::           ::::::::       :::::::::::
+                                 :+:           :+:    :+:         :+:    :+:          :+:
+                                +:+           +:+    +:+         +:+                 +:+
+                               +#+           +#+    +:+         +#++:++#++          +#+
+                              +#+           +#+    +#+                +#+          +#+
+                             #+#           #+#    #+#         #+#    #+#          #+#
+                            ##########     ########           ########           ###     
+
+                                                   LOST.#0404
+""")
 
 try:
     if config['CONFIGURATION']['rich_presence'] == "True":
