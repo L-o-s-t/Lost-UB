@@ -43,7 +43,6 @@ except ModuleNotFoundError:
 
     init(convert=True)
 
-# Updater ==============================================================================================================
 # Functions & Setters ==================================================================================================
 
 os.system("title " + "Lost.")
@@ -210,10 +209,10 @@ if not os.path.exists('config.ini'):
                                +#+           +#+    +:+         +#++:++#++          +#+
                               +#+           +#+    +#+                +#+          +#+
                              #+#           #+#    #+#         #+#    #+#          #+#
-                            ##########     ########           ########           ###     
+                            ##########     ########           ########           ###  
 
                                                    LOST.#0404
-    """)
+            """)
     config['CONFIGURATION'] = {
         "token": f"{input(f'{Fore.LIGHTBLUE_EX}[LOST-UB]>{Fore.LIGHTWHITE_EX} Please enter in your token: ')}",
         "prefix": f"{input(f'{Fore.LIGHTBLUE_EX}[LOST-UB]>{Fore.LIGHTWHITE_EX} Please enter in your prefix: ')}",
@@ -286,6 +285,18 @@ bot = commands.Bot(command_prefix=f"{config['CONFIGURATION']['prefix']}", help_c
                    guild_subscriptions=False, case_insensitive=True, chunk_guilds_at_startup=False)
 
 try:
+    os.system("cls")
+    print(f"""{Fore.LIGHTBLUE_EX}{Style.BRIGHT}                                                                                            
+                                  :::            ::::::::           ::::::::       :::::::::::
+                                 :+:           :+:    :+:         :+:    :+:          :+:
+                                +:+           +:+    +:+         +:+                 +:+
+                               +#+           +#+    +:+         +#++:++#++          +#+
+                              +#+           +#+    +#+                +#+          +#+
+                             #+#           #+#    #+#         #+#    #+#          #+#
+                            ##########     ########           ########           ###  
+
+                                                   LOST.#0404
+                """)
     extensions = [
         'commands.help',
         'commands.rps',
@@ -374,6 +385,7 @@ async def on_command_error(ctx, error):
             await ctx.message.delete()
         except discord.Forbidden:
             log(ctx, "ERROR", "Unable to delete command message.")
+
 
 while True:
     update_prompt = input(f"{Fore.LIGHTBLUE_EX}[LOST-UB]> {Fore.LIGHTWHITE_EX}"
