@@ -470,13 +470,14 @@ while True:
 
         input(f"{Fore.LIGHTBLUE_EX}[LOST-UB]>{Fore.LIGHTWHITE_EX} {update_msg}\n"
               f"{Fore.LIGHTBLUE_EX}[LOST-UB]>{Fore.LIGHTWHITE_EX} {add_msg}\n"
-              f"{Fore.LIGHTBLUE_EX}[LOST-UB]>{Fore.LIGHTWHITE_EX} Finished! Press enter to continue...")
+              f"{Fore.LIGHTBLUE_EX}[LOST-UB]>{Fore.LIGHTWHITE_EX} Finished! Press enter to restart...")
 
         process = subprocess.run("echo y | rmdir /s repo",
                                  shell=True,
                                  stdout=subprocess.DEVNULL,
                                  stderr=subprocess.STDOUT)
-        break
+        os.startfile("bot.py")
+        exit()
     elif update_prompt.lower() == "no" or update_prompt.lower() == "n":
         break
     else:
