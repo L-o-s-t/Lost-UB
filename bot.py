@@ -43,6 +43,7 @@ except ModuleNotFoundError:
 
     init(convert=True)
 
+# Updater ==============================================================================================================
 # Functions & Setters ==================================================================================================
 
 os.system("title " + "Lost.")
@@ -209,10 +210,10 @@ if not os.path.exists('config.ini'):
                                +#+           +#+    +:+         +#++:++#++          +#+
                               +#+           +#+    +#+                +#+          +#+
                              #+#           #+#    #+#         #+#    #+#          #+#
-                            ##########     ########           ########           ###  
+                            ##########     ########           ########           ###     
 
                                                    LOST.#0404
-            """)
+    """)
     config['CONFIGURATION'] = {
         "token": f"{input(f'{Fore.LIGHTBLUE_EX}[LOST-UB]>{Fore.LIGHTWHITE_EX} Please enter in your token: ')}",
         "prefix": f"{input(f'{Fore.LIGHTBLUE_EX}[LOST-UB]>{Fore.LIGHTWHITE_EX} Please enter in your prefix: ')}",
@@ -285,18 +286,6 @@ bot = commands.Bot(command_prefix=f"{config['CONFIGURATION']['prefix']}", help_c
                    guild_subscriptions=False, case_insensitive=True, chunk_guilds_at_startup=False)
 
 try:
-    os.system("cls")
-    print(f"""{Fore.LIGHTBLUE_EX}{Style.BRIGHT}                                                                                            
-                                  :::            ::::::::           ::::::::       :::::::::::
-                                 :+:           :+:    :+:         :+:    :+:          :+:
-                                +:+           +:+    +:+         +:+                 +:+
-                               +#+           +#+    +:+         +#++:++#++          +#+
-                              +#+           +#+    +#+                +#+          +#+
-                             #+#           #+#    #+#         #+#    #+#          #+#
-                            ##########     ########           ########           ###  
-
-                                                   LOST.#0404
-                """)
     extensions = [
         'commands.help',
         'commands.rps',
@@ -329,11 +318,16 @@ try:
         'commands.monospace',
         'commands.space'
     ]
-    for extension in extensions:
-        bot.load_extension(extension)
+    try:
+        for extension in extensions:
+            bot.load_extension(extension)
+    except Exception as e:
+        input(f"{Fore.LIGHTBLUE_EX}[LOST-UB]{Fore.LIGHTRED_EX}[ERROR]> "
+              f"{Fore.LIGHTWHITE_EX}Lost-Ub was unable to load commands properly, press enter and check for updates.")
 except ModuleNotFoundError:
-    print(f"{Fore.LIGHTBLUE_EX}[LOST-UB]{Fore.LIGHTRED_EX}[ERROR]> "
-          f"{Fore.LIGHTWHITE_EX}Lost-Ub was unable to load commands properly, an update may fix this.")
+    input(f"{Fore.LIGHTBLUE_EX}[LOST-UB]{Fore.LIGHTRED_EX}[ERROR]> "
+          f"{Fore.LIGHTWHITE_EX}Lost-Ub was unable to load commands properly, restart and check for updates.")
+    exit()
 
 try:
     if config['CONFIGURATION']['rich_presence'] == "True":
@@ -386,11 +380,33 @@ async def on_command_error(ctx, error):
         except discord.Forbidden:
             log(ctx, "ERROR", "Unable to delete command message.")
 
-
 while True:
+    print(f"""{Fore.LIGHTBLUE_EX}{Style.BRIGHT}                                                                                            
+                                  :::            ::::::::           ::::::::       :::::::::::
+                                 :+:           :+:    :+:         :+:    :+:          :+:
+                                +:+           +:+    +:+         +:+                 +:+
+                               +#+           +#+    +:+         +#++:++#++          +#+
+                              +#+           +#+    +#+                +#+          +#+
+                             #+#           #+#    #+#         #+#    #+#          #+#
+                            ##########     ########           ########           ###     
+
+                                                   LOST.#0404
+        """)
     update_prompt = input(f"{Fore.LIGHTBLUE_EX}[LOST-UB]> {Fore.LIGHTWHITE_EX}"
                           f"Would you like to check for updates? [yes/no]: ")
     if update_prompt.lower() == "yes" or update_prompt.lower() == "y":
+        os.system('cls')
+        print(f"""{Fore.BLUE}{Style.BRIGHT}                                                                                            
+                                  :::            ::::::::           ::::::::       :::::::::::
+                                 :+:           :+:    :+:         :+:    :+:          :+:
+                                +:+           +:+    +:+         +:+                 +:+
+                               +#+           +#+    +:+         +#++:++#++          +#+
+                              +#+           +#+    +#+                +#+          +#+
+                             #+#           #+#    #+#         #+#    #+#          #+#
+                            ##########     ########           ########           ###     
+
+                                                   LOST.#0404
+        """)
         print(f"{Fore.LIGHTBLUE_EX}[LOST-UB]> {Fore.LIGHTWHITE_EX}Checking for updates...")
 
         # Clones Lost-UB repository
@@ -480,16 +496,23 @@ while True:
         else:
             update_msg = f"Updated {new_cmds} commands."
 
-        input(f"{Fore.LIGHTBLUE_EX}[LOST-UB]>{Fore.LIGHTWHITE_EX} {update_msg}\n"
-              f"{Fore.LIGHTBLUE_EX}[LOST-UB]>{Fore.LIGHTWHITE_EX} {add_msg}\n"
-              f"{Fore.LIGHTBLUE_EX}[LOST-UB]>{Fore.LIGHTWHITE_EX} Finished! Press enter to restart...")
+        if updated_cmds > 0 or new_cmds > 0:
+            input(f"{Fore.LIGHTBLUE_EX}[LOST-UB]>{Fore.LIGHTWHITE_EX} {update_msg}\n"
+                  f"{Fore.LIGHTBLUE_EX}[LOST-UB]>{Fore.LIGHTWHITE_EX} {add_msg}\n"
+                  f"{Fore.LIGHTBLUE_EX}[LOST-UB]>{Fore.LIGHTWHITE_EX} "
+                  f"Finished! A restart will be needed for changes to work. Press enter to restart...")
+            os.startfile("bot.py")
+            exit()
+        else:
+            input(f"{Fore.LIGHTBLUE_EX}[LOST-UB]>{Fore.LIGHTWHITE_EX} {update_msg}\n"
+                  f"{Fore.LIGHTBLUE_EX}[LOST-UB]>{Fore.LIGHTWHITE_EX} {add_msg}\n"
+                  f"{Fore.LIGHTBLUE_EX}[LOST-UB]>{Fore.LIGHTWHITE_EX} Finished! Press enter to continue...")
 
         process = subprocess.run("echo y | rmdir /s repo",
                                  shell=True,
                                  stdout=subprocess.DEVNULL,
                                  stderr=subprocess.STDOUT)
-        os.startfile("bot.py")
-        exit()
+        break
     elif update_prompt.lower() == "no" or update_prompt.lower() == "n":
         break
     else:
