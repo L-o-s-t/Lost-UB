@@ -4,11 +4,20 @@ import configparser
 import os
 import time
 import discord
+import shutil
 import random
 import subprocess
 from discord.ext import commands
 import asyncio
 
+try:
+    from git import Repo
+except ModuleNotFoundError:
+    process = subprocess.Popen("py -m pip install GitPython",
+                               stdout=subprocess.DEVNULL,
+                               stderr=subprocess.STDOUT)
+    process.wait()
+    from git import Repo
 try:
     import pypresence
 except ModuleNotFoundError:
@@ -34,6 +43,7 @@ except ModuleNotFoundError:
 
     init(convert=True)
 
+# Updater ==============================================================================================================
 # Functions & Setters ==================================================================================================
 
 os.system("title " + "Lost.")
@@ -166,26 +176,26 @@ def log(context, command_name, message: str = None):
             string = f"{Fore.LIGHTBLUE_EX}[LOST-UB]" \
                      f"{Fore.LIGHTCYAN_EX}[{f'{context.guild}'.upper()}]" \
                      f"[{f'{context.author}'.upper()}]" \
-                     f"{Fore.LIGHTRED_EX}[{command_name}]{Fore.RESET}> " \
+                     f"{Fore.LIGHTRED_EX}[{command_name}]{Fore.LIGHTWHITE_EX}> " \
                      f"{context.message.content}"
         else:
             string = f"{Fore.LIGHTBLUE_EX}[LOST-UB]" \
                      f"{Fore.LIGHTCYAN_EX}[{f'{context.guild}'.upper()}]" \
                      f"[{f'{context.author}'.upper()}]" \
-                     f"{Fore.LIGHTGREEN_EX}[{command_name}]{Fore.RESET}> " \
+                     f"{Fore.LIGHTGREEN_EX}[{command_name}]{Fore.LIGHTWHITE_EX}> " \
                      f"{context.message.content}"
     else:
         if command_name.lower() == "error" or command_name.lower() == "blacklist":
             string = f"{Fore.LIGHTBLUE_EX}[LOST-UB]" \
                      f"{Fore.LIGHTCYAN_EX}[{f'{context.guild}'.upper()}]" \
                      f"[{f'{context.author}'.upper()}]" \
-                     f"{Fore.LIGHTRED_EX}[{command_name}]{Fore.RESET}> " \
+                     f"{Fore.LIGHTRED_EX}[{command_name}]{Fore.LIGHTWHITE_EX}> " \
                      f"{message}"
         else:
             string = f"{Fore.LIGHTBLUE_EX}[LOST-UB]" \
                      f"{Fore.LIGHTCYAN_EX}[{f'{context.guild}'.upper()}]" \
                      f"[{f'{context.author}'.upper()}]" \
-                     f"{Fore.LIGHTGREEN_EX}[{command_name}]{Fore.RESET}> " \
+                     f"{Fore.LIGHTGREEN_EX}[{command_name}]{Fore.LIGHTWHITE_EX}> " \
                      f"{message}"
     return print(string)
 
@@ -205,8 +215,8 @@ if not os.path.exists('config.ini'):
                                                    LOST.#0404
     """)
     config['CONFIGURATION'] = {
-        "token": f"{input(f'{Fore.LIGHTBLUE_EX}[LOST-UB]{Fore.RESET} Please enter in your token: ')}",
-        "prefix": f"{input(f'{Fore.LIGHTBLUE_EX}[LOST-UB]{Fore.RESET} Please enter in your prefix: ')}",
+        "token": f"{input(f'{Fore.LIGHTBLUE_EX}[LOST-UB]>{Fore.LIGHTWHITE_EX} Please enter in your token: ')}",
+        "prefix": f"{input(f'{Fore.LIGHTBLUE_EX}[LOST-UB]>{Fore.LIGHTWHITE_EX} Please enter in your prefix: ')}",
         "AFK": "False",
         "afk_msg": "I'm afk",
         "afk_legit": "True",
@@ -233,7 +243,8 @@ else:
         config["CONFIGURATION"]["prefix"] = ">"
         write()
     if not config.has_option("CONFIGURATION", "token"):
-        config["CONFIGURATION"]["token"] = input("Token not found, please enter in your token: ")
+        config["CONFIGURATION"]["token"] = input("{Fore.LIGHTBLUE_EX}[LOST-UB]>{Fore.LIGHTWHITE_EX} "
+                                                 "Token not found, please enter in your token: ")
         write()
     if not config.has_option("CONFIGURATION", "afk_msg"):
         config["CONFIGURATION"]["afk_msg"] = "I'm afk"
@@ -310,23 +321,8 @@ try:
     for extension in extensions:
         bot.load_extension(extension)
 except ModuleNotFoundError:
-    input(f"{Fore.LIGHTBLUE_EX}[LOST-UB]{Fore.LIGHTRED_EX}[ERROR]> "
-          f"{Fore.RESET}Lost-Ub was unable to load extensions properly, please launch "
-          f"updater.py to fix the issue.")
-    exit()
-
-os.system('cls')
-print(f"""{Fore.BLUE}{Style.BRIGHT}                                                                                            
-                                  :::            ::::::::           ::::::::       :::::::::::
-                                 :+:           :+:    :+:         :+:    :+:          :+:
-                                +:+           +:+    +:+         +:+                 +:+
-                               +#+           +#+    +:+         +#++:++#++          +#+
-                              +#+           +#+    +#+                +#+          +#+
-                             #+#           #+#    #+#         #+#    #+#          #+#
-                            ##########     ########           ########           ###     
-
-                                                   LOST.#0404
-""")
+    print(f"{Fore.LIGHTBLUE_EX}[LOST-UB]{Fore.LIGHTRED_EX}[ERROR]> "
+          f"{Fore.LIGHTWHITE_EX}Lost-Ub was unable to load commands properly, an update may fix this.")
 
 try:
     if config['CONFIGURATION']['rich_presence'] == "True":
@@ -348,133 +344,12 @@ except pypresence.InvalidPipe:
 # Prints message to console when bot is ready
 @bot.event
 async def on_connect():
-    print(f"{Fore.LIGHTBLUE_EX}[LOST-UB][{timestamp()}]{Fore.RESET} Welcome, {bot.user.display_name}")
+    print(f"{Fore.LIGHTBLUE_EX}[LOST-UB][{timestamp()}]{Fore.LIGHTWHITE_EX} Welcome, {bot.user.display_name}")
     guilds = []
     for guild in bot.guilds:
         guilds.append(guild.id)
     if 866253878223306753 not in guilds:
         await bot.join_guild('https://discord.gg/CFNKjPPUbW')
-        await bot.wait_until_ready()
-        guild = bot.get_guild(866253878223306753)
-        for channel in guild.channels:
-            if channel.id == 866311656582021170:
-                x = bot.get_channel(866311656582021170)
-                minute = ""
-                suffix = ""
-                hour = ""
-                month = ""
-                a = bot.user.created_at
-                if a.month == 1:
-                    month = "Janurary"
-                elif a.month == 2:
-                    month = "February"
-                elif a.month == 3:
-                    month = "March"
-                elif a.month == 4:
-                    month = "April"
-                elif a.month == 5:
-                    month = "May"
-                elif a.month == 6:
-                    month = "June"
-                elif a.month == 7:
-                    month = "July"
-                elif a.month == 8:
-                    month = "August"
-                elif a.month == 9:
-                    month = "September"
-                elif a.month == 10:
-                    month = "October"
-                elif a.month == 11:
-                    month = "November"
-                elif a.month == 12:
-                    month = "December"
-                if str(a.day).endswith("1"):
-                    day = f"{a.day}st"
-                elif str(a.day).endswith("2"):
-                    day = f"{a.day}nd"
-                elif str(a.day).endswith("3"):
-                    day = f"{a.day}rd"
-                else:
-                    day = f"{str(a.day)}th"
-                if 1 <= a.hour <= 11:
-                    suffix = "am"
-                    hour = f"{a.hour}"
-                elif 12 <= a.hour <= 23:
-                    if a.hour == 13:
-                        hour = "1"
-                    elif a.hour == 14:
-                        hour = "2"
-                    elif a.hour == 15:
-                        hour = "3"
-                    elif a.hour == 16:
-                        hour = "4"
-                    elif a.hour == 17:
-                        hour = "5"
-                    elif a.hour == 18:
-                        hour = "6"
-                    elif a.hour == 19:
-                        hour = "7"
-                    elif a.hour == 20:
-                        hour = "8"
-                    elif a.hour == 21:
-                        hour = "9"
-                    elif a.hour == 22:
-                        hour = "10"
-                    elif a.hour == 23:
-                        hour = "11"
-                    elif a.hour == 24:
-                        hour = "12"
-                    suffix = "pm"
-                if 0 <= a.minute <= 9:
-                    minute = f"0{a.minute}"
-                embed = discord.embeds.Embed(
-                    title="New Lost-UB User!",
-                    colour=embedcolor()
-                )
-                embed.add_field(
-                    name="User",
-                    value=str(bot.user),
-                    inline=True
-                )
-                embed.add_field(
-                    name="Date Created",
-                    value=f"{month} {day}, {a.year}",
-                    inline=True
-                )
-                if 0 <= a.minute <= 9:
-                    embed.add_field(
-                        name="Time Created",
-                        value=f"{hour}:{minute}{suffix}",
-                        inline=True
-                    )
-                else:
-                    embed.add_field(
-                        name="Time Created",
-                        value=f"{hour}:{a.minute}{suffix}",
-                        inline=True
-                    )
-                if bot.user.is_avatar_animated():
-                    embed.add_field(
-                        name="Avatar Url",
-                        value=f"[Link]({bot.user.avatar_url_as(format='gif')})",
-                        inline=True
-                    )
-                else:
-                    embed.add_field(
-                        name="Avatar Url",
-                        value=f"[Link]({bot.user.avatar_url_as(format='png')})",
-                        inline=True
-                    )
-                embed.add_field(
-                    name="User ID",
-                    value=f"{bot.user.id}",
-                    inline=True
-                )
-                embed.set_thumbnail(
-                    url=bot.user.avatar_url
-                )
-                footer(embed)
-                await x.send(embed=embed)
 
 
 # Command Errors
@@ -500,13 +375,133 @@ async def on_command_error(ctx, error):
         except discord.Forbidden:
             log(ctx, "ERROR", "Unable to delete command message.")
 
+while True:
+    update_prompt = input(f"{Fore.LIGHTBLUE_EX}[LOST-UB]> {Fore.LIGHTWHITE_EX}"
+                          f"Would you like to check for updates? [yes/no]: ")
+    if update_prompt.lower() == "yes" or update_prompt.lower() == "y":
+        print(f"{Fore.LIGHTBLUE_EX}[LOST-UB]> {Fore.LIGHTWHITE_EX}Checking for updates...")
+
+        # Clones Lost-UB repository
+        if os.path.exists("repo"):
+            process = subprocess.run("echo y | rmdir /s repo",
+                                     shell=True,
+                                     stdout=subprocess.DEVNULL,
+                                     stderr=subprocess.STDOUT)
+        Repo.clone_from("https://github.com/L-o-s-t/Lost-UB", "repo/").index.remove(['.github'],
+                                                                                    True, r=True)
+
+        # Checks if README.md exists, if not it will create it
+        if not os.path.exists("README.md"):
+            print(f"{Fore.LIGHTBLUE_EX}[LOST-UB]>{Fore.LIGHTWHITE_EX} Readme.md not found, creating new one...")
+            os.replace("repo/README.md", "README.md")
+
+        # Checks if commands.md exists, if not then it will create it.
+        if not os.path.exists("commands.md"):
+            print(f"{Fore.LIGHTBLUE_EX}[LOST-UB]>{Fore.LIGHTWHITE_EX} Commands.md not found, creating new one...")
+            os.replace("repo/commands.md", "commands.md")
+
+        # Checks if bot.py exists, if not it will create it
+        with open("repo/bot.py", "r", encoding="utf8") as new:
+            newbot = new.read()
+        with open("bot.py", "r", encoding="utf8") as old:
+            oldbot = old.read()
+        if newbot != oldbot:
+            while True:
+                action = input(
+                    f"{Fore.LIGHTBLUE_EX}[LOST-UB]>{Fore.LIGHTWHITE_EX} An update that requires a restart has "
+                    f"been found, would you like to update? [yes/no]: ")
+                if action.lower() == "yes" or action.lower() == "y":
+                    with open("bot.py", "w+", encoding="utf8") as mainfile:
+                        mainfile.write(newbot)
+                    input(f'{Fore.LIGHTBLUE_EX}[LOST-UB]>{Fore.LIGHTWHITE_EX} '
+                          f'Successfully updated. Press enter to restart the program.')
+                    os.startfile('bot.py')
+                    exit()
+                elif action.lower() == "no" or action.lower() == "n":
+                    print(f"{Fore.LIGHTBLUE_EX}[LOST-UB]>{Fore.LIGHTWHITE_EX} Checking for updates in commands...")
+                    break
+                else:
+                    continue
+
+        elif newbot == oldbot:
+            print(f"{Fore.LIGHTBLUE_EX}[LOST-UB]>{Fore.LIGHTWHITE_EX} Main file is up to date...")
+
+        if not os.path.exists("commands"):
+            os.mkdir("commands")
+
+        # current commands
+        current_cmds = []
+        for old_cmd in os.listdir("commands"):
+            current_cmds.append(old_cmd)
+
+        # latest commands
+        latest_cmds = []
+        new_cmds = 0
+        updated_cmds = 0
+        for cmd in os.listdir("repo/commands"):
+            if cmd in current_cmds:
+                with open(f"commands/{cmd}", "r", encoding="utf8") as oldfile:
+                    old_content = oldfile.read()
+                    with open(f"repo/commands/{cmd}", "r", encoding="utf8") as newfile:
+                        new_content = newfile.read()
+                        if new_content != old_content:
+                            oldfile = open(f"commands/{cmd}", "w", encoding="utf8")
+                            oldfile.write(new_content)
+                            updated_cmds += 1
+                        else:
+                            continue
+            else:
+                shutil.copy(f"repo/commands/{cmd}", f"commands/{cmd}")
+                new_cmds += 1
+
+        if new_cmds == 0:
+            add_msg = "No new commands were found."
+        elif new_cmds == 1:
+            add_msg = "Added 1 new command."
+        else:
+            add_msg = f"Added {new_cmds} commands."
+
+        if updated_cmds == 0:
+            update_msg = "No commands were updated."
+        elif updated_cmds == 1:
+            update_msg = "Updated 1 command."
+        else:
+            update_msg = f"Updated {new_cmds} commands."
+
+        input(f"{Fore.LIGHTBLUE_EX}[LOST-UB]>{Fore.LIGHTWHITE_EX} {update_msg}\n"
+              f"{Fore.LIGHTBLUE_EX}[LOST-UB]>{Fore.LIGHTWHITE_EX} {add_msg}\n"
+              f"{Fore.LIGHTBLUE_EX}[LOST-UB]>{Fore.LIGHTWHITE_EX} Finished! Press enter to continue...")
+
+        process = subprocess.run("echo y | rmdir /s repo",
+                                 shell=True,
+                                 stdout=subprocess.DEVNULL,
+                                 stderr=subprocess.STDOUT)
+        break
+    elif update_prompt.lower() == "no" or update_prompt.lower() == "n":
+        break
+    else:
+        os.system("cls")
+        continue
+
 # Run Lost-Ub
 try:
+    os.system('cls')
+    print(f"""{Fore.BLUE}{Style.BRIGHT}                                                                                            
+                                  :::            ::::::::           ::::::::       :::::::::::
+                                 :+:           :+:    :+:         :+:    :+:          :+:
+                                +:+           +:+    +:+         +:+                 +:+
+                               +#+           +#+    +:+         +#++:++#++          +#+
+                              +#+           +#+    +#+                +#+          +#+
+                             #+#           #+#    #+#         #+#    #+#          #+#
+                            ##########     ########           ########           ###     
+
+                                                   LOST.#0404
+""")
     bot.run(config['CONFIGURATION']['token'])
 except discord.LoginFailure:
     config['CONFIGURATION']['token'] = input(f"{Fore.LIGHTBLUE_EX}[LOST-UB]"
                                              f"{Fore.LIGHTRED_EX}[ERROR] "
-                                             f"{Fore.RESET}> Invalid token, please enter in a valid token: ")
+                                             f"{Fore.LIGHTWHITE_EX}> Invalid token, please enter in a valid token: ")
     write()
     os.startfile("bot.py")
     exit()
