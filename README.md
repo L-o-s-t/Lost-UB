@@ -46,19 +46,14 @@ then typing `cmd` and copy and paste these into cmd prompt
 ```
 pip install discord.py-self[voice]
 ```
+
 ### 2. Install Git (for updates)
-- [Git Link](https://git-scm.com/downloads)
-  - [code](https://github.com/L-o-s-t/Lost-UB/blob/main/updater.py) that uses git
-### 3. Download "updater.py" and run
-- [updater.py](https://github.com/L-o-s-t/Lost-UB/releases)
-  - highly suggest moving it to a dedicated folder.
-### 4. Run bot.py
+- [Link](https://git-scm.com/downloads)
+
+### 3. Run bot.py
 
 # Video Tutorial
 [![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/Fmbia_6jrI0/0.jpg)](https://www.youtube.com/watch?v=Fmbia_6jrI0)
-
-# To Update...
-Simply just run updater.py, and it should look for updates.
 
 # Official Discord Server
 [Lost.](https://discord.gg/CFNKjPPUbW)
