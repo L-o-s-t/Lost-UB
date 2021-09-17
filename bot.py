@@ -43,7 +43,12 @@ except ModuleNotFoundError:
 
     init(convert=True)
 
-# Updater ==============================================================================================================
+if os.path.exists("repo"):
+    process = subprocess.run("echo y | rmdir /s repo",
+                             shell=True,
+                             stdout=subprocess.DEVNULL,
+                             stderr=subprocess.STDOUT)
+
 # Functions & Setters ==================================================================================================
 
 os.system("title " + "Lost.")
@@ -286,6 +291,19 @@ bot = commands.Bot(command_prefix=f"{config['CONFIGURATION']['prefix']}", help_c
                    guild_subscriptions=False, case_insensitive=True, chunk_guilds_at_startup=False)
 
 try:
+    os.system("cls")
+    print(f"""{Fore.LIGHTBLUE_EX}{Style.BRIGHT}                                                                                            
+                                      :::            ::::::::           ::::::::       :::::::::::
+                                     :+:           :+:    :+:         :+:    :+:          :+:
+                                    +:+           +:+    +:+         +:+                 +:+
+                                   +#+           +#+    +:+         +#++:++#++          +#+
+                                  +#+           +#+    +#+                +#+          +#+
+                                 #+#           #+#    #+#         #+#    #+#          #+#
+                                ##########     ########           ########           ###     
+
+                                                       LOST.#0404
+        """)
+    successful = True
     extensions = [
         'commands.help',
         'commands.rps',
@@ -318,12 +336,21 @@ try:
         'commands.monospace',
         'commands.space'
     ]
-    try:
-        for extension in extensions:
+    for extension in extensions:
+        try:
             bot.load_extension(extension)
-    except Exception as e:
-        input(f"{Fore.LIGHTBLUE_EX}[LOST-UB]{Fore.LIGHTRED_EX}[ERROR]> "
-              f"{Fore.LIGHTWHITE_EX}Lost-Ub was unable to load commands properly, press enter and check for updates.")
+        except Exception as e:
+            successful = False
+            folder, command = extension.split(".")
+            print(f"{Fore.LIGHTBLUE_EX}[LOST-UB]{Fore.LIGHTRED_EX}[ERROR]> "
+                  f"{Fore.LIGHTWHITE_EX}Lost-Ub was unable to load {command} properly.")
+            pass
+    if successful is False:
+        input(f"{Fore.LIGHTBLUE_EX}[LOST-UB]{Fore.LIGHTRED_EX}[ERROR]> {Fore.LIGHTWHITE_EX}"
+              f"These commands weren't loaded correctly.\n"
+              f"{Fore.LIGHTBLUE_EX}[LOST-UB]{Fore.LIGHTRED_EX}[ERROR]> {Fore.LIGHTWHITE_EX}"
+              f"An update may fix this. Press enter to continue...")
+        os.system("cls")
 except ModuleNotFoundError:
     input(f"{Fore.LIGHTBLUE_EX}[LOST-UB]{Fore.LIGHTRED_EX}[ERROR]> "
           f"{Fore.LIGHTWHITE_EX}Lost-Ub was unable to load commands properly, restart and check for updates.")
@@ -381,6 +408,7 @@ async def on_command_error(ctx, error):
             log(ctx, "ERROR", "Unable to delete command message.")
 
 while True:
+    os.system("cls")
     print(f"""{Fore.LIGHTBLUE_EX}{Style.BRIGHT}                                                                                            
                                   :::            ::::::::           ::::::::       :::::::::::
                                  :+:           :+:    :+:         :+:    :+:          :+:
@@ -409,12 +437,6 @@ while True:
         """)
         print(f"{Fore.LIGHTBLUE_EX}[LOST-UB]> {Fore.LIGHTWHITE_EX}Checking for updates...")
 
-        # Clones Lost-UB repository
-        if os.path.exists("repo"):
-            process = subprocess.run("echo y | rmdir /s repo",
-                                     shell=True,
-                                     stdout=subprocess.DEVNULL,
-                                     stderr=subprocess.STDOUT)
         Repo.clone_from("https://github.com/L-o-s-t/Lost-UB", "repo/").index.remove(['.github'],
                                                                                     True, r=True)
 
