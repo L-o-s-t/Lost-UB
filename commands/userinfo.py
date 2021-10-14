@@ -32,9 +32,13 @@ class UserInfo(commands.Cog):
             else:
                 guilds = "None"
             if member != bot.user and not member.bot:
+                friend_count = 0
                 list_of_friends = await member.mutual_friends()
                 for friend in list_of_friends:
                     friends += f"- {friend}\n"
+                    friend_count += 1
+                if friend_count == 0:
+                    friends = "No Mutual Friends"
             elif member.bot:
                 friends = "bots don't have friends"
             else:

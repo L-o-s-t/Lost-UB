@@ -552,9 +552,9 @@ try:
                               +#+           +#+    +#+                +#+          +#+
                              #+#           #+#    #+#         #+#    #+#          #+#
                             ##########     ########           ########           ###     
-
+    
                                                    LOST.#0404
-""")
+    """)
     bot.run(config['CONFIGURATION']['token'])
 except discord.LoginFailure:
     config['CONFIGURATION']['token'] = input(f"{Fore.LIGHTBLUE_EX}[LOST-UB]"

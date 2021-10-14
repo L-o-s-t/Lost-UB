@@ -290,7 +290,8 @@ class Settings(commands.Cog):
                         await ctx.reply(embed=embed)
                     except discord.Forbidden:
                         await simple_codeblock(ctx, f"[ PFP Section ]\n"
-                                                    f"Command usage: {get_prefix()}settings (section) (setting) (value)\n"
+                                                    f"Command usage: {get_prefix()}"
+                                                    f"settings (section) (setting) (value)\n"
                                                     f"\n"
                                                     f"[ Settings ]\n"
                                                     f"- silentsteal | {config['CONFIGURATION']['silentsteal']}\n"
@@ -332,7 +333,8 @@ class Settings(commands.Cog):
                                                "Doesn't send any messages after cmd and deletes command message.")
                         except discord.Forbidden:
                             await simple_codeblock(ctx, "[ SilentSave Setting ]\n"
-                                                        "Doesn't send any messages after cmd and deletes command message.")
+                                                        "Doesn't send any messages after "
+                                                        "cmd and deletes command message.")
                     elif value.lower() == "true":
                         try:
                             await confirmation(ctx, "SilentSave", "on")
@@ -713,13 +715,23 @@ class Settings(commands.Cog):
                     elif value.lower() == "true":
                         config['CONFIGURATION']['rich_presence'] = "True"
                         write()
-                        await settings_embed(ctx, "Discord Rich Presence",
-                                             "Rich Presence is now enabled. You will need to restart Lost-UB")
+                        try:
+                            await settings_embed(ctx, "Discord Rich Presence",
+                                                 "Rich Presence is now enabled. You will need to restart Lost-UB")
+                        except discord.Forbidden:
+                            await codeblock_settings_embed(ctx, "Discord Rich Presence",
+                                                           "Rich Presence is now enabled. "
+                                                           "You will need to restart Lost-UB")
                     elif value.lower() == "false":
                         config['CONFIGURATION']['rich_presence'] = "False"
                         write()
-                        await settings_embed(ctx, "Discord Rich Presence",
-                                             "Rich Presence is now disabled. You will need to restart Lost-UB")
+                        try:
+                            await settings_embed(ctx, "Discord Rich Presence",
+                                                 "Rich Presence is now disabled. You will need to restart Lost-UB")
+                        except discord.Forbidden:
+                            await codeblock_settings_embed(ctx, "Discord Rich Presence",
+                                                           "Rich Presence is now disabled. "
+                                                           "You will need to restart Lost-UB")
                     else:
                         try:
                             await settings_embed(ctx, "Discord Rich PResence",
