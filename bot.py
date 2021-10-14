@@ -490,34 +490,44 @@ while True:
                             oldfile = open(f"commands/{cmd}", "w", encoding="utf8")
                             oldfile.write(new_content)
                             updated_cmds += 1
-                            updatedlist.append(cmd)
+                            updatedlist.append(cmd.replace('.py', ''))
                         else:
                             continue
             else:
                 shutil.copy(f"repo/commands/{cmd}", f"commands/{cmd}")
                 new_cmds += 1
-                addedlist.append(cmd)
+                addedlist.append(cmd.replace('.py', ''))
 
         if new_cmds == 0:
             add_msg = "No new commands were found."
         elif new_cmds == 1:
-            add_msg = "Added 1 new command."
+            add_msg = "Added 1 new command"
         else:
-            add_msg = f"Added {new_cmds} commands."
+            add_msg = f"Added {new_cmds} commands"
 
         if updated_cmds == 0:
             update_msg = "No commands were updated."
         elif updated_cmds == 1:
-            update_msg = "Updated 1 command."
+            update_msg = "Updated 1 command"
         else:
-            update_msg = f"Updated {new_cmds} commands."
-        if updated_cmds > 0 or new_cmds > 0:
+            update_msg = f"Updated {new_cmds} commands"
+
+        update_results = ""
+        if updated_cmds > 0:
             require_restart = True
-            print(f"{Fore.LIGHTBLUE_EX}[LOST-UB]>{Fore.LIGHTWHITE_EX} {update_msg}: {', '.join(updatedlist)}.\n"
-                  f"{Fore.LIGHTBLUE_EX}[LOST-UB]>{Fore.LIGHTWHITE_EX} {add_msg}: {', '.join(addedlist)}.")
+            update_results += f"{Fore.LIGHTBLUE_EX}[LOST-UB]>{Fore.LIGHTWHITE_EX} " \
+                              f"{update_msg}: {', '.join(updatedlist)}.\n"
         else:
-            print(f"{Fore.LIGHTBLUE_EX}[LOST-UB]>{Fore.LIGHTWHITE_EX} {update_msg}\n"
-                  f"{Fore.LIGHTBLUE_EX}[LOST-UB]>{Fore.LIGHTWHITE_EX} {add_msg}")
+            require_restart = True
+            update_results += f"{Fore.LIGHTBLUE_EX}[LOST-UB]>{Fore.LIGHTWHITE_EX} {update_msg}\n"
+        if new_cmds > 0:
+            require_restart = True
+            update_results += f"{Fore.LIGHTBLUE_EX}[LOST-UB]>{Fore.LIGHTWHITE_EX} {add_msg}: {', '.join(addedlist)}."
+        else:
+            require_restart = True
+            update_results += f"{Fore.LIGHTBLUE_EX}[LOST-UB]>{Fore.LIGHTWHITE_EX} {add_msg}"
+
+        print(update_results)
 
         process = subprocess.run("echo y | rmdir /s repo",
                                  shell=True,
@@ -530,6 +540,7 @@ while True:
             exit()
         else:
             input(f"{Fore.LIGHTBLUE_EX}[LOST-UB]>{Fore.LIGHTWHITE_EX} No restarts required, press enter to continue...")
+            break
     elif update_prompt.lower() == "no" or update_prompt.lower() == "n":
         break
     else:
