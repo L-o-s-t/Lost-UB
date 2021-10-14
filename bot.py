@@ -423,6 +423,7 @@ while True:
     update_prompt = input(f"{Fore.LIGHTBLUE_EX}[LOST-UB]> {Fore.LIGHTWHITE_EX}"
                           f"Would you like to check for updates? [yes/no]: ")
     if update_prompt.lower() == "yes" or update_prompt.lower() == "y":
+        require_restart = False
         os.system('cls')
         print(f"""{Fore.BLUE}{Style.BRIGHT}                                                                                            
                                   :::            ::::::::           ::::::::       :::::::::::
@@ -456,22 +457,11 @@ while True:
         with open("bot.py", "r", encoding="utf8") as old:
             oldbot = old.read()
         if newbot != oldbot:
-            while True:
-                action = input(
-                    f"{Fore.LIGHTBLUE_EX}[LOST-UB]>{Fore.LIGHTWHITE_EX} An update that requires a restart has "
-                    f"been found, would you like to update? [yes/no]: ")
-                if action.lower() == "yes" or action.lower() == "y":
-                    with open("bot.py", "w+", encoding="utf8") as mainfile:
-                        mainfile.write(newbot)
-                    input(f'{Fore.LIGHTBLUE_EX}[LOST-UB]>{Fore.LIGHTWHITE_EX} '
-                          f'Successfully updated. Press enter to restart the program.')
-                    os.startfile('bot.py')
-                    exit()
-                elif action.lower() == "no" or action.lower() == "n":
-                    print(f"{Fore.LIGHTBLUE_EX}[LOST-UB]>{Fore.LIGHTWHITE_EX} Checking for updates in commands...")
-                    break
-                else:
-                    continue
+            require_restart = True
+            with open("bot.py", "w+", encoding="utf8") as mainfile:
+                mainfile.write(newbot)
+            print(f'{Fore.LIGHTBLUE_EX}[LOST-UB]>{Fore.LIGHTWHITE_EX} '
+                  f'Successfully updated Lost-UB. Checking for updates in commands...')
 
         elif newbot == oldbot:
             print(f"{Fore.LIGHTBLUE_EX}[LOST-UB]>{Fore.LIGHTWHITE_EX} Main file is up to date...")
@@ -488,6 +478,8 @@ while True:
         latest_cmds = []
         new_cmds = 0
         updated_cmds = 0
+        updatedlist = []
+        addedlist = []
         for cmd in os.listdir("repo/commands"):
             if cmd in current_cmds:
                 with open(f"commands/{cmd}", "r", encoding="utf8") as oldfile:
@@ -498,11 +490,13 @@ while True:
                             oldfile = open(f"commands/{cmd}", "w", encoding="utf8")
                             oldfile.write(new_content)
                             updated_cmds += 1
+                            updatedlist.append(cmd)
                         else:
                             continue
             else:
                 shutil.copy(f"repo/commands/{cmd}", f"commands/{cmd}")
                 new_cmds += 1
+                addedlist.append(cmd)
 
         if new_cmds == 0:
             add_msg = "No new commands were found."
@@ -517,24 +511,23 @@ while True:
             update_msg = "Updated 1 command."
         else:
             update_msg = f"Updated {new_cmds} commands."
-
         if updated_cmds > 0 or new_cmds > 0:
-            input(f"{Fore.LIGHTBLUE_EX}[LOST-UB]>{Fore.LIGHTWHITE_EX} {update_msg}\n"
-                  f"{Fore.LIGHTBLUE_EX}[LOST-UB]>{Fore.LIGHTWHITE_EX} {add_msg}\n"
-                  f"{Fore.LIGHTBLUE_EX}[LOST-UB]>{Fore.LIGHTWHITE_EX} "
-                  f"Finished! A restart will be needed for changes to work. Press enter to restart...")
-            os.startfile("bot.py")
-            exit()
-        else:
-            input(f"{Fore.LIGHTBLUE_EX}[LOST-UB]>{Fore.LIGHTWHITE_EX} {update_msg}\n"
-                  f"{Fore.LIGHTBLUE_EX}[LOST-UB]>{Fore.LIGHTWHITE_EX} {add_msg}\n"
-                  f"{Fore.LIGHTBLUE_EX}[LOST-UB]>{Fore.LIGHTWHITE_EX} Finished! Press enter to continue...")
+            require_restart = True
+
+        print(f"{Fore.LIGHTBLUE_EX}[LOST-UB]>{Fore.LIGHTWHITE_EX} {update_msg}: {', '.join(updatedlist)}.\n"
+              f"{Fore.LIGHTBLUE_EX}[LOST-UB]>{Fore.LIGHTWHITE_EX} {add_msg}: {', '.join(addedlist)}.")
 
         process = subprocess.run("echo y | rmdir /s repo",
                                  shell=True,
                                  stdout=subprocess.DEVNULL,
                                  stderr=subprocess.STDOUT)
-        break
+        if require_restart:
+            input(f"{Fore.LIGHTBLUE_EX}[LOST-UB]>{Fore.LIGHTWHITE_EX} A restart will be needed for changes"
+                  f" to work. Press enter to restart...")
+            os.startfile('bot.py')
+            exit()
+        else:
+            input(f"{Fore.LIGHTBLUE_EX}[LOST-UB]>{Fore.LIGHTWHITE_EX} No restarts required, press enter to continue...")
     elif update_prompt.lower() == "no" or update_prompt.lower() == "n":
         break
     else:
