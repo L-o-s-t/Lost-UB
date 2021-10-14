@@ -518,13 +518,11 @@ while True:
             update_results += f"{Fore.LIGHTBLUE_EX}[LOST-UB]>{Fore.LIGHTWHITE_EX} " \
                               f"{update_msg}: {', '.join(updatedlist)}.\n"
         else:
-            require_restart = True
             update_results += f"{Fore.LIGHTBLUE_EX}[LOST-UB]>{Fore.LIGHTWHITE_EX} {update_msg}\n"
         if new_cmds > 0:
             require_restart = True
             update_results += f"{Fore.LIGHTBLUE_EX}[LOST-UB]>{Fore.LIGHTWHITE_EX} {add_msg}: {', '.join(addedlist)}."
         else:
-            require_restart = True
             update_results += f"{Fore.LIGHTBLUE_EX}[LOST-UB]>{Fore.LIGHTWHITE_EX} {add_msg}"
 
         print(update_results)
