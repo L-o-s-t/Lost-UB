@@ -513,9 +513,11 @@ while True:
             update_msg = f"Updated {new_cmds} commands."
         if updated_cmds > 0 or new_cmds > 0:
             require_restart = True
-
-        print(f"{Fore.LIGHTBLUE_EX}[LOST-UB]>{Fore.LIGHTWHITE_EX} {update_msg}: {', '.join(updatedlist)}.\n"
-              f"{Fore.LIGHTBLUE_EX}[LOST-UB]>{Fore.LIGHTWHITE_EX} {add_msg}: {', '.join(addedlist)}.")
+            print(f"{Fore.LIGHTBLUE_EX}[LOST-UB]>{Fore.LIGHTWHITE_EX} {update_msg}: {', '.join(updatedlist)}.\n"
+                  f"{Fore.LIGHTBLUE_EX}[LOST-UB]>{Fore.LIGHTWHITE_EX} {add_msg}: {', '.join(addedlist)}.")
+        else:
+            print(f"{Fore.LIGHTBLUE_EX}[LOST-UB]>{Fore.LIGHTWHITE_EX} {update_msg}\n"
+                  f"{Fore.LIGHTBLUE_EX}[LOST-UB]>{Fore.LIGHTWHITE_EX} {add_msg}")
 
         process = subprocess.run("echo y | rmdir /s repo",
                                  shell=True,
