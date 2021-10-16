@@ -31,3 +31,4 @@ Kick                    | ~>kick [member] [reason]                      | Kicks 
 Ban                     | ~>ban [member] [reason]                       | Bans user from server
 Warn                    | ~>warn [member] [reason]                      | Issues a warning for the user
 Warnings                | ~>warnings [member] [reason]                  | Fetches all warnings from user
+UserLog                 | ~>userlog [member]                            | Logs all messages sent from user
