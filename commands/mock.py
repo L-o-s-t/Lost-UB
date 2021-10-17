@@ -221,7 +221,6 @@ class Mock(commands.Cog):
                                 if int(x) == member.id:
                                     pass
                                 else:
-                                    print(f'{x} is not {member.id}')
                                     temp += f"{x}\n"
                         with open('data/automock.txt', 'w', encoding='utf8') as file:
                             file.write(temp)
