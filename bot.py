@@ -284,6 +284,12 @@ if not os.path.exists('data/blacklist.txt'):
     open('data/blacklist.txt', 'a+')
 if not os.path.exists('data/automock.txt'):
     open('data/automock.txt', 'a+')
+if not os.path.exists('data/logs'):
+    os.mkdir('data/logs')
+if not os.path.exists('data/logs/loggedusers.txt'):
+    open('data/logs/loggedusers.txt', 'a+')
+if not os.path.exists('data/logs/users'):
+    os.mkdir('data/logs/users')
 
 # Bot ==================================================================================================================
 
@@ -334,7 +340,8 @@ try:
         'commands.mock',
         'commands.cursive',
         'commands.monospace',
-        'commands.space'
+        'commands.space',
+        'commands.userlog'
     ]
     for extension in extensions:
         try:
