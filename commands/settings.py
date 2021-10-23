@@ -660,7 +660,8 @@ class Settings(commands.Cog):
                         embed.add_field(
                             name="Settings",
                             value=f"- blacklist | {config['CONFIGURATION']['blacklist']}\n"
-                                  f"- richpresence | {config['CONFIGURATION']['rich_presence']}"
+                                  f"- richpresence | {config['CONFIGURATION']['rich_presence']}\n"
+                                  f"- autoupdate | {config['CONFIGURATION']['autoupdate']}"
                         )
                         embed.set_footer(
                             text=f"Logged in as {bot.user} | Lost-UB",
@@ -673,7 +674,8 @@ class Settings(commands.Cog):
                                                f"Command usage: {get_prefix()}settings (section) (setting) (value)\n\n"
                                                f"[ Settings ]\n"
                                                f"- blacklist | {config['CONFIGURATION']['blacklist']}\n"
-                                               f"- richpresence | {config['CONFIGURATION']['rich_presence']}")
+                                               f"- richpresence | {config['CONFIGURATION']['rich_presence']}\n"
+                                               f"- autoupdate | {config['CONFIGURATION']['autoupdate']}")
                 elif setting.lower() == "blacklist":
                     if value is None:
                         try:
@@ -734,10 +736,48 @@ class Settings(commands.Cog):
                                                            "You will need to restart Lost-UB")
                     else:
                         try:
-                            await settings_embed(ctx, "Discord Rich PResence",
+                            await settings_embed(ctx, "Discord Rich Presence",
                                                  "Invalid value, must be true or false")
                         except discord.Forbidden:
-                            await codeblock_settings_embed(ctx, "Discord Rich PResence",
+                            await codeblock_settings_embed(ctx, "Discord Rich Presence",
+                                                           "Invalid value, must be true or false")
+                elif setting.lower() == "autoupdate":
+                    if value is None:
+                        try:
+                            await settings_embed(ctx, "AutoUpdate",
+                                                 "Lost-UB will check for updates as soon as you open the program.")
+                        except discord.Forbidden:
+                            await codeblock_settings_embed(ctx, "AutoUpdate",
+                                                           "Lost-UB will check for updates "
+                                                           "as soon as you open the program.")
+                    elif value.lower() == "true":
+                        config['CONFIGURATION']['autoupdate'] = "True"
+                        write()
+                        try:
+                            await settings_embed(ctx, "AutoUpdate",
+                                                 "AutoUpdate is now enabled, Lost-UB will now check for updates every"
+                                                 "time you open the program.")
+                        except discord.Forbidden:
+                            await codeblock_settings_embed(ctx, "AutoUpdate",
+                                                           "AutoUpdate is now enabled, Lost-UB will now check for "
+                                                           "updates every time you open the program.")
+                    elif value.lower() == "false":
+                        config['CONFIGURATION']['autoupdate'] = "False"
+                        write()
+                        try:
+                            await settings_embed(ctx, "AutoUpdate",
+                                                 "AutoUpdate is now disabled. Lost-UB will now check for updates every"
+                                                 "time you open the program.")
+                        except discord.Forbidden:
+                            await codeblock_settings_embed(ctx, "AutoUpdate",
+                                                           "AutoUpdate is now disabled. Lost-UB will now check for up"
+                                                           "dates every time you open the program.")
+                    else:
+                        try:
+                            await settings_embed(ctx, "AutoUpdate",
+                                                 "Invalid value, must be true or false")
+                        except discord.Forbidden:
+                            await codeblock_settings_embed(ctx, "AutoUpdate",
                                                            "Invalid value, must be true or false")
                 else:
                     try:
@@ -750,7 +790,8 @@ class Settings(commands.Cog):
                         embed.add_field(
                             name="Settings",
                             value=f"- blacklist | {config['CONFIGURATION']['blacklist']}\n"
-                                  f"- richpresence | {config['CONFIGURATION']['rich_presence']}"
+                                  f"- richpresence | {config['CONFIGURATION']['rich_presence']}\n"
+                                  f"- autoupdate | {config['CONFIGURATION']['autoupdate']}"
                         )
                         embed.set_footer(
                             text=f"Logged in as {bot.user} | Lost-UB",
@@ -764,7 +805,8 @@ class Settings(commands.Cog):
                                                f"Command usage: {get_prefix()}settings (section) (setting) (value)\n\n"
                                                f"[ Settings ]\n"
                                                f"- blacklist | {config['CONFIGURATION']['blacklist']}\n"
-                                               f"- richpresence | {config['CONFIGURATION']['rich_presence']}")
+                                               f"- richpresence | {config['CONFIGURATION']['rich_presence']}\n"
+                                               f"- autoupdate | {config['CONFIGURATION']['autoupdate']}")
 
             else:
                 try:
