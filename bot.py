@@ -55,9 +55,9 @@ os.system("title " + "Lost.")
 
 config = configparser.ConfigParser()
 
-games = 3
+games = 4
 fun = 13
-tools = 8
+tools = 9
 admin = 4
 
 
@@ -375,7 +375,8 @@ try:
         'commands.cursive',
         'commands.monospace',
         'commands.space',
-        'commands.userlog'
+        'commands.userlog',
+        'commands.hangman'
     ]
     for extension in extensions:
         try:
