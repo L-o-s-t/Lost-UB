@@ -252,6 +252,7 @@ if not os.path.exists('config.ini'):
     config['CONFIGURATION'] = {
         "token": f"{input(f'{Fore.LIGHTBLUE_EX}[LOST-UB]>{Fore.LIGHTWHITE_EX} Please enter in your token: ')}",
         "prefix": f"{input(f'{Fore.LIGHTBLUE_EX}[LOST-UB]>{Fore.LIGHTWHITE_EX} Please enter in your prefix: ')}",
+        "autoupdate": "True",
         "AFK": "False",
         "afk_msg": "I'm afk",
         "afk_legit": "True",
@@ -304,6 +305,9 @@ else:
         write()
     if not config.has_option("CONFIGURATION", "automock"):
         config["CONFIGURATION"]["automock"] = "False"
+        write()
+    if not config.has_option("CONFIGURATION", "autoupdate"):
+        config["CONFIGURATION"]["autoupdate"] = "True"
         write()
 
 if not os.path.exists('data'):
@@ -444,22 +448,8 @@ async def on_command_error(ctx, error):
         except discord.Forbidden:
             log(ctx, "ERROR", "Unable to delete command message.")
 
-while True:
-    os.system("cls")
-    print(f"""{Fore.LIGHTBLUE_EX}{Style.BRIGHT}                                                                                            
-                                  :::            ::::::::           ::::::::       :::::::::::
-                                 :+:           :+:    :+:         :+:    :+:          :+:
-                                +:+           +:+    +:+         +:+                 +:+
-                               +#+           +#+    +:+         +#++:++#++          +#+
-                              +#+           +#+    +#+                +#+          +#+
-                             #+#           #+#    #+#         #+#    #+#          #+#
-                            ##########     ########           ########           ###     
-
-                                                   LOST.#0404
-        """)
-    update_prompt = input(f"{Fore.LIGHTBLUE_EX}[LOST-UB]> {Fore.LIGHTWHITE_EX}"
-                          f"Would you like to check for updates? [yes/no]: ")
-    if update_prompt.lower() == "yes" or update_prompt.lower() == "y":
+if config["CONFIGURATION"]["autoupdate"] == "True":
+    while True:
         require_restart = False
         os.system('cls')
         print(f"""{Fore.BLUE}{Style.BRIGHT}                                                                                            
@@ -576,11 +566,6 @@ while True:
         else:
             input(f"{Fore.LIGHTBLUE_EX}[LOST-UB]>{Fore.LIGHTWHITE_EX} No restarts required, press enter to continue...")
             break
-    elif update_prompt.lower() == "no" or update_prompt.lower() == "n":
-        break
-    else:
-        os.system("cls")
-        continue
 
 # Run Lost-Ub
 try:
