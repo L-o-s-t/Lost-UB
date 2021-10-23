@@ -74,8 +74,9 @@ class Help(commands.Cog):
                     embed.add_field(
                         name="Games",
                         value=f"**Rock, Paper, Scissors** | {get_prefix()}rps\n"
-                              f"**Battle** | {get_prefix()}battle\n"
-                              f"**Fight**  | {get_prefix()}fight [@member]",
+                              f"**Battle**  | {get_prefix()}battle\n"
+                              f"**Fight**   | {get_prefix()}fight [@member]\n"
+                              f"**Hangman** | {get_prefix()}hangman",
                         inline=True
                     )
                     embed.set_thumbnail(
@@ -93,8 +94,9 @@ class Help(commands.Cog):
                                     f"[] = required, () = optional.\n\n"
                                     f"[ Games ]\n"
                                     f"Rock, Paper, Scissors | {get_prefix()}rps\n"
-                                    f"Battle | {get_prefix()}battle\n"
-                                    f"Fight  | {get_prefix()}fight [@member]\n\n"
+                                    f"Battle  | {get_prefix()}battle\n"
+                                    f"Fight   | {get_prefix()}fight [@member]\n"
+                                    f"Hangman | {get_prefix()}hangman\n\n"
                                     f"{codeblock_footer()}"
                                     f"```")
             elif module.lower() == "fun":
@@ -172,7 +174,8 @@ class Help(commands.Cog):
                               f"**Calculate**  | {get_prefix()}calculate [number] [operator] [number]\n"
                               f"**SendEmbed**  | {get_prefix()}sendembed [title] | [description]\n"
                               f"**Poll**       | {get_prefix()}poll\n"
-                              f"**Blacklist**  | {get_prefix()}blacklist (add/remove) (@member)\n",
+                              f"**Blacklist**  | {get_prefix()}blacklist [add/remove] [@member]\n"
+                              f"**UserLog**      | {get_prefix()}userlog [add/remove] [@member]",
                         inline=True
                     )
                     embed.set_thumbnail(
@@ -189,14 +192,18 @@ class Help(commands.Cog):
                                     f"Your prefix is: {get_prefix()}\n"
                                     f"[] = required, () = optional.\n\n"
                                     f"[ Tools ]\n"
-                                    f"StealPFP   | {get_prefix()}stealpfp [@member]\n"
-                                    f"SavePFP    | {get_prefix()}savepfp [@member]\n"
-                                    f"PFP        | {get_prefix()}pfp [@member]\n"
-                                    f"AFK        | {get_prefix()}afk\n"
-                                    f"ServerInfo | {get_prefix()}serverinfo\n"
-                                    f"ServerIcon | {get_prefix()}servericon\n"
-                                    f"UserInfo   | {get_prefix()}userinfo [@member]\n"
-                                    f"Calculate  | {get_prefix()}calculate [number] [operator] [number]\n\n"
+                                    f"StealPFP       | {get_prefix()}stealpfp [@member]\n"
+                                    f"SavePFP        | {get_prefix()}savepfp [@member]\n"
+                                    f"PFP            | {get_prefix()}pfp [@member]\n"
+                                    f"AFK            | {get_prefix()}afk\n"
+                                    f"ServerInfo     | {get_prefix()}serverinfo\n"
+                                    f"ServerIcon     | {get_prefix()}servericon\n"
+                                    f"UserInfo       | {get_prefix()}userinfo [@member]\n"
+                                    f"Calculate      | {get_prefix()}calculate [number] [operator] [number]\n"
+                                    f"SendEmbed      | {get_prefix()}sendembed [title] | [description]\n"
+                                    f"Poll           | {get_prefix()}poll\n"
+                                    f"Blacklist      | {get_prefix()}blacklist [add/remove] [@member]\n"
+                                    f"UserLog        | {get_prefix()}userlog [add/remove] [@member]\n\n"
                                     f"{codeblock_footer()}"
                                     f"```")
             elif module.lower() == "admin":
