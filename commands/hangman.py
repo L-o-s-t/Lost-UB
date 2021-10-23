@@ -18,7 +18,6 @@ class Hangman(commands.Cog):
             guesses = []
             requested_word = requests.get('https://random-word-form.herokuapp.com/random/noun')
             random_word = f"{requested_word.json()}".replace('[\'', '').replace('\']', '')
-            print(random_word)
             for x in f"{random_word}":
                 display.append('-')
             try:
