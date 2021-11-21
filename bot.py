@@ -247,7 +247,7 @@ if not os.path.exists('config.ini'):
                              #+#           #+#    #+#         #+#    #+#          #+#
                             ##########     ########           ########           ###     
 
-                                                   LOST.#0404
+                                                   LOST.#9567
     """)
     config['CONFIGURATION'] = {
         "token": f"{input(f'{Fore.LIGHTBLUE_EX}[LOST-UB]>{Fore.LIGHTWHITE_EX} Please enter in your token: ')}",
@@ -341,7 +341,7 @@ try:
                                  #+#           #+#    #+#         #+#    #+#          #+#
                                 ##########     ########           ########           ###     
 
-                                                       LOST.#0404
+                                                       LOST.#9567
         """)
     successful = True
     extensions = [
@@ -462,7 +462,7 @@ if config["CONFIGURATION"]["autoupdate"] == "True":
                              #+#           #+#    #+#         #+#    #+#          #+#
                             ##########     ########           ########           ###     
 
-                                                   LOST.#0404
+                                                   LOST.#9567
         """)
         print(f"{Fore.LIGHTBLUE_EX}[LOST-UB]> {Fore.LIGHTWHITE_EX}Checking for updates...")
 
@@ -580,7 +580,7 @@ try:
                              #+#           #+#    #+#         #+#    #+#          #+#
                             ##########     ########           ########           ###     
     
-                                                   LOST.#0404
+                                                   LOST.#9567
     """)
     bot.run(config['CONFIGURATION']['token'])
 except discord.LoginFailure:
