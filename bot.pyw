@@ -629,6 +629,7 @@ async def on_connect():
     if config["CONFIGURATION"]["server"] == "None":
         server_icon = open("data/server_logo.png", "rb")
         server = await bot.create_guild("Lost.UB", server_icon.read())
+        time.sleep(5)
         while True:
             try:
                 server = bot.get_guild(server.id)
