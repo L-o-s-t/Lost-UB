@@ -10,7 +10,7 @@ class Ban(commands.Cog):
     @commands.has_permissions(administrator=True)
     async def ban(self, ctx, member: discord.Member, *, reason: str = None):
         if ctx.author == bot.user:
-            log(ctx, "BAN")
+            await log(ctx, description="This user used the command BAN", color=embedcolor())
             embed = discord.embeds.Embed(
                 title="User Banned",
                 description=f"Command Author: {ctx.author}",

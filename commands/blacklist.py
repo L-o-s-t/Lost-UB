@@ -13,7 +13,7 @@ class Blacklist(commands.Cog):
         # if command author is the bot user then...
         if ctx.author == bot.user:
 
-            log(ctx, "BLACKLIST")  # logs to console
+            await log(ctx, description="This user used the command BLACKLIST", color=embedcolor())  # logs to console
 
             # if action is nothing, it will fetch the blacklisted users
             if action is None:
@@ -141,7 +141,6 @@ class Blacklist(commands.Cog):
                             member = await bot.fetch_user(member)
                             print('found')
                         except discord.errors.NotFound:
-                            print('notfound')
                             notfound = True
                             pass
                         oldfile = open("data/blacklist.txt", "r")
@@ -212,7 +211,7 @@ class Blacklist(commands.Cog):
                                                            f"{member.id}")
                     else:
                         await ctx.message.delete()
-                        log(ctx, "ERROR", f"Invalid User ID.")
+                        await ctx.send("Invalid Uer ID.")
 
             # if action is remove, it will add the specified user
             elif action.lower() == "remove":
@@ -358,12 +357,12 @@ class Blacklist(commands.Cog):
                                                            "Successfully removed all users.")
                     else:
                         await ctx.message.delete()
-                        log(ctx, "ERROR", f"Invalid User ID.")
+                        await ctx.send("Invalid User ID.")
 
             # if action is none of the above, it will send an error to console
             else:
-                log(ctx, "ERROR", f"{action.lower()} is not an action. "
-                                  f"{get_prefix()}blacklist (add/remove) (@member/member_id)")
+                await ctx.send(f"{action.lower()} is not an action. "
+                               f"{get_prefix()}blacklist (add/remove) (@member/member_id)")
                 await ctx.message.delete()
 
 

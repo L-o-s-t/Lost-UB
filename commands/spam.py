@@ -9,23 +9,30 @@ class Spam(commands.Cog):
     @commands.command()
     async def spam(self, ctx, delay: str = None, count: str = None, *, message: str = None):
         if bot.user == ctx.author:
-            log(ctx, "SPAM")
+            await log(ctx, description="This user used the command SPAM", color=embedcolor())
             await ctx.message.delete()
             if delay is None:
-                log(ctx, "ERROR", f"Missing required arguments. {get_prefix()}spam [delay] [count] [message]")
+                await log(ctx, description=f"Missing required arguments.\n"
+                                           f"Usage: {get_prefix()}spam [delay] [count] [message]",
+                          color=embedcolor("red"))
             elif not delay.isnumeric():
-                log(ctx, "ERROR", f"Invalid arguments, '{delay}' is not a number.")
+                await log(ctx, description=f"Invalid arguments, '{delay}' is not a number.", color=embedcolor("red"))
             else:
                 if count is None:
-                    log(ctx, "ERROR", f"Missing required arguments. {get_prefix()}spam [delay] [count] [message]")
+                    await log(ctx, description=f"Missing required arguments.\n"
+                                               f"Usage: {get_prefix()}spam [delay] [count] [message]",
+                              color=embedcolor("red"))
                 elif not count.isnumeric():
-                    log(ctx, "ERROR", f"Invalid arguments, '{count}' is not a number.")
+                    await log(ctx, description=f"Invalid arguments, '{count}' is not a number.",
+                              color=embedcolor("red"))
                 else:
                     if message is None:
-                        log(ctx, "ERROR", f"Missing required arguments. "
-                                          f"{get_prefix()}spam [delay] [count] [message]")
+                        await log(ctx, description=f"Missing required arguments. "
+                                                   f"{get_prefix()}spam [delay] [count] [message]",
+                                  color=embedcolor("red"))
                     elif message is None:
-                        log(ctx, "ERROR", f"You have to specify what you want to spam!")
+                        await log(ctx, description=f"You have to specify what you want to spam!",
+                                  color=embedcolor("red"))
                     else:
                         counter = 0
                         while counter < int(count):
@@ -36,10 +43,11 @@ class Spam(commands.Cog):
     @commands.command()
     async def spamall(self, ctx, *, message: str = None):
         if ctx.author == bot.user:
-            log(ctx, "SPAMALL")
+            await log(ctx, description="This user used the command SPAMALL", color=embedcolor())
             await ctx.message.delete()
             if message is None:
-                log(ctx, "ERROR", f"You must specify a message. {get_prefix()}spamall [message]")
+                await log(ctx, description=f"You must specify a message. {get_prefix()}spamall [message]",
+                          color=embedcolor("red"))
             else:
                 for channels in ctx.guild.channels:
                     try:

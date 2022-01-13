@@ -8,6 +8,7 @@ class UserLog(commands.Cog):
 
     @commands.command()
     async def userlog(self, ctx, action: str = None, member=None):
+        await log(ctx, description="This user used the command USERLOG", color=embedcolor())
 
         # if command author is bot user:
         if ctx.author == bot.user:
@@ -70,7 +71,7 @@ class UserLog(commands.Cog):
             # else if "#" in member:
             elif action.lower() == "add":
                 if member is None:
-                    log(ctx, "ERROR", "Member not specified.")
+                    await log(ctx, "Member not specified.", color=embedcolor("red"))
                     await ctx.message.delete()
 
                 elif '@' in str(member):
@@ -79,7 +80,7 @@ class UserLog(commands.Cog):
                         content = logfile.read()
                         lines = content.split("\n")
                         if f"{member.id}" in lines:
-                            log(ctx, "ERROR", "User is already logged.")
+                            await log(ctx, "User is already logged.", color=embedcolor("red"))
                         else:
                             logfile.write(f"{member.id}\n")
                             try:
@@ -119,7 +120,7 @@ class UserLog(commands.Cog):
                             lines = content.split("\n")
                             if f"{member}" in lines:
                                 await ctx.message.delete()
-                                log(ctx, "ERROR", "User is already logged.")
+                                await log(ctx, "User is already logged.", color=embedcolor())
                             else:
                                 notfound = False
 
@@ -174,11 +175,11 @@ class UserLog(commands.Cog):
                                                                     f"[ ID ]\n"
                                                                     f"{member.id}")
                     else:
-                        log(ctx, "ERROR", "Invalid user ID.")
+                        await log(ctx, "Invalid user ID.", color=embedcolor("red"))
 
             elif action.lower() == "remove":
                 if member is None:
-                    log(ctx, "ERROR", "Member not specified.")
+                    await log(ctx, "Member not specified.", color=embedcolor("red"))
                     await ctx.message.delete()
 
                 elif '@' in str(member):
@@ -220,7 +221,7 @@ class UserLog(commands.Cog):
                                                         f"{member.id}")
                     else:
                         await ctx.message.delete()
-                        log(ctx, "ERROR", "That user isn't being logged.")
+                        await log(ctx, "That user isn't being logged.", color=embedcolor("red"))
 
                 else:
                     count = 0
@@ -288,7 +289,7 @@ class UserLog(commands.Cog):
                                                                 f"{member.id}")
                         else:
                             await ctx.message.delete()
-                            log(ctx, "ERROR", "That user isn't being logged.")
+                            await log(ctx, "That user isn't being logged.", color=embedcolor())
                     elif count == 3:
                         if str(member).lower() == "all":
                             with open('data/logs/loggedusers.txt', 'w+', encoding='utf8') as file:
@@ -303,7 +304,7 @@ class UserLog(commands.Cog):
                                                            "Successfully removed all users.")
                     else:
                         await ctx.message.delete()
-                        log(ctx, "ERROR", "Invalid User ID")
+                        await log(ctx, "Invalid User ID", color=embedcolor())
 
     @commands.Cog.listener()
     async def on_message(self, ctx):

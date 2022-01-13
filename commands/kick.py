@@ -10,7 +10,7 @@ class Kick(commands.Cog):
     @commands.has_permissions(administrator=True)
     async def kick(self, ctx, member: discord.Member, *, reason: str = None):
         if ctx.author == bot.user:
-            log(ctx, "KICK")
+            await log(ctx, description="This user used the command KICK", color=embedcolor())
             embed = discord.embeds.Embed(
                 title="User Kicked",
                 description=f"Command Author: {ctx.author}",
