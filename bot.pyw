@@ -13,6 +13,12 @@ import datetime
 import pypresence
 from git import Repo
 
+if os.path.exists("repo"):
+    process = subprocess.run("echo y | rmdir /s repo",
+                             shell=True,
+                             stdout=subprocess.DEVNULL,
+                             stderr=subprocess.STDOUT)
+
 # Functions & Setters ==================================================================================================
 
 config = configparser.ConfigParser()
