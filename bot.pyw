@@ -335,7 +335,7 @@ if config["CONFIGURATION"]["blacklist"] == "True" and config["CONFIGURATION"]["w
     config["CONFIGURATION"]["blacklist"] = "False"
     config["CONFIGURATION"]["whitelist"] = "False"
     write()
-    input("Blacklist and whitelist cannot be on at the same time. disabled both.")
+    print("Blacklist and whitelist cannot be on at the same time. disabled both.")
 
 if not os.path.exists('data'):
     os.mkdir('data')
@@ -360,7 +360,6 @@ bot = commands.Bot(command_prefix=f"{config['CONFIGURATION']['prefix']}", help_c
                    case_insensitive=True)
 
 try:
-    os.system("cls")
     print(f"""                                                                                         
                                       :::            ::::::::           ::::::::       :::::::::::
                                      :+:           :+:    :+:         :+:    :+:          :+:
@@ -421,13 +420,12 @@ try:
         print(f"[LOST-UB][ERROR]> These commands weren't loaded correctly.\n"
               f"[LOST-UB][ERROR]> An update may fix this.")
 except ModuleNotFoundError:
-    input(f"[LOST-UB][ERROR]> Lost-Ub was unable to load commands properly, restart and check for updates.")
+    print(f"[LOST-UB][ERROR]> Lost-Ub was unable to load commands properly, restart and check for updates.")
     exit()
 
 if config["CONFIGURATION"]["autoupdate"] == "True":
     while True:
         require_restart = False
-        os.system('cls')
         print(f"""                                                                                         
                                   :::            ::::::::           ::::::::       :::::::::::
                                  :+:           :+:    :+:         :+:    :+:          :+:
@@ -539,7 +537,7 @@ if config["CONFIGURATION"]["autoupdate"] == "True":
             os.startfile('bot.pyw')
             exit()
         else:
-            input(f"[LOST-UB]> No restarts required, press enter to continue...")
+            print(f"[LOST-UB]> No restarts required, press enter to continue...")
             break
 
 try:
@@ -620,7 +618,6 @@ async def on_connect():
 
 # Run Lost-Ub
 try:
-    os.system('cls')
     print(f"""                                                                                           
                                   :::            ::::::::           ::::::::       :::::::::::
                                  :+:           :+:    :+:         :+:    :+:          :+:
@@ -629,7 +626,7 @@ try:
                               +#+           +#+    +#+                +#+          +#+
                              #+#           #+#    #+#         #+#    #+#          #+#
                             ##########     ########           ########           ###     
-    
+
                                                    LOST.#9567
     """)
     bot.run(config['CONFIGURATION']['token'])
