@@ -88,7 +88,7 @@ class Settings(commands.Cog):
                                  f"```")
 
         if ctx.author == bot.user:
-            log(ctx, "SETTINGS")
+            await log(ctx, description="This user used the command SETTINGS", color=embedcolor())
             if section is None:
                 try:
                     await sections_embed(ctx)
@@ -660,6 +660,7 @@ class Settings(commands.Cog):
                         embed.add_field(
                             name="Settings",
                             value=f"- blacklist | {config['CONFIGURATION']['blacklist']}\n"
+                                  f"- whitelist | {config['CONFIGURATION']['whitelist']}\n"
                                   f"- richpresence | {config['CONFIGURATION']['rich_presence']}\n"
                                   f"- autoupdate | {config['CONFIGURATION']['autoupdate']}"
                         )
@@ -674,6 +675,7 @@ class Settings(commands.Cog):
                                                f"Command usage: {get_prefix()}settings (section) (setting) (value)\n\n"
                                                f"[ Settings ]\n"
                                                f"- blacklist | {config['CONFIGURATION']['blacklist']}\n"
+                                               f"- whitelist | {config['CONFIGURATION']['whitelist']}\n"
                                                f"- richpresence | {config['CONFIGURATION']['rich_presence']}\n"
                                                f"- autoupdate | {config['CONFIGURATION']['autoupdate']}")
                 elif setting.lower() == "blacklist":
@@ -684,6 +686,8 @@ class Settings(commands.Cog):
                             await simple_codeblock(ctx, "[ Blacklist ]\n"
                                                         "Prevent users from using the bot.")
                     elif value.lower() == "true":
+                        if config['CONFIGURATION']['whitelist'] == "True":
+                            config['CONFIGURATION']['whitelist'] = "False"
                         config['CONFIGURATION']['blacklist'] = "True"
                         write()
                         try:
@@ -705,6 +709,38 @@ class Settings(commands.Cog):
                             await simple_embed(ctx, "Blacklist", "Invalid value, must be ``true`` or ``false``")
                         except discord.Forbidden:
                             await simple_codeblock(ctx, "[ Blacklist ]\n"
+                                                        "Invalid value, must be \"true\" or \"false\".")
+                elif setting.lower() == "whitelist":
+                    if value is None:
+                        try:
+                            await simple_embed(ctx, "Whitelist", "Allow users to use the bot.")
+                        except discord.Forbidden:
+                            await simple_codeblock(ctx, "[ Whitelist ]\n"
+                                                        "Allow users to use the bot.")
+                    elif value.lower() == "true":
+                        if config['CONFIGURATION']['blacklist'] == "True":
+                            config['CONFIGURATION']['blacklist'] = "False"
+                        config['CONFIGURATION']['whitelist'] = "True"
+                        write()
+                        try:
+                            await simple_embed(ctx, "Whitelist", "Whitelist has been turned on")
+                        except discord.Forbidden:
+                            await simple_codeblock(ctx,
+                                                   "[ Whitelist ]\n"
+                                                   "Whitelist has been turned on")
+                    elif value.lower() == "false":
+                        config['CONFIGURATION']['whitelist'] = "False"
+                        write()
+                        try:
+                            await simple_embed(ctx, "Whitelist", "Whitelist has been turned off")
+                        except discord.Forbidden:
+                            await simple_codeblock(ctx, "[ Whitelist ]\n"
+                                                        "Whitelist has been turned off")
+                    else:
+                        try:
+                            await simple_embed(ctx, "Whitelist", "Invalid value, must be ``true`` or ``false``")
+                        except discord.Forbidden:
+                            await simple_codeblock(ctx, "[ Whitelist ]\n"
                                                         "Invalid value, must be \"true\" or \"false\".")
                 elif setting.lower() == "richpresence":
                     if value is None:
