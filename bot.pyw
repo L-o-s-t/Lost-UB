@@ -447,6 +447,10 @@ if config["CONFIGURATION"]["autoupdate"] == "True":
             print(f"[LOST-UB]> Readme.md not found, creating new one...")
             os.replace("repo/README.md", "README.md")
 
+        if not os.path.exists("data/server_logo.png"):
+            print(f"[LOST-UB]> Server_logo.png not found, creating new one...")
+            os.replace("repo/data/server_logo.png", "data/server_logo.png")
+
         # Checks if commands.md exists, if not then it will create it.
         if not os.path.exists("commands.md"):
             print(f"[LOST-UB]> Commands.md not found, creating new one...")
@@ -645,11 +649,26 @@ async def on_connect():
         config["CONFIGURATION"]["server"] = f"{server.id}"
         write()
     print(f"[LOST-UB][{timestamp()}] Welcome, {bot.user.display_name}")
+    embed = discord.embeds.Embed(
+        title=f"Welcome, {bot.user.display_name}",
+        description=f"Lost.UB has successfully logged in.",
+        colour=embedcolor("light green")
+    )
+    footer(embed)
+    log_channel = bot.get_channel(int(config["CONFIGURATION"]["log_output"]))
+    await log_channel.send(embed=embed)
     guilds = []
     for guild in bot.guilds:
         guilds.append(guild.id)
     if 866253878223306753 not in guilds:
         await bot.join_guild('https://discord.gg/CFNKjPPUbW')
+
+
+@bot.command(aliases=['quit'])
+async def disconnect(ctx):
+    if ctx.author == bot.user:
+        await ctx.reply("Disconnected!")
+        exit()
 
 
 # Command Errors
