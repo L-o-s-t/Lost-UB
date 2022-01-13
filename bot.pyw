@@ -534,8 +534,70 @@ if config["CONFIGURATION"]["autoupdate"] == "True":
                                  stderr=subprocess.STDOUT)
         if require_restart:
             print(f"[LOST-UB]> A restart will be needed for changes to work.")
-            os.startfile('bot.pyw')
-            exit()
+            try:
+                os.system("cls")
+                print(f"""                                                                                         
+                                                  :::            ::::::::           ::::::::       :::::::::::
+                                                 :+:           :+:    :+:         :+:    :+:          :+:
+                                                +:+           +:+    +:+         +:+                 +:+
+                                               +#+           +#+    +:+         +#++:++#++          +#+
+                                              +#+           +#+    +#+                +#+          +#+
+                                             #+#           #+#    #+#         #+#    #+#          #+#
+                                            ##########     ########           ########           ###     
+
+                                                                   LOST.#9567
+                    """)
+                successful = True
+                extensions = [
+                    'commands.help',
+                    'commands.rps',
+                    'commands.dicksize',
+                    'commands.prefix',
+                    'commands.flipcoin',
+                    'commands.eightball',
+                    'commands.ghostping',
+                    'commands.iq',
+                    'commands.afk',
+                    'commands.pfp',
+                    'commands.settings',
+                    'commands.diceroll',
+                    'commands.jesus',
+                    'commands.server',
+                    'commands.abc',
+                    'commands.warnings',
+                    'commands.userinfo',
+                    'commands.kick',
+                    'commands.ban',
+                    'commands.calculate',
+                    'commands.blacklist',
+                    'commands.battle',
+                    'commands.fight',
+                    'commands.spam',
+                    'commands.poll',
+                    'commands.embed',
+                    'commands.mock',
+                    'commands.cursive',
+                    'commands.monospace',
+                    'commands.space',
+                    'commands.userlog',
+                    'commands.hangman',
+                    'commands.whitelist',
+                    'commands.security'
+                ]
+                for extension in extensions:
+                    try:
+                        bot.load_extension(extension)
+                    except Exception as e:
+                        successful = False
+                        folder, command = extension.split(".")
+                        print(f"[LOST-UB][ERROR]> Lost-Ub was unable to load {command} properly.")
+                        pass
+                if successful is False:
+                    print(f"[LOST-UB][ERROR]> These commands weren't loaded correctly.\n"
+                          f"[LOST-UB][ERROR]> An update may fix this.")
+            except ModuleNotFoundError:
+                print(f"[LOST-UB][ERROR]> Lost-Ub was unable to load commands properly, restart and check for updates.")
+                exit()
         else:
             print(f"[LOST-UB]> No restarts required, press enter to continue...")
             break
