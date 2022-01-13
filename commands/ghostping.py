@@ -8,10 +8,13 @@ class GhostPing(commands.Cog):
 
     @commands.command()
     async def ghostping(self, ctx, member: discord.Member):
-        if blacklist_check(ctx):
-            await ctx.reply("You are blacklisted!")
+        if permission_check(ctx):
+            if config["CONFIGURATION"]["blacklist"] == "True":
+                await log(ctx, "BLACKLIST", "This user attempted to use GHOSTPING", color=embedcolor("red"))
+            elif config["CONFIGURATION"]["whitelist"] == "True":
+                await log(ctx, "WHITELIST", "This user attempted to use GHOSTPING", color=embedcolor("red"))
         else:
-            log(ctx, "GHOSTPING")
+            await log(ctx, description="This user used the command GHOSTPING", color=embedcolor())
             msg = await ctx.send(f'{member}')
             await msg.delete()
             await ctx.message.delete()
@@ -19,10 +22,10 @@ class GhostPing(commands.Cog):
     @commands.command()
     async def ghostpingall(self, ctx, member: discord.Member = None):
         if ctx.author == bot.user:
-            log(ctx, "GHOSTPINGALL")
+            await log(ctx, description="This user used the command GHOSTPINGALL", color=embedcolor())
             await ctx.message.delete()
             if member is None:
-                log(ctx, "ERROR", "Member not found")
+                await log(ctx, "Member not found", color=embedcolor("red"))
             else:
                 for channels in ctx.guild.channels:
                     try:

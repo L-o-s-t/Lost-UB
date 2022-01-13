@@ -8,10 +8,13 @@ class Battle(commands.Cog):
 
     @commands.command()
     async def battle(self, ctx):
-        if blacklist_check(ctx):
-            log(ctx, "BLACKLIST", f"{ctx.author.display_name} tried to use the command BATTLE.")
+        if permission_check(ctx):
+            if config["CONFIGURATION"]["blacklist"] == "True":
+                await log(ctx, "BLACKLIST", "This user attempted to use BATTLE", color=embedcolor("red"))
+            elif config["CONFIGURATION"]["whitelist"] == "True":
+                await log(ctx, "WHITELIST", "This user attempted to use BATTLE", color=embedcolor("red"))
         else:
-            log(ctx, "BATTLE")
+            await log(ctx, color=embedcolor())
             player_hp = 100
             enemy_hp = 100
 

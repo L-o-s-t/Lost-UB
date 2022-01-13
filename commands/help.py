@@ -8,10 +8,13 @@ class Help(commands.Cog):
 
     @commands.command(aliases=['help'])
     async def info(self, ctx, module: str = None):
-        if blacklist_check(ctx):
-            log(ctx, "BLACKLIST", f"{ctx.author.display_name} tried to use the command HELP.")
+        if permission_check(ctx):
+            if config["CONFIGURATION"]["blacklist"] == "True":
+                await log(ctx, "BLACKLIST", "This user attempted to use HELP", color=embedcolor("red"))
+            elif config["CONFIGURATION"]["whitelist"] == "True":
+                await log(ctx, "WHITELIST", "This user attempted to use HELP", color=embedcolor("red"))
         else:
-            log(ctx, "HELP")
+            await log(ctx, description="This user used the command HELP", color=embedcolor())
             if module is None:
                 try:
                     embed = discord.embeds.Embed(

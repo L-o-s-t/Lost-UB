@@ -9,11 +9,12 @@ class Warnings(commands.Cog):
     @commands.command()
     @commands.has_permissions(administrator=True)
     async def warn(self, ctx, member: discord.Member, *, reason: str = None):
+        await log(ctx, description="This user used the command WARN", color=embedcolor())
         if bot.user == ctx.author:
             if reason is None:
                 await ctx.reply("You must enter a reason for this warning.")
             else:
-                log(ctx, "WARN")
+                await log(ctx, description="This user used the command WARN", color=embedcolor())
                 if not os.path.exists("data/warnings"):
                     os.mkdir("data/warnings")
                 if not os.path.exists(f"data/warnings/{ctx.guild.id}"):
@@ -69,10 +70,13 @@ class Warnings(commands.Cog):
     @commands.command(aliases=['warns'])
     @commands.has_permissions(administrator=True)
     async def warnings(self, ctx, member: discord.Member):
-        if blacklist_check(ctx):
-            log(ctx, "BLACKLIST", f"{ctx.author.display_name} tried to use the command .")
+        if permission_check(ctx):
+            if config["CONFIGURATION"]["blacklist"] == "True":
+                await log(ctx, "BLACKLIST", "This user attempted to use WARNS", color=embedcolor("red"))
+            elif config["CONFIGURATION"]["whitelist"] == "True":
+                await log(ctx, "WHITELIST", "This user attempted to use WARNS", color=embedcolor("red"))
         else:
-            log(ctx, "WARNINGS")
+            await log(ctx, description="This user used the command WARNS", color=embedcolor())
             if not os.path.exists(f"data/warnings/{ctx.guild.id}/{member.id}.txt"):
                 embed = discord.embeds.Embed(
                     title="User Warnings",

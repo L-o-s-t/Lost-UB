@@ -8,10 +8,13 @@ class Jesus(commands.Cog):
 
     @commands.command()
     async def jesus(self, ctx):
-        if blacklist_check(ctx):
-            log(ctx, "BLACKLIST", f"{ctx.author.display_name} tried to use the command JESUS.")
+        if permission_check(ctx):
+            if config["CONFIGURATION"]["blacklist"] == "True":
+                await log(ctx, "BLACKLIST", "This user attempted to use JESUS", color=embedcolor("red"))
+            elif config["CONFIGURATION"]["whitelist"] == "True":
+                await log(ctx, "WHITELIST", "This user attempted to use JESUS", color=embedcolor("red"))
         else:
-            log(ctx, "JESUS")
+            await log(ctx, description="This user used the command JESUS", color=embedcolor())
             embed = discord.embeds.Embed(
                 title="You need jesus. Come and receive some of my help my child",
                 colour=embedcolor())
@@ -19,7 +22,7 @@ class Jesus(commands.Cog):
             try:
                 await ctx.reply(embed=embed)
             except discord.Forbidden:
-                log(ctx, "ERROR", "You need the permission, \"Embed Links\", to use this!")
+                await ctx.send("You need the permission, \"Embed Links\", to use this!")
 
 
 def setup(userbot):

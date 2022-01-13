@@ -8,10 +8,13 @@ class Server(commands.Cog):
 
     @commands.command()
     async def serverinfo(self, ctx):
-        if blacklist_check(ctx):
-            log(ctx, "BLACKLIST", f"{ctx.author.display_name} tried to use the command SERVERINFO.")
+        if permission_check(ctx):
+            if config["CONFIGURATION"]["blacklist"] == "True":
+                await log(ctx, "BLACKLIST", "This user attempted to use SERVERINFO", color=embedcolor("red"))
+            elif config["CONFIGURATION"]["whitelist"] == "True":
+                await log(ctx, "WHITELIST", "This user attempted to use SERVERINFO", color=embedcolor("red"))
         else:
-            log(ctx, "SERVERINFO")
+            await log(ctx, description="This user used the command SERVERINFO", color=embedcolor())
             name = str(ctx.guild.name)
 
             owner = str(ctx.guild.owner)
@@ -47,10 +50,13 @@ class Server(commands.Cog):
 
     @commands.command()
     async def servericon(self, ctx):
-        if blacklist_check(ctx):
-            log(ctx, "BLACKLIST", f"{ctx.author.display_name} tried to use the command SERVERICON.")
+        if permission_check(ctx):
+            if config["CONFIGURATION"]["blacklist"] == "True":
+                await log(ctx, "BLACKLIST", "This user attempted to use SERVERICON", color=embedcolor("red"))
+            elif config["CONFIGURATION"]["whitelist"] == "True":
+                await log(ctx, "WHITELIST", "This user attempted to use SERVERICON", color=embedcolor("red"))
         else:
-            log(ctx, "SERVERICON")
+            await log(ctx, description="This user used the command HELP", color=embedcolor())
             try:
                 embed = discord.embeds.Embed(colour=embedcolor())
                 embed.add_field(

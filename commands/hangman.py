@@ -9,10 +9,13 @@ class Hangman(commands.Cog):
 
     @commands.command()
     async def hangman(self, ctx):
-        if blacklist_check(ctx):
-            await ctx.reply("You are blacklisted!")
+        if permission_check(ctx):
+            if config["CONFIGURATION"]["blacklist"] == "True":
+                await log(ctx, "BLACKLIST", "This user attempted to use HANGMAN", color=embedcolor("red"))
+            elif config["CONFIGURATION"]["whitelist"] == "True":
+                await log(ctx, "WHITELIST", "This user attempted to use HANGMAN", color=embedcolor("red"))
         else:
-            log(ctx, "HANGMAN")
+            await log(ctx, description="This user used the command HANGMAN", color=embedcolor())
             health = 6
             display = []
             guesses = []

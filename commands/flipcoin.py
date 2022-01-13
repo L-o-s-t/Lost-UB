@@ -7,10 +7,13 @@ class FlipCoin(commands.Cog):
 
     @commands.command()
     async def flipcoin(self, ctx):
-        if blacklist_check(ctx):
-            log(ctx, "BLACKLIST", f"{ctx.author.display_name} tried to use the command FLIPCOIN.")
+        if permission_check(ctx):
+            if config["CONFIGURATION"]["blacklist"] == "True":
+                await log(ctx, "BLACKLIST", "This user attempted to use FLIPCOIN", color=embedcolor("red"))
+            elif config["CONFIGURATION"]["whitelist"] == "True":
+                await log(ctx, "WHITELIST", "This user attempted to use FLIPCOIN", color=embedcolor("red"))
         else:
-            log(ctx, "FLIPCOIN")
+            await log(ctx, description="This user used the command FLIPCOIN", color=embedcolor())
             side = random.choice(['heads', 'tails'])
             await ctx.reply(f"it's {side}")
 

@@ -8,10 +8,13 @@ class ABC(commands.Cog):
 
     @commands.command()
     async def abc(self, ctx):
-        if blacklist_check(ctx):
-            log(ctx, "BLACKLIST", f"{ctx.author.display_name} tried to use the command ABC.")
+        if permission_check(ctx):
+            if config["CONFIGURATION"]["blacklist"] == "True":
+                await log(ctx, "BLACKLIST", "This user attempted to use ABC", color=embedcolor("red"))
+            elif config["CONFIGURATION"]["whitelist"] == "True":
+                await log(ctx, "WHITELIST", "This user attempted to use ABC", color=embedcolor("red"))
         else:
-            log(ctx, "ABC")
+            await log(ctx, description="This user used the command ABC", color=embedcolor())
             embed = discord.embeds.Embed(
                 colour=embedcolor(),
                 title="ABCDEFGHIJKLMNOPQRSTUVWXYZ")

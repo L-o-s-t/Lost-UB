@@ -8,15 +8,17 @@ class Space(commands.Cog):
 
     @commands.command()
     async def space(self, ctx, *, message):
-        
-        if blacklist_check(ctx):
-            log(ctx, "BLACKLIST", f"{ctx.author.display_name} tried to use the command SPACE.")
+        if permission_check(ctx):
+            if config["CONFIGURATION"]["blacklist"] == "True":
+                await log(ctx, "BLACKLIST", "This user attempted to use SPACE", color=embedcolor("red"))
+            elif config["CONFIGURATION"]["whitelist"] == "True":
+                await log(ctx, "WHITELIST", "This user attempted to use SPACE", color=embedcolor("red"))
         else:
             uppercase_spacing = "ＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ"
             lowercase_spacing = "ａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚ"
     
             if message is None:
-                log(ctx, "ERROR", "You must specify a message you want monospaced!")
+                await log(ctx, description="This user used the command SPACE", color=embedcolor())
             else:
                 space_message = ""
                 for x in message:

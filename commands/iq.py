@@ -8,10 +8,13 @@ class IQ(commands.Cog):
 
     @commands.command()
     async def iq(self, ctx, member: discord.Member):
-        if blacklist_check(ctx):
-            log(ctx, "BLACKLIST", f"{ctx.author.display_name} tried to use the command IQ.")
+        if permission_check(ctx):
+            if config["CONFIGURATION"]["blacklist"] == "True":
+                await log(ctx, "BLACKLIST", "This user attempted to use IQ", color=embedcolor("red"))
+            elif config["CONFIGURATION"]["whitelist"] == "True":
+                await log(ctx, "WHITELIST", "This user attempted to use IQ", color=embedcolor("red"))
         else:
-            log(ctx, "IQ")
+            await log(ctx, description="This user used the command IQ", color=embedcolor())
             result = ""
             iq_rating = random.randrange(0, 199)
             if iq_rating <= 69:

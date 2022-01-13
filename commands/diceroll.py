@@ -8,10 +8,13 @@ class DiceRoll(commands.Cog):
 
     @commands.command()
     async def diceroll(self, ctx):
-        if blacklist_check(ctx):
-            log(ctx, "BLACKLIST", f"{ctx.author.display_name} tried to use the command DICEROLL.")
+        if permission_check(ctx):
+            if config["CONFIGURATION"]["blacklist"] == "True":
+                await log(ctx, "BLACKLIST", "This user attempted to use DICEROLL", color=embedcolor("red"))
+            elif config["CONFIGURATION"]["whitelist"] == "True":
+                await log(ctx, "WHITELIST", "This user attempted to use DICEROLL", color=embedcolor("red"))
         else:
-            log(ctx, "ROLLADICE")
+            await log(ctx, description="This user used the command DICEROLL", color=embedcolor())
             number = random.randrange(1, 7)
             try:
                 embed = discord.embeds.Embed(

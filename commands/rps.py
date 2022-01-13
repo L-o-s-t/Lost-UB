@@ -7,10 +7,13 @@ class RPS(commands.Cog):
 
     @commands.command()
     async def rps(self, ctx):
-        if blacklist_check(ctx):
-            log(ctx, "BLACKLIST", f"{ctx.author.display_name} tried to use the command RPS.")
+        if permission_check(ctx):
+            if config["CONFIGURATION"]["blacklist"] == "True":
+                await log(ctx, "BLACKLIST", "This user attempted to use RPS", color=embedcolor("red"))
+            elif config["CONFIGURATION"]["whitelist"] == "True":
+                await log(ctx, "WHITELIST", "This user attempted to use RPS", color=embedcolor("red"))
         else:
-            log(ctx, "RPS")
+            await log(ctx, description="This user used the command RPS", color=embedcolor())
             try:
                 embed = discord.embeds.Embed(
                     title="Rock, Paper, Scissors Game",

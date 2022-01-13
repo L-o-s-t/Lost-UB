@@ -1,5 +1,3 @@
-import discord
-
 from bot import *
 
 
@@ -10,12 +8,16 @@ class Mock(commands.Cog):
 
     @commands.command()
     async def mock(self, ctx, *, message: str = None):
-        if blacklist_check(ctx):
-            log(ctx, "BLACKLIST", f"{ctx.author.display_name} tried to use the command MOCK.")
+        if permission_check(ctx):
+            if config["CONFIGURATION"]["blacklist"] == "True":
+                await log(ctx, "BLACKLIST", "This user attempted to use MOCK", color=embedcolor("red"))
+            elif config["CONFIGURATION"]["whitelist"] == "True":
+                await log(ctx, "WHITELIST", "This user attempted to use MOCK", color=embedcolor("red"))
         else:
             if message is None:
-                log(ctx, f"ERROR", "You must specify a message to mock!")
+                await log(ctx, f"ERROR", "You must specify a message to mock!", color=embedcolor("red"))
             else:
+                await log(ctx, description="This user used the command HELP", color=embedcolor())
                 count = 0
                 mocked_msg = ""
                 for x in message:
@@ -98,7 +100,7 @@ class Mock(commands.Cog):
             # else if "#" in member:
             elif action.lower() == "add":
                 if member is None:
-                    log(ctx, "ERROR", "Member not specified.")
+                    await log(ctx, "Member not specified.", color=embedcolor("red"))
                     await ctx.message.delete()
 
                 elif '@' in str(member):
@@ -107,7 +109,7 @@ class Mock(commands.Cog):
                         content = oldfile.read()
                         lines = content.split("\n")
                         if f"{member.id}" in lines:
-                            log(ctx, "ERROR", "User is already automocked.")
+                            await log(ctx, "User is already automocked.", color=embedcolor("red"))
                         else:
                             oldfile.write(f"{member.id}\n")
                             try:
@@ -147,7 +149,7 @@ class Mock(commands.Cog):
                             lines = content.split("\n")
                             if f"{member}" in lines:
                                 await ctx.message.delete()
-                                log(ctx, "ERROR", "User is already automocked.")
+                                await log(ctx, "User is already automocked.", color=embedcolor("red"))
                             else:
                                 notfound = False
 
@@ -202,11 +204,11 @@ class Mock(commands.Cog):
                                                                     f"[ ID ]\n"
                                                                     f"{member.id}")
                     else:
-                        log(ctx, "ERROR", "Invalid user ID.")
+                        await log(ctx, "Invalid user ID.", color=embedcolor("red"))
 
             elif action.lower() == "remove":
                 if member is None:
-                    log(ctx, "ERROR", "Member not specified.")
+                    await log(ctx, "Member not specified.", color=embedcolor("red"))
                     await ctx.message.delete()
 
                 elif '@' in str(member):
@@ -248,7 +250,7 @@ class Mock(commands.Cog):
                                                         f"{member.id}")
                     else:
                         await ctx.message.delete()
-                        log(ctx, "ERROR", "That user isn't being automocked.")
+                        await log(ctx, "That user isn't being automocked.", color=embedcolor("red"))
 
                 else:
                     count = 0
@@ -316,7 +318,7 @@ class Mock(commands.Cog):
                                                                 f"{member.id}")
                         else:
                             await ctx.message.delete()
-                            log(ctx, "ERROR", "That user isn't being automocked.")
+                            await log(ctx, "That user isn't being automocked.", color=embedcolor("red"))
                     elif count == 3:
                         if str(member).lower() == "all":
                             with open('data/automock.txt', 'w+', encoding='utf8') as file:
@@ -331,7 +333,7 @@ class Mock(commands.Cog):
                                                            "Successfully removed all users.")
                     else:
                         await ctx.message.delete()
-                        log(ctx, "ERROR", "Invalid User ID")
+                        await log(ctx, "Invalid User ID", color=embedcolor("red"))
 
     @commands.Cog.listener()
     async def on_message(self, ctx):
@@ -341,7 +343,7 @@ class Mock(commands.Cog):
                 users = content.split("\n")
                 if f"{ctx.author.id}" in users:
                     if f"{ctx.content}".startswith(f"{get_prefix()}"):
-                        log(ctx, "AUTOMOCK", "AutoMocked message starts with prefix, skipping...")
+                        await log(ctx, "AutoMocked message starts with prefix, skipping...", color=embedcolor())
                     else:
                         count = 0
                         mocked_msg = ""

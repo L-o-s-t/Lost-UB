@@ -8,10 +8,13 @@ class UserInfo(commands.Cog):
 
     @commands.command()
     async def userinfo(self, ctx, member: discord.Member):
-        if blacklist_check(ctx):
-            log(ctx, "BLACKLIST", f"{ctx.author.display_name} tried to use the command USERINFO.")
+        if permission_check(ctx):
+            if config["CONFIGURATION"]["blacklist"] == "True":
+                await log(ctx, "BLACKLIST", "This user attempted to use USERINFO", color=embedcolor("red"))
+            elif config["CONFIGURATION"]["whitelist"] == "True":
+                await log(ctx, "WHITELIST", "This user attempted to use USERINFO", color=embedcolor("red"))
         else:
-            log(ctx, "USERINFO")
+            await log(ctx, description="This user used the command USERINFO", color=embedcolor())
             minute = ""
             friends = ""
             guilds = ""

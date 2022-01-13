@@ -7,10 +7,13 @@ class EightBall(commands.Cog):
 
     @commands.command(aliases=['8ball'])
     async def eightball(self, ctx, *, question: str = None):
-        if blacklist_check(ctx):
-            log(ctx, "BLACKLIST", f"{ctx.author.display_name} tried to use the command EIGHTBALL.")
+        if permission_check(ctx):
+            if config["CONFIGURATION"]["blacklist"] == "True":
+                await log(ctx, "BLACKLIST", "This user attempted to use EIGHTBALL", color=embedcolor("red"))
+            elif config["CONFIGURATION"]["whitelist"] == "True":
+                await log(ctx, "WHITELIST", "This user attempted to use EIGHTBALL", color=embedcolor("red"))
         else:
-            log(ctx, "8BALL")
+            await log(ctx, description="This user used the command EIGHTBALL", color=embedcolor())
             if question is None:
                 await ctx.reply(f'Incorrect arguments | {config["CONFIGURATION"]["prefix"]}8ball (question)')
             else:

@@ -5,12 +5,14 @@ class DickSize(commands.Cog):
 
     @commands.command()
     async def dicksize(self, ctx, member: discord.Member):
-
-        if blacklist_check(ctx):
-            log(ctx, "BLACKLIST", f"{ctx.author.display_name} tried to use the command DICKSIZE.")
+        if permission_check(ctx):
+            if config["CONFIGURATION"]["blacklist"] == "True":
+                await log(ctx, "BLACKLIST", "This user attempted to use DICKSIZE", color=embedcolor("red"))
+            elif config["CONFIGURATION"]["whitelist"] == "True":
+                await log(ctx, "WHITELIST", "This user attempted to use DICKSIZE", color=embedcolor("red"))
         else:
             desc = ''
-            log(ctx, "DICKSIZE")
+            await log(ctx, description="This user used the command DICKSIZE", color=embedcolor())
             size = random.randrange(0, 12)
             if size >= 6:
                 desc = "That's a schlong dong!"
