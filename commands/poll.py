@@ -8,25 +8,27 @@ class Poll(commands.Cog):
 
     @commands.command()
     async def poll(self, ctx, *, arguments: str = None):
-        if arguments is None:
-            await ctx.message.delete()
-            log(ctx, "ERROR", "Missing required arguments.")
-        else:
-            title, description = arguments.split('| ')
-            await ctx.message.delete()
-            embed = discord.embeds.Embed(
-                title=title,
-                description=description,
-                colour=embedcolor()
-            )
-            footer(embed)
-            try:
-                msg = await ctx.send(embed=embed)
-            except discord.Forbidden:
-                msg = await simple_codeblock(ctx, f"[ {title} ]\n"
-                                                  f"{description}", reply=False)
-            await msg.add_reaction('✅')
-            await msg.add_reaction('❎')
+        await log(ctx, description="This user used the command POLL", color=embedcolor())
+        if ctx.author == bot.user:
+            if arguments is None:
+                await ctx.message.delete()
+                await log(ctx, "Missing required arguments.", color=embedcolor("red"))
+            else:
+                title, description = arguments.split('| ')
+                await ctx.message.delete()
+                embed = discord.embeds.Embed(
+                    title=title,
+                    description=description,
+                    colour=embedcolor()
+                )
+                footer(embed)
+                try:
+                    msg = await ctx.send(embed=embed)
+                except discord.Forbidden:
+                    msg = await simple_codeblock(ctx, f"[ {title} ]\n"
+                                                      f"{description}", reply=False)
+                await msg.add_reaction('✅')
+                await msg.add_reaction('❎')
 
 
 def setup(userbot):
