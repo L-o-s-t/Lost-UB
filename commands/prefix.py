@@ -7,13 +7,16 @@ class Prefix(commands.Cog):
         self.bot = userbot
 
     @commands.command()
-    async def prefix(self, ctx, x):
+    async def prefix(self, ctx, new_prefix: str = None):
         if ctx.author == bot.user:
-            log(ctx, "PREFIX")
-            config["CONFIGURATION"]["prefix"] = x
-            write()
-            bot.command_prefix = x
-            await ctx.reply(f'Prefix changed to: ``{x}``')
+            if new_prefix is None:
+                await ctx.reply(f"Current prefix: {bot.command_prefix}")
+            else:
+                await log(ctx, description="This user used the command PREFIX", color=embedcolor())
+                config["CONFIGURATION"]["prefix"] = new_prefix
+                write()
+                bot.command_prefix = new_prefix
+                await ctx.reply(f'Prefix changed to: ``{new_prefix}``')
 
 
 def setup(userbot):
