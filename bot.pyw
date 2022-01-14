@@ -12,6 +12,9 @@ import asyncio
 import datetime
 import pypresence
 from git import Repo
+import winshell
+import win32com.client
+import getpass
 
 if os.path.exists("repo"):
     process = subprocess.run("echo y | rmdir /s repo",
@@ -249,17 +252,6 @@ def log(context, title: str = "Command Usage", description: str = None, color: s
 # Checks ===============================================================================================================
 
 if not os.path.exists('config.ini'):
-    print(f"""                                                                                        
-                                  :::            ::::::::           ::::::::       :::::::::::
-                                 :+:           :+:    :+:         :+:    :+:          :+:
-                                +:+           +:+    +:+         +:+                 +:+
-                               +#+           +#+    +:+         +#++:++#++          +#+
-                              +#+           +#+    +#+                +#+          +#+
-                             #+#           #+#    #+#         #+#    #+#          #+#
-                            ##########     ########           ########           ###     
-
-                                                   LOST.#9567
-    """)
     config['CONFIGURATION'] = {
         "token": "None",
         "prefix": "~>",
@@ -412,20 +404,21 @@ except ModuleNotFoundError:
     print(f"[LOST-UB][ERROR]> Lost-Ub was unable to load commands properly, restart and check for updates.")
     exit()
 
+# create shortcut
+startup_folder = rf"C:\Users\{getpass.getuser()}\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup"
+path = os.path.join(startup_folder, "LOST-UB.lnk")
+target = rf"{os.getcwd()}\bot.pyw"
+icon = rf"{os.getcwd()}\data\icon.ico"
+shell = win32com.client.Dispatch("WScript.Shell")
+shortcut = shell.CreateShortCut(path)
+shortcut.Targetpath = target
+shortcut.IconLocation = icon
+shortcut.WorkingDirectory = os.getcwd()
+shortcut.save()
+
 if config["CONFIGURATION"]["autoupdate"] == "True":
     while True:
         require_restart = False
-        print(f"""                                                                                         
-                                  :::            ::::::::           ::::::::       :::::::::::
-                                 :+:           :+:    :+:         :+:    :+:          :+:
-                                +:+           +:+    +:+         +:+                 +:+
-                               +#+           +#+    +:+         +#++:++#++          +#+
-                              +#+           +#+    +#+                +#+          +#+
-                             #+#           #+#    #+#         #+#    #+#          #+#
-                            ##########     ########           ########           ###     
-
-                                                   LOST.#9567
-        """)
         print(f"[LOST-UB]> Checking for updates...")
 
         Repo.clone_from("https://github.com/L-o-s-t/Lost-UB", "repo/").index.remove(['.github'],
@@ -528,17 +521,6 @@ if config["CONFIGURATION"]["autoupdate"] == "True":
         if require_restart:
             print(f"[LOST-UB]> A restart will be needed for changes to work.")
             try:
-                print(f"""                                                                                         
-                                                  :::            ::::::::           ::::::::       :::::::::::
-                                                 :+:           :+:    :+:         :+:    :+:          :+:
-                                                +:+           +:+    +:+         +:+                 +:+
-                                               +#+           +#+    +:+         +#++:++#++          +#+
-                                              +#+           +#+    +#+                +#+          +#+
-                                             #+#           #+#    #+#         #+#    #+#          #+#
-                                            ##########     ########           ########           ###     
-
-                                                                   LOST.#9567
-                    """)
                 successful = True
                 extensions = [
                     'commands.help',
@@ -611,52 +593,125 @@ except pypresence.InvalidPipe:
     pass
 
 
-# Prints message to console when bot is ready
+# When bot connects
 @bot.event
 async def on_connect():
-    if config["CONFIGURATION"]["server"] == "None":
-        server_icon = open("data/server_logo.png", "rb")
-        server = await bot.create_guild("Lost.UB", server_icon.read())
-        time.sleep(5)
-        while True:
-            try:
-                server = bot.get_guild(server.id)
-                break
-            except AttributeError:
-                time.sleep(5)
+    print("connected.")
+
+    # check if lost.ub server exists
+    server = ""
+    log_channel = ""
+    if config["CONFIGURATION"]["server"] == "ERROR":
+        for guild in bot.guilds:
+            if guild.name.lower() == "lost.ub":
+                server = guild
         for category in server.categories:
-            print(category.name.lower())
+            print(f"{category}")
             if category.name.lower() == "text channels":
-                print(category)
+                for channel in category.channels:
+                    if channel.name.lower() == "general":
+                        embed = discord.embeds.Embed(
+                            title=f"Welcome, {bot.user.display_name}",
+                            description="Thank you for using LOST.UB!\n"
+                                        "This server will be used for logs, errors, and other neat things!",
+                            colour=embedcolor()
+                        )
+                        footer(embed)
+                        await channel.send(embed=embed)
+                await category.edit(name="Home")
                 log_channel = await category.create_text_channel(name="logs")
-                config["CONFIGURATION"]["log_output"] = f"{log_channel.id}"
-                await category.edit(name="Lost.UB Home")
             elif category.name.lower() == "voice channels":
                 for channel in category.channels:
                     await channel.delete()
                 await category.delete()
         config["CONFIGURATION"]["server"] = f"{server.id}"
+        config["CONFIGURATION"]["log_output"] = f"{log_channel.id}"
         write()
-    print(f"[LOST-UB][{timestamp()}] Welcome, {bot.user.display_name}")
+    server = bot.get_guild(int(config["CONFIGURATION"]["server"]))
+    if server == "None" or server is None:
+        server_icon = open("data/server_logo.png", "rb")
+        server = await bot.create_guild("Lost.ub", server_icon.read())
+        server = bot.get_guild(server.id)
+        while True:
+            try:
+                print(f"server categories: {server.categories}")
+                break
+            except AttributeError:
+                print(f"an unknown error occurred.")
+                config["CONFIGURATION"]["server"] = "ERROR"
+                write()
+                os.startfile("bot.pyw")
+                exit()
+        for category in server.categories:
+            print(f"{category}")
+            if category.name.lower() == "text channels":
+                for channel in category.channels:
+                    if channel.name.lower() == "general":
+                        embed = discord.embeds.Embed(
+                            title=f"Welcome, {bot.user.display_name}",
+                            description="Thank you for using LOST.UB!\n"
+                                        "This server will be used for logs, errors, and other neat things!",
+                            colour=embedcolor()
+                        )
+                        footer(embed)
+                        await channel.send(embed=embed)
+                await category.edit(name="Home")
+                log_channel = await category.create_text_channel(name="logs")
+            elif category.name.lower() == "voice channels":
+                for channel in category.channels:
+                    await channel.delete()
+                await category.delete()
+        config["CONFIGURATION"]["server"] = f"{server.id}"
+        config["CONFIGURATION"]["log_output"] = f"{log_channel.id}"
+        write()
+    else:
+        for channel in server.channels:
+            if channel.name.lower() == "logs":
+                log_channel = channel
+
+    # connected message
     embed = discord.embeds.Embed(
-        title=f"Welcome, {bot.user.display_name}",
-        description=f"Lost.UB has successfully logged in.",
+        title="Connected",
+        description=f"Lost.ub successfully logged in.",
         colour=embedcolor("light green")
     )
+    embed.add_field(
+        name="User",
+        value=bot.user,
+        inline=True
+    )
+    embed.add_field(
+        name="Time",
+        value=timestamp(),
+        inline=True
+    )
+    embed.set_thumbnail(url=bot.user.avatar_url)
     footer(embed)
-    log_channel = bot.get_channel(int(config["CONFIGURATION"]["log_output"]))
     await log_channel.send(embed=embed)
-    guilds = []
-    for guild in bot.guilds:
-        guilds.append(guild.id)
-    if 866253878223306753 not in guilds:
-        await bot.join_guild('https://discord.gg/CFNKjPPUbW')
 
 
 @bot.command(aliases=['quit'])
 async def disconnect(ctx):
     if ctx.author == bot.user:
-        await ctx.reply("Disconnected!")
+        embed = discord.embeds.Embed(
+            title="Disconnected",
+            description="Lost.ub successfully logged out.",
+            colour=embedcolor("red")
+        )
+        embed.add_field(
+            name="User",
+            value=bot.user,
+            inline=True
+        )
+        embed.add_field(
+            name="Time",
+            value=timestamp(),
+            inline=True
+        )
+        embed.set_thumbnail(url=bot.user.avatar_url)
+        footer(embed)
+        log_channel = bot.get_channel(int(config["CONFIGURATION"]["log_output"]))
+        await log_channel.send(embed=embed)
         exit()
 
 
@@ -719,7 +774,6 @@ else:
         bot.run(config['CONFIGURATION']['token'])
     except discord.LoginFailure:
         print(f"[LOST-UB][ERROR]> Invalid token, please enter in a valid token: ")
-        write()
         os.startfile("bot.pyw")
         exit()
 # for safety purposes and ease of access, your token will be stored in
