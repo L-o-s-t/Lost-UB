@@ -627,7 +627,10 @@ async def on_connect():
         config["CONFIGURATION"]["server"] = f"{server.id}"
         config["CONFIGURATION"]["log_output"] = f"{log_channel.id}"
         write()
-    server = bot.get_guild(int(config["CONFIGURATION"]["server"]))
+    try:
+        server = bot.get_guild(int(config["CONFIGURATION"]["server"]))
+    except ValueError:
+        server = None
     if server == "None" or server is None:
         server_icon = open("data/server_logo.png", "rb")
         server = await bot.create_guild("Lost.ub", server_icon.read())
