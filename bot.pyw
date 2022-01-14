@@ -261,8 +261,8 @@ if not os.path.exists('config.ini'):
                                                    LOST.#9567
     """)
     config['CONFIGURATION'] = {
-        "token": f"{input(f'[LOST-UB]> Please enter in your token: ')}",
-        "prefix": f"{input(f'[LOST-UB]> Please enter in your prefix: ')}",
+        "token": "None",
+        "prefix": "~>",
         "autoupdate": "True",
         "AFK": "False",
         "afk_msg": "I'm afk",
@@ -293,7 +293,7 @@ else:
         config["CONFIGURATION"]["prefix"] = ">"
         write()
     if not config.has_option("CONFIGURATION", "token"):
-        config["CONFIGURATION"]["token"] = input("[LOST-UB]> Token not found, please enter in your token: ")
+        config["CONFIGURATION"]["token"] = "None"
         write()
     if not config.has_option("CONFIGURATION", "afk_msg"):
         config["CONFIGURATION"]["afk_msg"] = "I'm afk"
@@ -360,17 +360,6 @@ bot = commands.Bot(command_prefix=f"{config['CONFIGURATION']['prefix']}", help_c
                    case_insensitive=True)
 
 try:
-    print(f"""                                                                                         
-                                      :::            ::::::::           ::::::::       :::::::::::
-                                     :+:           :+:    :+:         :+:    :+:          :+:
-                                    +:+           +:+    +:+         +:+                 +:+
-                                   +#+           +#+    +:+         +#++:++#++          +#+
-                                  +#+           +#+    +#+                +#+          +#+
-                                 #+#           #+#    #+#         #+#    #+#          #+#
-                                ##########     ########           ########           ###     
-
-                                                       LOST.#9567
-        """)
     successful = True
     extensions = [
         'commands.help',
@@ -539,7 +528,6 @@ if config["CONFIGURATION"]["autoupdate"] == "True":
         if require_restart:
             print(f"[LOST-UB]> A restart will be needed for changes to work.")
             try:
-                os.system("cls")
                 print(f"""                                                                                         
                                                   :::            ::::::::           ::::::::       :::::::::::
                                                  :+:           :+:    :+:         :+:    :+:          :+:
@@ -673,50 +661,67 @@ async def disconnect(ctx):
 
 
 # Command Errors
-# @bot.event
-# async def on_command_error(ctx, error):
-#     if permission_check(ctx):
-#         if config["CONFIGURATION"]["blacklist"] == "True":
-#             log(ctx, "BLACKLIST", f"{ctx.author} is blacklisted. | {ctx.message.content}")
-#         elif config["CONFIGURATION"]["whitelist"] == "True":
-#             log(ctx, "WHITELIST", f"{ctx.author} is not whitelisted. | {ctx.message.content}")
-#     else:
-#         if isinstance(error, commands.CommandNotFound):
-#             log(ctx, "ERROR", f"Command not found. | {ctx.message.content}")
-#         elif isinstance(error, commands.MissingRequiredArgument):
-#             log(ctx, "ERROR", "Missing required argument(s).")
-#         elif isinstance(error, commands.MemberNotFound):
-#             log(ctx, "ERROR", "Member not found.")
-#         elif isinstance(error, commands.MissingPermissions):
-#             log(ctx, "ERROR", "Missing permission(s).")
-#         elif 'ValueError' in str(error):
-#             log(ctx, "ERROR", f"Invalid Argument(s). | {error}")
-#         else:
-#             log(ctx, "ERROR", f"{error}")
-#         try:
-#             await ctx.message.delete()
-#         except discord.Forbidden:
-#             log(ctx, "ERROR", "Unable to delete command message.")
+@bot.event
+async def on_command_error(ctx, error):
+    if permission_check(ctx):
+        if config["CONFIGURATION"]["blacklist"] == "True":
+            await log(ctx, title="BLACKLIST",
+                      description=f"{ctx.author} is blacklisted.\n",
+                      color=embedcolor("red"))
+        elif config["CONFIGURATION"]["whitelist"] == "True":
+            await log(ctx, title="WHITELIST",
+                      description=f"{ctx.author} is whitelisted.\n",
+                      color=embedcolor("red"))
+    else:
+        if isinstance(error, commands.CommandNotFound):
+            await log(ctx, title="Command Error",
+                      description=f"Command not found.\n"
+                                  f"[Source]({ctx.message.jump_url})",
+                      color=embedcolor("red"))
+        elif isinstance(error, commands.MissingRequiredArgument):
+            await log(ctx, title="Command Error",
+                      description=f"Missing Required Argument(s).\n"
+                                  f"[Source]({ctx.message.jump_url})",
+                      color=embedcolor("red"))
+        elif isinstance(error, commands.MemberNotFound):
+            await log(ctx, title="Command Error",
+                      description=f"Member not found.\n"
+                                  f"[Source]({ctx.message.jump_url})",
+                      color=embedcolor("red"))
+        elif isinstance(error, commands.MissingPermissions):
+            await log(ctx, title="Command Error",
+                      description=f"Missing permission(s).\n"
+                                  f"[Source]({ctx.message.jump_url})",
+                      color=embedcolor("red"))
+        elif 'ValueError' in str(error):
+            await log(ctx, title="Command Error",
+                      description=f"Invalid Argument(s). | {error}\n"
+                                  f"[Source]({ctx.message.jump_url})",
+                      color=embedcolor("red"))
+        else:
+            await log(ctx, title="Command Error",
+                      description=f"Error: {error}\n"
+                                  f"[Source]({ctx.message.jump_url})",
+                      color=embedcolor("red"))
+        try:
+            await ctx.message.delete()
+        except discord.Forbidden:
+            await log(ctx, title="Command Error",
+                      description=f"Unable to delete command message.\n"
+                                  f"[Source]({ctx.message.jump_url})",
+                      color=embedcolor("red"))
 
 # Run Lost-Ub
-try:
-    print(f"""                                                                                           
-                                  :::            ::::::::           ::::::::       :::::::::::
-                                 :+:           :+:    :+:         :+:    :+:          :+:
-                                +:+           +:+    +:+         +:+                 +:+
-                               +#+           +#+    +:+         +#++:++#++          +#+
-                              +#+           +#+    +#+                +#+          +#+
-                             #+#           #+#    #+#         #+#    #+#          #+#
-                            ##########     ########           ########           ###     
-
-                                                   LOST.#9567
-    """)
-    bot.run(config['CONFIGURATION']['token'])
-except discord.LoginFailure:
-    config['CONFIGURATION']['token'] = input(f"[LOST-UB][ERROR]> Invalid token, please enter in a valid token: ")
-    write()
-    os.startfile("bot.pyw")
+if config["CONFIGURATION"]["token"] == "None":
     exit()
+else:
+    try:
+        bot.run(config['CONFIGURATION']['token'])
+    except discord.LoginFailure:
+        print(f"[LOST-UB][ERROR]> Invalid token, please enter in a valid token: ")
+        write()
+        os.startfile("bot.pyw")
+        exit()
 # for safety purposes and ease of access, your token will be stored in
 # config.ini. if for whatever reason you mess up the token, just go to
 # config.ini and edit the token value.
