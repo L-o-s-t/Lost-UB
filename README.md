@@ -2,7 +2,7 @@
  An open sourced, free, safe to use discord user bot.
 
 # Features
-###### replace "~>" with your prefix. by default prefix is set to "~>"
+###### replace "\~>" with your prefix. by default prefix is set to "\~>"
 
 Command                 | Usage                                         | Description
 ----------------------- | --------------------------------------------- | ---------------------------------------------
