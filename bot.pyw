@@ -703,7 +703,16 @@ async def on_connect():
     # )
     # embed.set_thumbnail(url=bot.user.avatar_url)
     # footer(embed)
-    # await log_channel.send(embed=embed)
+    message = f"```ini\n" \
+              f"[ Connected ]\n" \
+              f"Lost.ub successfully logged in.\n\n" \
+              f"[ User ]\n" \
+              f"{bot.user}\n\n" \
+              f"[ Time ]\n" \
+              f"{timestamp()}\n\n" \
+              f"{codeblock_footer()}\n" \
+              f"```"
+    await log_channel.send(message)
 
 
 @bot.command(aliases=['quit'])
