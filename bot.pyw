@@ -718,25 +718,34 @@ async def on_connect():
 @bot.command(aliases=['quit'])
 async def disconnect(ctx):
     if ctx.author == bot.user:
-        embed = discord.embeds.Embed(
-            title="Disconnected",
-            description="Lost.ub successfully logged out.",
-            colour=embedcolor("red")
-        )
-        embed.add_field(
-            name="User",
-            value=bot.user,
-            inline=True
-        )
-        embed.add_field(
-            name="Time",
-            value=timestamp(),
-            inline=True
-        )
-        embed.set_thumbnail(url=bot.user.avatar_url)
-        footer(embed)
+        # embed = discord.embeds.Embed(
+        #     title="Disconnected",
+        #     description="Lost.ub successfully logged out.",
+        #     colour=embedcolor("red")
+        # )
+        # embed.add_field(
+        #     name="User",
+        #     value=bot.user,
+        #     inline=True
+        # )
+        # embed.add_field(
+        #     name="Time",
+        #     value=timestamp(),
+        #     inline=True
+        # )
+        # embed.set_thumbnail(url=bot.user.avatar_url)
+        # footer(embed)
         log_channel = bot.get_channel(int(config["CONFIGURATION"]["log_output"]))
-        await log_channel.send(embed=embed)
+        message = f"```ini\n" \
+                  f"[ Disconnected ]\n" \
+                  f"Lost.ub successfully logged out.\n\n" \
+                  f"[ User ]\n" \
+                  f"{bot.user}\n\n" \
+                  f"[ Time ]\n" \
+                  f"{timestamp()}\n\n" \
+                  f"{codeblock_footer()}\n" \
+                  f"```"
+        await log_channel.send(message)
         exit()
 
 
