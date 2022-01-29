@@ -58,7 +58,7 @@ class UserLog(commands.Cog):
                                 )
                         footer(embed)
                         await ctx.send(embed=embed)
-                    except discord.Forbidden:
+                    except Exception as e:
                         if count != 0:
                             await simple_codeblock(ctx, f"[ Logged User List ]\n"
                                                         f"{description}\n\n"
@@ -99,7 +99,7 @@ class UserLog(commands.Cog):
                                 embed.set_thumbnail(url=member.avatar_url)
                                 footer(embed)
                                 await ctx.reply(embed=embed)
-                            except discord.Forbidden:
+                            except Exception as e:
                                 await simple_codeblock(ctx, f"[ Logged User Added ]\n\n"
                                                             f"[ User ]\n"
                                                             f"{member}\n\n"
@@ -161,7 +161,7 @@ class UserLog(commands.Cog):
                                         embed.set_thumbnail(url=member.avatar_url)
                                     footer(embed)
                                     await ctx.reply(embed=embed)
-                                except discord.Forbidden:
+                                except Exception as e:
                                     if notfound:
                                         await simple_codeblock(ctx, f"[ Logged User Added ]\n\n"
                                                                     f"[ User ]\n"
@@ -213,7 +213,7 @@ class UserLog(commands.Cog):
                             embed.set_thumbnail(url=member.avatar_url)
                             footer(embed)
                             await ctx.reply(embed=embed)
-                        except discord.Forbidden:
+                        except Exception as e:
                             await simple_codeblock(ctx, "[ Logged User Removed ]\n\n"
                                                         "[ User ]\n"
                                                         f"{member}\n\n"
@@ -274,7 +274,7 @@ class UserLog(commands.Cog):
                                     embed.set_thumbnail(url=member.avatar_url)
                                 footer(embed)
                                 await ctx.reply(embed=embed)
-                            except discord.Forbidden:
+                            except Exception as e:
                                 if notfound:
                                     await simple_codeblock(ctx, "[ Logged User Removed ]\n\n"
                                                                 "[ User ]\n"
@@ -298,7 +298,7 @@ class UserLog(commands.Cog):
                                     await simple_embed(ctx,
                                                        title="Logged User List",
                                                        description="**Successfully removed all users.**")
-                                except discord.Forbidden:
+                                except Exception as e:
                                     await simple_codeblock(ctx,
                                                            "[ Logged User List ]\n"
                                                            "Successfully removed all users.")

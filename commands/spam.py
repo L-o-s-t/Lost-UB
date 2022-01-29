@@ -54,7 +54,7 @@ class Spam(commands.Cog):
                         await channels.send(message)
                     except AttributeError:
                         pass
-                    except discord.Forbidden:
+                    except Exception as e:
                         pass
 
 

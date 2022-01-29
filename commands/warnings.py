@@ -56,7 +56,7 @@ class Warnings(commands.Cog):
                         url=member.avatar_url
                     )
                     await ctx.reply(embed=embed)
-                except discord.Forbidden:
+                except Exception as e:
                     await simple_codeblock(ctx,
                                            f"[ User Warned ]\n"
                                            f"Command author: {ctx.author}\n\n"
@@ -116,7 +116,7 @@ class Warnings(commands.Cog):
                         )
                     try:
                         await ctx.reply(embed=embed)
-                    except discord.Forbidden:
+                    except Exception as e:
                         if remainder == 0:
                             await simple_codeblock(ctx,
                                                    f"[ User Warnings ]\n"

@@ -55,7 +55,7 @@ class Fight(commands.Cog):
                 footer(embed)
                 try:
                     await ctx.reply(embed=embed)
-                except discord.Forbidden:
+                except Exception as e:
                     await simple_codeblock(ctx,
                                            f"[ Fight ]\n"
                                            f"{ctx.author.display_name} started a fight with {member.display_name}!\n"
@@ -109,7 +109,7 @@ class Fight(commands.Cog):
                                 footer(embed)
                                 try:
                                     await action.reply(embed=embed)
-                                except discord.Forbidden:
+                                except Exception as e:
                                     await simple_codeblock(ctx,
                                                            f"[ Fight ]\n"
                                                            f"{ctx.author.display_name} dealt {player_damage} to"
@@ -153,7 +153,7 @@ class Fight(commands.Cog):
                                 footer(embed)
                                 try:
                                     await action.reply(embed=embed)
-                                except discord.Forbidden:
+                                except Exception as e:
                                     await simple_codeblock(ctx,
                                                            f"[ Fight ]\n"
                                                            f"{ctx.author.display_name} decided to defend themselves.\n"
@@ -188,7 +188,7 @@ class Fight(commands.Cog):
                                 footer(embed)
                                 try:
                                     await action.reply(embed=embed)
-                                except discord.Forbidden:
+                                except Exception as e:
                                     await simple_codeblock(ctx,
                                                            f"[ Fight ]\n"
                                                            f"{ctx.author.display_name} forfeits! "
@@ -218,7 +218,7 @@ class Fight(commands.Cog):
                             footer(embed)
                             try:
                                 await ctx.send(embed=embed)
-                            except discord.Forbidden:
+                            except Exception as e:
                                 await simple_codeblock(ctx,
                                                        f"[ Fight ]\n"
                                                        f"{ctx.author.display_name} wins the fight!\n\n"
@@ -246,7 +246,7 @@ class Fight(commands.Cog):
                             footer(embed)
                             try:
                                 await ctx.send(embed=embed)
-                            except discord.Forbidden:
+                            except Exception as e:
                                 await simple_codeblock(ctx,
                                                        f"[ Fight ]\n"
                                                        f"{member.display_name} wins the fight!\n\n"
@@ -295,7 +295,7 @@ class Fight(commands.Cog):
                                 footer(embed)
                                 try:
                                     await action.reply(embed=embed)
-                                except discord.Forbidden:
+                                except Exception as e:
                                     await simple_codeblock(ctx,
                                                            f"[ Fight ]\n"
                                                            f"{member.display_name} dealt {player2_damage} to"
@@ -339,7 +339,7 @@ class Fight(commands.Cog):
                                 footer(embed)
                                 try:
                                     await action.reply(embed=embed)
-                                except discord.Forbidden:
+                                except Exception as e:
                                     await simple_codeblock(ctx,
                                                            f"[ Fight ]\n"
                                                            f"{member.display_name} decided to defend themselves.\n"
@@ -381,7 +381,7 @@ class Fight(commands.Cog):
                                 footer(embed)
                                 try:
                                     await action.reply(embed=embed)
-                                except discord.Forbidden:
+                                except Exception as e:
                                     await simple_codeblock(ctx,
                                                            f"[ Fight ]\n"
                                                            f"{member.display_name} forfeits! "
@@ -418,7 +418,7 @@ class Fight(commands.Cog):
                             footer(embed)
                             try:
                                 await ctx.send(embed=embed)
-                            except discord.Forbidden:
+                            except Exception as e:
                                 await simple_codeblock(ctx,
                                                        f"[ Fight ]\n"
                                                        f"{member.display_name} wins the fight!\n\n"
@@ -453,7 +453,7 @@ class Fight(commands.Cog):
                             footer(embed)
                             try:
                                 await ctx.send(embed=embed)
-                            except discord.Forbidden:
+                            except Exception as e:
                                 await simple_codeblock(ctx,
                                                        f"[ Fight ]\n"
                                                        f"{ctx.author.display_name} wins the fight!\n\n"

@@ -68,7 +68,7 @@ class Whitelist(commands.Cog):
                 )
                 try:
                     await ctx.reply(embed=embed)
-                except discord.Forbidden:
+                except Exception as e:
                     if remainder > 0:
                         string = f"These users are allowed to use any command.\n" \
                                  f"```{temp}" \
@@ -124,7 +124,7 @@ class Whitelist(commands.Cog):
                         )
                         try:
                             await ctx.reply(embed=embed)
-                        except discord.Forbidden:
+                        except Exception as e:
                             await simple_codeblock(ctx,
                                                    f"[ Whitelisted User Added ]\n\n"
                                                    f"[ User ]\n"
@@ -195,7 +195,7 @@ class Whitelist(commands.Cog):
                             )
                             try:
                                 await ctx.reply(embed=embed)
-                            except discord.Forbidden:
+                            except Exception as e:
                                 if notfound:
                                     await simple_codeblock(ctx,
                                                            f"[ Whitelisted User Added ]\n\n"
@@ -256,7 +256,7 @@ class Whitelist(commands.Cog):
                         )
                         try:
                             await ctx.reply(embed=embed)
-                        except discord.Forbidden:
+                        except Exception as e:
                             await simple_codeblock(ctx,
                                                    f"[ Whitelisted User Removed ]\n\n"
                                                    f"[ User ]\n"
@@ -327,7 +327,7 @@ class Whitelist(commands.Cog):
                             )
                             try:
                                 await ctx.reply(embed=embed)
-                            except discord.Forbidden:
+                            except Exception as e:
                                 if notfound:
                                     await simple_codeblock(ctx,
                                                            f"[ Whitelisted User Removed ]\n\n"
@@ -352,7 +352,7 @@ class Whitelist(commands.Cog):
                                     await simple_embed(ctx,
                                                        title="Whitelist",
                                                        description="**Successfully removed all users.**")
-                                except discord.Forbidden:
+                                except Exception as e:
                                     await simple_codeblock(ctx,
                                                            "[ Whitelist ]\n"
                                                            "Successfully removed all users.")

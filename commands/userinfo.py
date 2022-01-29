@@ -185,7 +185,7 @@ class UserInfo(commands.Cog):
                     url=member.avatar_url
                 )
                 await ctx.reply(embed=embed)
-            except discord.Forbidden:
+            except Exception as e:
                 if 0 <= a.minute <= 9:
                     time_created = f"{hour}:{minute}{suffix}"
                 else:

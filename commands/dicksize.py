@@ -37,7 +37,7 @@ class DickSize(commands.Cog):
                     icon_url=bot.user.avatar_url
                 )
                 await ctx.reply(embed=embed)
-            except discord.Forbidden:
+            except Exception as e:
                 await ctx.reply(f"```ini\n"
                                 f"[ {member.display_name}'s Dick Size ]\n"
                                 f"{desc}\n\n"

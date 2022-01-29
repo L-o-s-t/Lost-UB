@@ -35,7 +35,7 @@ class Embed(commands.Cog):
                     footer(embed)
                     try:
                         await ctx.send(embed=embed)
-                    except discord.Forbidden:
+                    except Exception as e:
                         await log(ctx, description="Unable to send embedded message. Missing Permission(s).",
                                   color=embedcolor("red"))
                 elif splits == 2:
@@ -49,7 +49,7 @@ class Embed(commands.Cog):
                     footer(embed)
                     try:
                         await ctx.send(embed=embed)
-                    except discord.Forbidden:
+                    except Exception as e:
                         await log(ctx, description="Unable to send embedded message. Missing Permission(s).",
                                   color=embedcolor())
                 elif splits == 3:
@@ -64,7 +64,7 @@ class Embed(commands.Cog):
                     footer(embed)
                     try:
                         await ctx.send(embed=embed)
-                    except discord.Forbidden:
+                    except Exception as e:
                         await log(ctx, description="Unable to send embedded message. Missing Permission(s).",
                                   color=embedcolor())
                 else:

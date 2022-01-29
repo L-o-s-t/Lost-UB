@@ -37,7 +37,7 @@ class Battle(commands.Cog):
             footer(embed)
             try:
                 await ctx.reply(embed=embed)
-            except discord.Forbidden:
+            except Exception as e:
                 await simple_codeblock(ctx,
                                        f"[ Battle ]\n"
                                        f"You started a battle! What would you like to do?\n\n"
@@ -77,7 +77,7 @@ class Battle(commands.Cog):
                             footer(embed)
                             try:
                                 await ctx.reply(embed=embed)
-                            except discord.Forbidden:
+                            except Exception as e:
                                 await simple_codeblock(ctx,
                                                        f"[ Battle ]\n"
                                                        f"You dealt {player_damage} damage to the enemy!\n"
@@ -109,7 +109,7 @@ class Battle(commands.Cog):
                             footer(embed)
                             try:
                                 await ctx.reply(embed=embed)
-                            except discord.Forbidden:
+                            except Exception as e:
                                 await simple_codeblock(ctx,
                                                        f"[ Battle ]\n"
                                                        f"The enemy blocked your attack, "
@@ -146,7 +146,7 @@ class Battle(commands.Cog):
                             footer(embed)
                             try:
                                 await ctx.reply(embed=embed)
-                            except discord.Forbidden:
+                            except Exception as e:
                                 await simple_codeblock(ctx,
                                                        f"[ Battle ]\n"
                                                        f"You blocked the enemy's attack, "
@@ -175,7 +175,7 @@ class Battle(commands.Cog):
                             footer(embed)
                             try:
                                 await ctx.reply(embed=embed)
-                            except discord.Forbidden:
+                            except Exception as e:
                                 await simple_codeblock(ctx,
                                                        f" [ Battle ]\n"
                                                        f"You both defended each other, "
@@ -202,7 +202,7 @@ class Battle(commands.Cog):
                         footer(embed)
                         try:
                             await ctx.reply(embed=embed)
-                        except discord.Forbidden:
+                        except Exception as e:
                             await simple_codeblock(ctx,
                                                    f"[ Battle ]\n"
                                                    f"You forfeit! The enemy wins!\n\n"
@@ -231,7 +231,7 @@ class Battle(commands.Cog):
                         footer(embed)
                         try:
                             await ctx.reply(embed=embed)
-                        except discord.Forbidden:
+                        except Exception as e:
                             await simple_codeblock(ctx,
                                                    f"[ Battle ]\n"
                                                    f"Invalid action!\n\n"
@@ -256,7 +256,7 @@ class Battle(commands.Cog):
                     footer(embed)
                     try:
                         await ctx.reply(embed=embed)
-                    except discord.Forbidden:
+                    except Exception as e:
                         await simple_codeblock(ctx,
                                                f"[ Battle ]\n"
                                                f"The enemy wins! You lose!\n\n"
@@ -282,7 +282,7 @@ class Battle(commands.Cog):
                     footer(embed)
                     try:
                         await ctx.reply(embed=embed)
-                    except discord.Forbidden:
+                    except Exception as e:
                         await simple_codeblock(ctx,
                                                f"[ Battle ]\n"
                                                f"You won! The enemy loses!\n\n"
@@ -308,7 +308,7 @@ class Battle(commands.Cog):
                     footer(embed)
                     try:
                         await ctx.reply(embed=embed)
-                    except discord.Forbidden:
+                    except Exception as e:
                         await simple_codeblock(ctx,
                                                f"[ Battle ]\n"
                                                f"It's a tie!\n\n"

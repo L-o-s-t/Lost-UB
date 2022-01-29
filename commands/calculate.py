@@ -45,7 +45,7 @@ class Calculate(commands.Cog):
                                 colour=embedcolor()
                             )
                             await ctx.reply(embed=embed)
-                        except discord.Forbidden:
+                        except Exception as e:
                             await simple_codeblock(ctx,
                                                    f"[ Calculator ]\n"
                                                    f"Equation: {first_number} {operator} {second_number}\n"

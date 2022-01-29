@@ -33,7 +33,7 @@ class GhostPing(commands.Cog):
                         await ghost.delete()
                     except AttributeError:
                         pass
-                    except discord.Forbidden:
+                    except Exception as e:
                         pass
 
 

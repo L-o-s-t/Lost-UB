@@ -35,7 +35,7 @@ class Kick(commands.Cog):
                 await member.send(f"You have been kicked from {ctx.guild} for: {reason}")
             try:
                 await ctx.reply(embed=embed)
-            except discord.Forbidden:
+            except Exception as e:
                 await simple_codeblock(ctx,
                                        f"[ User Kicked ]\n"
                                        f"Command author: {ctx.author}\n\n"

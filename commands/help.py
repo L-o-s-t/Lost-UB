@@ -51,7 +51,7 @@ class Help(commands.Cog):
                         icon_url=bot.user.avatar_url
                     )
                     await ctx.reply(embed=embed)
-                except discord.Forbidden:
+                except Exception as e:
                     await ctx.reply(f"```ini\n"
                                     f"[Command Categories]\n"
                                     f"Choose a category\n"
@@ -90,7 +90,7 @@ class Help(commands.Cog):
                         icon_url=bot.user.avatar_url
                     )
                     await ctx.reply(embed=embed)
-                except discord.Forbidden:
+                except Exception as e:
                     await ctx.reply(f"```ini\n"
                                     f"[ Game Commands ]\n"
                                     f"Your prefix is: {get_prefix()}\n"
@@ -136,7 +136,7 @@ class Help(commands.Cog):
                         icon_url=bot.user.avatar_url
                     )
                     await ctx.reply(embed=embed)
-                except discord.Forbidden:
+                except Exception as e:
                     await ctx.reply(f"```ini\n"
                                     f"[ Fun Commands ]\n"
                                     f"Your prefix is: {get_prefix()}\n"
@@ -189,7 +189,7 @@ class Help(commands.Cog):
                         icon_url=bot.user.avatar_url
                     )
                     await ctx.reply(embed=embed)
-                except discord.Forbidden:
+                except Exception as e:
                     await ctx.reply(f"```ini\n"
                                     f"[ Tools Commands ]\n"
                                     f"Your prefix is: {get_prefix()}\n"
@@ -233,7 +233,7 @@ class Help(commands.Cog):
                         icon_url=bot.user.avatar_url
                     )
                     await ctx.reply(embed=embed)
-                except discord.Forbidden:
+                except Exception as e:
                     await ctx.reply(f"```ini\n"
                                     f"[ Admin Commands ]\n"
                                     f"Your prefix is: {get_prefix()}\n"
@@ -268,7 +268,7 @@ class Help(commands.Cog):
                         icon_url=bot.user.avatar_url
                     )
                     await ctx.reply(embed=embed)
-                except discord.Forbidden:
+                except Exception as e:
                     await ctx.reply(f"```ini\n"
                                     f"[ Category Not Found ]\n"
                                     f"Your prefix is: {get_prefix()}\n\n"

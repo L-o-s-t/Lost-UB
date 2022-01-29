@@ -81,7 +81,7 @@ class RPS(commands.Cog):
                     await ctx.reply(embed=embed)
                 except asyncio.TimeoutError:
                     await ctx.reply("You took too long to respond!")
-            except discord.Forbidden:
+            except Exception as e:
                 await ctx.reply(f"```ini\n"
                                 f"[ Rock, Paper, Scissors Game]\n"
                                 f"What is your choice?\n\n"

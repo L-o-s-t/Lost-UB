@@ -36,7 +36,7 @@ class Server(commands.Cog):
                 embed.add_field(name="Member Count", value=membercount, inline=True)
 
                 await ctx.send(embed=embed)
-            except discord.Forbidden:
+            except Exception as e:
                 await simple_codeblock(ctx, f"[ Server Info ]\n"
                                             f"{ctx.guild.name}\n\n"
                                             f"[ Owner ]\n"
@@ -64,7 +64,7 @@ class Server(commands.Cog):
                     value=f"[========>]({ctx.guild.icon_url_as(format='png')})")
                 embed.set_thumbnail(url=ctx.guild.icon_url)
                 await ctx.reply(embed=embed)
-            except discord.Forbidden:
+            except Exception as e:
                 if '.png' in str(ctx.guild.icon_url_as(format='png')):
                     await simple_codeblock(ctx, f"[ Server Icon Link ]\n"
                                                 f"{ctx.guild.icon_url_as(format='png')}")

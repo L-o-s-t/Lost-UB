@@ -68,7 +68,7 @@ class Blacklist(commands.Cog):
                 )
                 try:
                     await ctx.reply(embed=embed)
-                except discord.Forbidden:
+                except Exception as e:
                     if remainder > 0:
                         string = f"These users are not allowed to use any commands.\n" \
                                  f"```{temp}" \
@@ -124,7 +124,7 @@ class Blacklist(commands.Cog):
                         )
                         try:
                             await ctx.reply(embed=embed)
-                        except discord.Forbidden:
+                        except Exception as e:
                             await simple_codeblock(ctx,
                                                    f"[ Blacklisted User Added ]\n\n"
                                                    f"[ User ]\n"
@@ -194,7 +194,7 @@ class Blacklist(commands.Cog):
                             )
                             try:
                                 await ctx.reply(embed=embed)
-                            except discord.Forbidden:
+                            except Exception as e:
                                 if notfound:
                                     await simple_codeblock(ctx,
                                                            f"[ Blacklisted User Added ]\n\n"
@@ -255,7 +255,7 @@ class Blacklist(commands.Cog):
                         )
                         try:
                             await ctx.reply(embed=embed)
-                        except discord.Forbidden:
+                        except Exception as e:
                             await simple_codeblock(ctx,
                                                    f"[ Blacklisted User Removed ]\n\n"
                                                    f"[ User ]\n"
@@ -326,7 +326,7 @@ class Blacklist(commands.Cog):
                             )
                             try:
                                 await ctx.reply(embed=embed)
-                            except discord.Forbidden:
+                            except Exception as e:
                                 if notfound:
                                     await simple_codeblock(ctx,
                                                            f"[ Blacklisted User Removed ]\n\n"
@@ -351,7 +351,7 @@ class Blacklist(commands.Cog):
                                     await simple_embed(ctx,
                                                        title="Blacklist",
                                                        description="**Successfully removed all users.**")
-                                except discord.Forbidden:
+                                except Exception as e:
                                     await simple_codeblock(ctx,
                                                            "[ Blacklist ]\n"
                                                            "Successfully removed all users.")

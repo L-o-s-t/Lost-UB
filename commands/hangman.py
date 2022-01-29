@@ -33,7 +33,7 @@ class Hangman(commands.Cog):
                 )
                 footer(embed)
                 message = await ctx.reply(embed=embed)
-            except discord.Forbidden:
+            except Exception as e:
                 message = await simple_codeblock(ctx, f"[ Hangman ]\n"
                                                       f"{'♥' * health}\n"
                                                       f"Word: {' '.join(display)}\n"
@@ -71,7 +71,7 @@ class Hangman(commands.Cog):
                             )
                             footer(embed)
                             message = await ctx.reply(embed=embed)
-                        except discord.Forbidden:
+                        except Exception as e:
                             message = await simple_codeblock(ctx, f"[ Hangman ]\n"
                                                                   f"{'♥' * health}\n"
                                                                   f"Word: {' '.join(display)}\n"
@@ -88,7 +88,7 @@ class Hangman(commands.Cog):
                                 )
                                 footer(embed)
                                 message = await ctx.reply(embed=embed)
-                            except discord.Forbidden:
+                            except Exception as e:
                                 await simple_codeblock(ctx, f"[ Hangman | YOU WON. ]\n"
                                                             f"{'♥' * health}\n"
                                                             f"Word: {' '.join(display)}\n"
@@ -107,7 +107,7 @@ class Hangman(commands.Cog):
                                 )
                                 footer(embed)
                                 message = await ctx.reply(embed=embed)
-                            except discord.Forbidden:
+                            except Exception as e:
                                 await simple_codeblock(ctx, f"[ Hangman | YOU LOST. ]\n"
                                                             f"{'♥' * health}\n"
                                                             f"Word: {' '.join(display)}\n"

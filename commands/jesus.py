@@ -21,7 +21,7 @@ class Jesus(commands.Cog):
             embed.set_image(url='https://preventsatan.com/wp-content/uploads/2019/06/Jesus-name-powerful.jpg')
             try:
                 await ctx.reply(embed=embed)
-            except discord.Forbidden:
+            except Exception as e:
                 await ctx.send("You need the permission, \"Embed Links\", to use this!")
 
 

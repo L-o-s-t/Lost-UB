@@ -24,7 +24,7 @@ class Poll(commands.Cog):
                 footer(embed)
                 try:
                     msg = await ctx.send(embed=embed)
-                except discord.Forbidden:
+                except Exception as e:
                     msg = await simple_codeblock(ctx, f"[ {title} ]\n"
                                                       f"{description}", reply=False)
                 await msg.add_reaction('✅')

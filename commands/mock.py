@@ -87,7 +87,7 @@ class Mock(commands.Cog):
                                 )
                         footer(embed)
                         await ctx.send(embed=embed)
-                    except discord.Forbidden:
+                    except Exception as e:
                         if count != 0:
                             await simple_codeblock(ctx, f"[ AutoMock User List ]\n"
                                                         f"{description}\n\n"
@@ -128,7 +128,7 @@ class Mock(commands.Cog):
                                 embed.set_thumbnail(url=member.avatar_url)
                                 footer(embed)
                                 await ctx.reply(embed=embed)
-                            except discord.Forbidden:
+                            except Exception as e:
                                 await simple_codeblock(ctx, f"[ AutoMock User Added ]\n\n"
                                                             f"[ User ]\n"
                                                             f"{member}\n\n"
@@ -190,7 +190,7 @@ class Mock(commands.Cog):
                                         embed.set_thumbnail(url=member.avatar_url)
                                     footer(embed)
                                     await ctx.reply(embed=embed)
-                                except discord.Forbidden:
+                                except Exception as e:
                                     if notfound:
                                         await simple_codeblock(ctx, f"[ AutoMock User Added ]\n\n"
                                                                     f"[ User ]\n"
@@ -242,7 +242,7 @@ class Mock(commands.Cog):
                             embed.set_thumbnail(url=member.avatar_url)
                             footer(embed)
                             await ctx.reply(embed=embed)
-                        except discord.Forbidden:
+                        except Exception as e:
                             await simple_codeblock(ctx, "[ Automock User Removed ]\n\n"
                                                         "[ User ]\n"
                                                         f"{member}\n\n"
@@ -264,7 +264,7 @@ class Mock(commands.Cog):
                         if f"{member}" in str(lines):
                             for x in lines:
                                 if x:
-                                    if int(x) == member:
+                                    if int(x) == int(member):
                                         pass
                                     else:
                                         temp += f"{x}\n"
@@ -298,12 +298,12 @@ class Mock(commands.Cog):
                                     )
                                     embed.add_field(
                                         name="ID",
-                                        value=f"{member}"
+                                        value=f"{member.id}"
                                     )
                                     embed.set_thumbnail(url=member.avatar_url)
                                 footer(embed)
                                 await ctx.reply(embed=embed)
-                            except discord.Forbidden:
+                            except Exception as e:
                                 if notfound:
                                     await simple_codeblock(ctx, "[ Automock User Removed ]\n\n"
                                                                 "[ User ]\n"
@@ -327,7 +327,7 @@ class Mock(commands.Cog):
                                     await simple_embed(ctx,
                                                        title="AutoMock User List",
                                                        description="**Successfully removed all users.**")
-                                except discord.Forbidden:
+                                except Exception as e:
                                     await simple_codeblock(ctx,
                                                            "[ AutoMock User List ]\n"
                                                            "Successfully removed all users.")
@@ -353,7 +353,7 @@ class Mock(commands.Cog):
                             else:
                                 mocked_msg += f"{x.lower()}"
                             count += 1
-                        await ctx.reply(mocked_msg)
+                        await ctx.reply(mocked_msg + " 🤡")
 
 
 def setup(userbot):

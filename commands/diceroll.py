@@ -27,7 +27,7 @@ class DiceRoll(commands.Cog):
                     icon_url=bot.user.avatar_url
                 )
                 await ctx.reply(embed=embed)
-            except discord.Forbidden:
+            except Exception as e:
                 await simple_codeblock(ctx, f"[ Dice Roll ]\n"
                                             f"You rolled a {number}")
 

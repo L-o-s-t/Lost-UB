@@ -52,7 +52,7 @@ class EightBall(commands.Cog):
                         icon_url=bot.user.avatar_url
                     )
                     await ctx.reply(embed=embed)
-                except discord.Forbidden:
+                except Exception as e:
                     await ctx.reply(f"```ini\n"
                                     f"[ Eight Ball ]\n"
                                     f"{question}\n\n"

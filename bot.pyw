@@ -187,35 +187,48 @@ def timestamp():
 def log(context, title: str = "Command Usage", description: str = None, color: str = None):
     if context.guild is None:
         context.guild = "dms"
-    embed = discord.embeds.Embed(
-        title=title,
-        description=description,
-        colour=color
-    )
-    embed.add_field(
-        name="User",
-        value=context.author,
-        inline=True
-    )
-    embed.add_field(
-        name="Guild",
-        value=context.guild,
-        inline=True
-    )
-    embed.add_field(
-        name="Source",
-        value=f"[Message]({context.message.jump_url})",
-        inline=True
-    )
-    embed.add_field(
-        name="Timestamp",
-        value=timestamp(),
-        inline=True
-    )
-    embed.set_thumbnail(url=f"{context.author.avatar_url}")
-    footer(embed)
+    # embed = discord.embeds.Embed(
+    #     title=title,
+    #     description=description,
+    #     colour=color
+    # )
+    # embed.add_field(
+    #     name="User",
+    #     value=context.author,
+    #     inline=True
+    # )
+    # embed.add_field(
+    #     name="Guild",
+    #     value=context.guild,
+    #     inline=True
+    # )
+    # embed.add_field(
+    #     name="Source",
+    #     value=f"[Message]({context.message.jump_url})",
+    #     inline=True
+    # )
+    # embed.add_field(
+    #     name="Timestamp",
+    #     value=timestamp(),
+    #     inline=True
+    # )
+    # embed.set_thumbnail(url=f"{context.author.avatar_url}")
+    # footer(embed)
+    message = f"```ini\n" \
+              f"[ {title} ]\n" \
+              f"{description}\n\n" \
+              f"[ User ]\n" \
+              f"{context.author}\n\n" \
+              f"[ Guild ]\n" \
+              f"{context.guild}\n\n" \
+              f"[ Source ]\n" \
+              f"{context.message.jump_url}\n\n" \
+              f"[ Timestamp ]\n" \
+              f"{timestamp()}\n\n" \
+              f"{codeblock_footer()}\n" \
+              f"```"
     channel = bot.get_channel(int(config["CONFIGURATION"]["log_output"]))
-    return channel.send(embed=embed)
+    return channel.send(message)
     # if context.guild is None:
     #     context.guild = "dms"
     # if message is None:
@@ -673,24 +686,24 @@ async def on_connect():
                 log_channel = channel
 
     # connected message
-    embed = discord.embeds.Embed(
-        title="Connected",
-        description=f"Lost.ub successfully logged in.",
-        colour=embedcolor("light green")
-    )
-    embed.add_field(
-        name="User",
-        value=bot.user,
-        inline=True
-    )
-    embed.add_field(
-        name="Time",
-        value=timestamp(),
-        inline=True
-    )
-    embed.set_thumbnail(url=bot.user.avatar_url)
-    footer(embed)
-    await log_channel.send(embed=embed)
+    # embed = discord.embeds.Embed(
+    #     title="Connected",
+    #     description=f"Lost.ub successfully logged in.",
+    #     colour=embedcolor("light green")
+    # )
+    # embed.add_field(
+    #     name="User",
+    #     value=bot.user,
+    #     inline=True
+    # )
+    # embed.add_field(
+    #     name="Time",
+    #     value=timestamp(),
+    #     inline=True
+    # )
+    # embed.set_thumbnail(url=bot.user.avatar_url)
+    # footer(embed)
+    # await log_channel.send(embed=embed)
 
 
 @bot.command(aliases=['quit'])
@@ -733,40 +746,33 @@ async def on_command_error(ctx, error):
     else:
         if isinstance(error, commands.CommandNotFound):
             await log(ctx, title="Command Error",
-                      description=f"Command not found.\n"
-                                  f"[Source]({ctx.message.jump_url})",
+                      description=f"Command not found.",
                       color=embedcolor("red"))
         elif isinstance(error, commands.MissingRequiredArgument):
             await log(ctx, title="Command Error",
-                      description=f"Missing Required Argument(s).\n"
-                                  f"[Source]({ctx.message.jump_url})",
+                      description=f"Missing Required Argument(s).",
                       color=embedcolor("red"))
         elif isinstance(error, commands.MemberNotFound):
             await log(ctx, title="Command Error",
-                      description=f"Member not found.\n"
-                                  f"[Source]({ctx.message.jump_url})",
+                      description=f"Member not found.",
                       color=embedcolor("red"))
         elif isinstance(error, commands.MissingPermissions):
             await log(ctx, title="Command Error",
-                      description=f"Missing permission(s).\n"
-                                  f"[Source]({ctx.message.jump_url})",
+                      description=f"Missing permission(s).",
                       color=embedcolor("red"))
         elif 'ValueError' in str(error):
             await log(ctx, title="Command Error",
-                      description=f"Invalid Argument(s). | {error}\n"
-                                  f"[Source]({ctx.message.jump_url})",
+                      description=f"Invalid Argument(s). | {error}",
                       color=embedcolor("red"))
         else:
             await log(ctx, title="Command Error",
-                      description=f"Error: {error}\n"
-                                  f"[Source]({ctx.message.jump_url})",
+                      description=f"Error: {error}",
                       color=embedcolor("red"))
         try:
             await ctx.message.delete()
         except discord.Forbidden:
             await log(ctx, title="Command Error",
-                      description=f"Unable to delete command message.\n"
-                                  f"[Source]({ctx.message.jump_url})",
+                      description=f"Unable to delete command message.",
                       color=embedcolor("red"))
 
 # Run Lost-Ub
