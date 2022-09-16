@@ -803,12 +803,18 @@ async def on_command_error(ctx, error):
 
 # Run Lost-Ub
 if config["CONFIGURATION"]["token"] == "None":
+    token_input = input("The token you've provided returned an error, please enter in a valid token: ")
+    config["CONFIGURATION"]["token"] = token_input
+    write()
+    os.startfile("bot.py")
     exit()
 else:
     try:
         bot.run(config['CONFIGURATION']['token'])
     except discord.LoginFailure:
-        print(f"[LOST-UB][ERROR]> Invalid token, please enter in a valid token: ")
+        token_input = input(f"[LOST-UB][ERROR]> Invalid token, please enter in a valid token: ")
+        config["CONFIGURATION"]["token"] = token_input
+        write()
         os.startfile("bot.py")
         exit()
 # for safety purposes and ease of access, your token will be stored in
