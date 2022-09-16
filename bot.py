@@ -586,7 +586,7 @@ if config["CONFIGURATION"]["autoupdate"] == "True":
                 print(f"[LOST-UB][ERROR]> Lost-Ub was unable to load commands properly, restart and check for updates.")
                 exit()
         else:
-            print(f"[LOST-UB]> No restarts required, press enter to continue...")
+            input(f"[LOST-UB]> No restarts required, press enter to continue...")
             break
 
 try:
@@ -618,6 +618,7 @@ async def on_connect():
         for guild in bot.guilds:
             if guild.name.lower() == "lost.ub":
                 server = guild
+        print("logs: " + server)
         for category in server.categories:
             print(f"{category}")
             if category.name.lower() == "text channels":
@@ -656,7 +657,7 @@ async def on_connect():
                 print(f"an unknown error occurred.")
                 config["CONFIGURATION"]["server"] = "ERROR"
                 write()
-                os.startfile("bot.py")
+                # os.startfile("bot.py")
                 exit()
         for category in server.categories:
             print(f"{category}")
@@ -670,7 +671,14 @@ async def on_connect():
                             colour=embedcolor()
                         )
                         footer(embed)
-                        await channel.send(embed=embed)
+                        try:
+                            await channel.send(embed=embed)
+                        except discord.HTTPException:
+                            await channel.send(f"```ini\n"
+                                               f"[ Welcome, {bot.user.display_name} ]\n\n"
+                                               f"Thank you for using LOST.UB!\n"
+                                               f"This server will be used for logs, errors, and other neat things!\n"
+                                               f"```")
                 await category.edit(name="Home")
                 log_channel = await category.create_text_channel(name="logs")
             elif category.name.lower() == "voice channels":
