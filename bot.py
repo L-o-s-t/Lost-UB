@@ -418,16 +418,16 @@ except ModuleNotFoundError:
     exit()
 
 # create shortcut
-startup_folder = rf"C:\Users\{getpass.getuser()}\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup"
-path = os.path.join(startup_folder, "LOST-UB.lnk")
-target = rf"{os.getcwd()}\bot.pyw"
-icon = rf"{os.getcwd()}\data\icon.ico"
-shell = win32com.client.Dispatch("WScript.Shell")
-shortcut = shell.CreateShortCut(path)
-shortcut.Targetpath = target
-shortcut.IconLocation = icon
-shortcut.WorkingDirectory = os.getcwd()
-shortcut.save()
+# startup_folder = rf"C:\Users\{getpass.getuser()}\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup"
+# path = os.path.join(startup_folder, "LOST-UB.lnk")
+# target = rf"{os.getcwd()}\bot.pyw"
+# icon = rf"{os.getcwd()}\data\icon.ico"
+# shell = win32com.client.Dispatch("WScript.Shell")
+# shortcut = shell.CreateShortCut(path)
+# shortcut.Targetpath = target
+# shortcut.IconLocation = icon
+# shortcut.WorkingDirectory = os.getcwd()
+# shortcut.save()
 
 if config["CONFIGURATION"]["autoupdate"] == "True":
     while True:
@@ -452,13 +452,13 @@ if config["CONFIGURATION"]["autoupdate"] == "True":
             os.replace("repo/commands.md", "commands.md")
 
         # Checks if bot.pyw exists, if not it will create it
-        with open("repo/bot.pyw", "r", encoding="utf8") as new:
+        with open("repo/bot.py", "r", encoding="utf8") as new:
             newbot = new.read()
-        with open("bot.pyw", "r", encoding="utf8") as old:
+        with open("bot.py", "r", encoding="utf8") as old:
             oldbot = old.read()
         if newbot != oldbot:
             require_restart = True
-            with open("bot.pyw", "w+", encoding="utf8") as mainfile:
+            with open("bot.py", "w+", encoding="utf8") as mainfile:
                 mainfile.write(newbot)
             print(f'[LOST-UB]> '
                   f'Successfully updated Lost-UB. Checking for updates in commands...')
@@ -656,7 +656,7 @@ async def on_connect():
                 print(f"an unknown error occurred.")
                 config["CONFIGURATION"]["server"] = "ERROR"
                 write()
-                os.startfile("bot.pyw")
+                os.startfile("bot.py")
                 exit()
         for category in server.categories:
             print(f"{category}")
@@ -801,7 +801,7 @@ else:
         bot.run(config['CONFIGURATION']['token'])
     except discord.LoginFailure:
         print(f"[LOST-UB][ERROR]> Invalid token, please enter in a valid token: ")
-        os.startfile("bot.pyw")
+        os.startfile("bot.py")
         exit()
 # for safety purposes and ease of access, your token will be stored in
 # config.ini. if for whatever reason you mess up the token, just go to
