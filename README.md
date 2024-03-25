@@ -1,5 +1,7 @@
 # Lost.ub
  An open sourced, free, safe to use discord user bot.
+ Please note: Although it works for the most part, I am currently not focused on maintaining it. I will work on it whenever I have the time for it.
+ 
 
 # Features
 ###### replace "\~>" with your prefix. by default prefix is set to "\~>"
@@ -44,7 +46,7 @@ UserLog                 | ~>userlog [member]                            | Logs a
 
 ### 1. Required Python Libraries
 
-Download the LATEST requirements.txt from the repository.
+Download the requirements.txt from the repository.
 
 Open explorer to the folder in which you've downloaded requirements.txt,
 
@@ -73,19 +75,15 @@ You can tell when it's done if the "repo" folder disappears, otherwise it's stil
 Now open "config.ini" and put your discord user token where it says "TOKEN", and feel free to change any other settings
 to your liking.
 
-Open "bot.pyw" once more and in a few seconds it will create it's own dedicated discord server where it will log things
+Open "bot.py" once more and in a few seconds it will create it's own dedicated discord server where it will log things
 such as command usage, errors, and other neat things.
 
 You are now finished with the lost.ub installation.
 
 If you have encountered any bugs please join the discord server down below, as I would love to help you out and fix issues.
 
-# Video Tutorial (outdated, will update soon)
-[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/Fmbia_6jrI0/0.jpg)](https://www.youtube.com/watch?v=Fmbia_6jrI0)
-
 # Links
 - [Discord Server](https://discord.gg/CFNKjPPUbW)
-- [Youtube Channel](https://www.youtube.com/channel/UCNhTaYLtjTULeIkQ6i5VnYA)
 
 # Disclaimer
 Lost.ub is safe itself, however, whatever you do with this will determine your outcome. Spamming, ghostpinging, and overall
