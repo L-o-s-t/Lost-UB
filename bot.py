@@ -64,91 +64,9 @@ def permission_check(ctx):
         return False
 
 
-def footer(embed):
-    return embed.set_footer(
-        text=f"Logged in as {bot.user} | Lost-UB",
-        icon_url=bot.user.avatar_url
-    )
-
-
 def codeblock_footer():
     return f"# Logged in as {bot.user.display_name} | Lost-UB"
 
-
-def embedcolor(color=None):
-    if color is None:
-        if config['CONFIGURATION']['embedcolor'].lower() == "red":
-            return discord.Colour.from_rgb(255, 0, 0)
-        elif config['CONFIGURATION']['embedcolor'].lower() == "light red":
-            return discord.Colour.from_rgb(255, 76, 76)
-        elif config['CONFIGURATION']['embedcolor'].lower() == "orange":
-            return discord.Colour.from_rgb(255, 165, 0)
-        elif config['CONFIGURATION']['embedcolor'].lower() == "light orange":
-            return discord.Colour.from_rgb(255, 192, 76)
-        elif config['CONFIGURATION']['embedcolor'].lower() == "yellow":
-            return discord.Colour.from_rgb(255, 255, 0)
-        elif config['CONFIGURATION']['embedcolor'].lower() == "green":
-            return discord.Colour.from_rgb(0, 128, 0)
-        elif config['CONFIGURATION']['embedcolor'].lower() == "light green":
-            return discord.Colour.from_rgb(76, 166, 76)
-        elif config['CONFIGURATION']['embedcolor'].lower() == "blue":
-            return discord.Colour.from_rgb(0, 0, 255)
-        elif config['CONFIGURATION']['embedcolor'].lower() == "light blue":
-            return discord.Colour.from_rgb(76, 76, 255)
-        elif config['CONFIGURATION']['embedcolor'].lower() == "purple":
-            return discord.Colour.from_rgb(128, 0, 128)
-        elif config['CONFIGURATION']['embedcolor'].lower() == "light purple":
-            return discord.Colour.from_rgb(128, 0, 128)
-        elif config['CONFIGURATION']['embedcolor'].lower() == "pink":
-            return discord.Colour.from_rgb(255, 192, 203)
-        elif config['CONFIGURATION']['embedcolor'].lower() == "light pink":
-            return discord.Colour.from_rgb(255, 210, 218)
-    else:
-        if color.lower() == "red":
-            return discord.Colour.from_rgb(255, 0, 0)
-        elif color.lower() == "light red":
-            return discord.Colour.from_rgb(255, 76, 76)
-        elif color.lower() == "orange":
-            return discord.Colour.from_rgb(255, 165, 0)
-        elif color.lower() == "light orange":
-            return discord.Colour.from_rgb(255, 192, 76)
-        elif color.lower() == "yellow":
-            return discord.Colour.from_rgb(255, 255, 0)
-        elif color.lower() == "green":
-            return discord.Colour.from_rgb(0, 128, 0)
-        elif color.lower() == "light green":
-            return discord.Colour.from_rgb(76, 166, 76)
-        elif color.lower() == "blue":
-            return discord.Colour.from_rgb(0, 0, 255)
-        elif color.lower() == "light blue":
-            return discord.Colour.from_rgb(76, 76, 255)
-        elif color.lower() == "purple":
-            return discord.Colour.from_rgb(128, 0, 128)
-        elif color.lower() == "light purple":
-            return discord.Colour.from_rgb(128, 0, 128)
-        elif color.lower() == "pink":
-            return discord.Colour.from_rgb(255, 192, 203)
-        elif color.lower() == "light pink":
-            return discord.Colour.from_rgb(255, 210, 218)
-        else:
-            return discord.Colour.from_rgb(76, 76, 255)
-
-
-def simple_embed(context, title, description, thumbnail: str = None, reply: bool = True):
-    embed = discord.embeds.Embed(
-        title=title,
-        description=description,
-        colour=embedcolor()
-    )
-    if thumbnail is None:
-        pass
-    else:
-        embed.set_thumbnail(url=thumbnail)
-    footer(embed)
-    if reply is True:
-        return context.reply(embed=embed)
-    else:
-        return context.send(embed=embed)
 
 
 def simple_codeblock(context, text, reply: bool = True):
