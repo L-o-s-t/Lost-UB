@@ -100,83 +100,10 @@ def timestamp():
     return f"{hour}:{minute}{suffix}"
 
 
-def log(context, title: str = "Command Usage", description: str = None, color: str = None):
+def log(context, title: str = "Command Usage", description: str = None):
     if context.guild is None:
         context.guild = "dms"
-    # embed = discord.embeds.Embed(
-    #     title=title,
-    #     description=description,
-    #     colour=color
-    # )
-    # embed.add_field(
-    #     name="User",
-    #     value=context.author,
-    #     inline=True
-    # )
-    # embed.add_field(
-    #     name="Guild",
-    #     value=context.guild,
-    #     inline=True
-    # )
-    # embed.add_field(
-    #     name="Source",
-    #     value=f"[Message]({context.message.jump_url})",
-    #     inline=True
-    # )
-    # embed.add_field(
-    #     name="Timestamp",
-    #     value=timestamp(),
-    #     inline=True
-    # )
-    # embed.set_thumbnail(url=f"{context.author.avatar_url}")
-    # footer(embed)
-    message = f"```ini\n" \
-              f"[ {title} ]\n" \
-              f"{description}\n\n" \
-              f"[ User ]\n" \
-              f"{context.author}\n\n" \
-              f"[ Guild ]\n" \
-              f"{context.guild}\n\n" \
-              f"[ Source ]\n" \
-              f"{context.message.jump_url}\n\n" \
-              f"[ Timestamp ]\n" \
-              f"{timestamp()}\n\n" \
-              f"{codeblock_footer()}\n" \
-              f"```"
-    channel = bot.get_channel(int(config["CONFIGURATION"]["log_output"]))
-    return channel.send(message)
-    # if context.guild is None:
-    #     context.guild = "dms"
-    # if message is None:
-    #     if command_name.lower() == "error" or command_name.lower() == "blacklist" or \
-    #             command_name.lower() == "ghostping":
-    #         string = f"{Fore.LIGHTBLUE_EX}[LOST-UB]" \
-    #                  f"{Fore.LIGHTCYAN_EX}[{f'{context.guild}'.upper()}]" \
-    #                  f"[{f'{context.author}'.upper()}]" \
-    #                  f"{Fore.LIGHTRED_EX}[{command_name}]{Fore.LIGHTWHITE_EX}> " \
-    #                  f"{context.message.content}"
-    #     else:
-    #         string = f"{Fore.LIGHTBLUE_EX}[LOST-UB]" \
-    #                  f"{Fore.LIGHTCYAN_EX}[{f'{context.guild}'.upper()}]" \
-    #                  f"[{f'{context.author}'.upper()}]" \
-    #                  f"{Fore.LIGHTGREEN_EX}[{command_name}]{Fore.LIGHTWHITE_EX}> " \
-    #                  f"{context.message.content}"
-    # else:
-    #     if command_name.lower() == "error" or command_name.lower() == "blacklist" or \
-    #             command_name.lower() == "whitelist" or command_name.lower() == "ghostping":
-    #         string = f"{Fore.LIGHTBLUE_EX}[LOST-UB]" \
-    #                  f"{Fore.LIGHTCYAN_EX}[{f'{context.guild}'.upper()}]" \
-    #                  f"[{f'{context.author}'.upper()}]" \
-    #                  f"{Fore.LIGHTRED_EX}[{command_name}]{Fore.LIGHTWHITE_EX}> " \
-    #                  f"{message}"
-    #     else:
-    #         string = f"{Fore.LIGHTBLUE_EX}[LOST-UB]" \
-    #                  f"{Fore.LIGHTCYAN_EX}[{f'{context.guild}'.upper()}]" \
-    #                  f"[{f'{context.author}'.upper()}]" \
-    #                  f"{Fore.LIGHTGREEN_EX}[{command_name}]{Fore.LIGHTWHITE_EX}> " \
-    #                  f"{message}"
-    # return print(string)
-
+    return f"[{title} - {description}][{context.guild}][{context.author}][{timestamp()}]"
 
 # Checks ===============================================================================================================
 
