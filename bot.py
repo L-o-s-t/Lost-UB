@@ -426,44 +426,26 @@ async def disconnect(ctx):
 async def on_command_error(ctx, error):
     if permission_check(ctx):
         if config["CONFIGURATION"]["blacklist"] == "True":
-            await log(ctx, title="BLACKLIST",
-                      description=f"{ctx.author} is blacklisted.\n",
-                      color=embedcolor("red"))
+            print(log(ctx, title="BLACKLIST", description=f"{ctx.author} is blacklisted."))
         elif config["CONFIGURATION"]["whitelist"] == "True":
-            await log(ctx, title="WHITELIST",
-                      description=f"{ctx.author} is whitelisted.\n",
-                      color=embedcolor("red"))
+            print(log(ctx, title="WHITELIST", description=f"{ctx.author} is whitelisted."))
     else:
         if isinstance(error, commands.CommandNotFound):
-            await log(ctx, title="Command Error",
-                      description=f"Command not found.",
-                      color=embedcolor("red"))
+            print(log(ctx, title="Command Error", description=f"Command not found."))
         elif isinstance(error, commands.MissingRequiredArgument):
-            await log(ctx, title="Command Error",
-                      description=f"Missing Required Argument(s).",
-                      color=embedcolor("red"))
+            print(log(ctx, title="Command Error", description=f"Missing required argument(s)."))
         elif isinstance(error, commands.MemberNotFound):
-            await log(ctx, title="Command Error",
-                      description=f"Member not found.",
-                      color=embedcolor("red"))
+            print(log(ctx, title="Command Error", description=f"Member not found."))
         elif isinstance(error, commands.MissingPermissions):
-            await log(ctx, title="Command Error",
-                      description=f"Missing permission(s).",
-                      color=embedcolor("red"))
+            print(log(ctx, title="Command Error", description=f"Missing permission(s)."))
         elif 'ValueError' in str(error):
-            await log(ctx, title="Command Error",
-                      description=f"Invalid Argument(s). | {error}",
-                      color=embedcolor("red"))
+            print(log(ctx, title="Command Error", description=f"Invalid Argument(s). | {error}"))
         else:
-            await log(ctx, title="Command Error",
-                      description=f"Error: {error}",
-                      color=embedcolor("red"))
+            print(log(ctx, title="Command Error", description=f"Error: {error}"))
         try:
             await ctx.message.delete()
         except discord.Forbidden:
-            await log(ctx, title="Command Error",
-                      description=f"Unable to delete command message.",
-                      color=embedcolor("red"))
+            print(log(ctx, title="Command Error", description=f"Unable to delete command message."))
 
 # Run Lost-Ub
 if config["CONFIGURATION"]["token"] == "None":
