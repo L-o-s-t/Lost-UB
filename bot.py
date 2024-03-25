@@ -117,13 +117,9 @@ if not os.path.exists('config.ini'):
         "afk_legit": "True",
         "silentsteal": "False",
         "silentsave": "False",
-        "embedcolor": "light blue",
         "blacklist": "False",
         "whitelist": "False",
-        "rich_presence": "True",
-        "automock": "False",
-        "server": "None",
-        "log_output": "None"
+        "automock": "False"
     }
     write()
 else:
@@ -155,29 +151,17 @@ else:
     if not config.has_option("CONFIGURATION", "silentsave"):
         config["CONFIGURATION"]["silentsave"] = "False"
         write()
-    if not config.has_option("CONFIGURATION", "embedcolor"):
-        config["CONFIGURATION"]["embedcolor"] = "red"
-        write()
     if not config.has_option("CONFIGURATION", "blacklist"):
         config["CONFIGURATION"]["blacklist"] = "False"
         write()
     if not config.has_option("CONFIGURATION", "whitelist"):
         config["CONFIGURATION"]["whitelist"] = "False"
         write()
-    if not config.has_option("CONFIGURATION", "rich_presence"):
-        config["CONFIGURATION"]["rich_presence"] = "True"
-        write()
     if not config.has_option("CONFIGURATION", "automock"):
         config["CONFIGURATION"]["automock"] = "False"
         write()
     if not config.has_option("CONFIGURATION", "autoupdate"):
         config["CONFIGURATION"]["autoupdate"] = "True"
-        write()
-    if not config.has_option("CONFIGURATION", "server"):
-        config["CONFIGURATION"]["server"] = "None"
-        write()
-    if not config.has_option("CONFIGURATION", "log_output"):
-        config["CONFIGURATION"]["server"] = "None"
         write()
 if config["CONFIGURATION"]["blacklist"] == "True" and config["CONFIGURATION"]["whitelist"] == "True":
     config["CONFIGURATION"]["blacklist"] = "False"
