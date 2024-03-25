@@ -9,12 +9,12 @@ class Warnings(commands.Cog):
     @commands.command()
     @commands.has_permissions(administrator=True)
     async def warn(self, ctx, member: discord.Member, *, reason: str = None):
-        await log(ctx, description="This user used the command WARN", color=embedcolor())
+        print(log(ctx, description="This user used the command WARN"))
         if bot.user == ctx.author:
             if reason is None:
                 await ctx.reply("You must enter a reason for this warning.")
             else:
-                await log(ctx, description="This user used the command WARN", color=embedcolor())
+                print(log(ctx, description="This user used the command WARN"))
                 if not os.path.exists("data/warnings"):
                     os.mkdir("data/warnings")
                 if not os.path.exists(f"data/warnings/{ctx.guild.id}"):
@@ -31,59 +31,28 @@ class Warnings(commands.Cog):
                     for x in lines:
                         if x:
                             count += 1
-                try:
-                    embed = discord.embeds.Embed(
-                        title="User Warned",
-                        description=f"Command Author: {ctx.author}",
-                        colour=embedcolor()
-                    )
-                    embed.add_field(
-                        name="User",
-                        value=f"{member}",
-                        inline=True
-                    )
-                    embed.add_field(
-                        name="Reason",
-                        value=reason,
-                        inline=True
-                    )
-                    embed.add_field(
-                        name="Warnings",
-                        value=f"{count + 1}",
-                        inline=True
-                    )
-                    embed.set_thumbnail(
-                        url=member.avatar_url
-                    )
-                    await ctx.reply(embed=embed)
-                except Exception as e:
-                    await simple_codeblock(ctx,
-                                           f"[ User Warned ]\n"
-                                           f"Command author: {ctx.author}\n\n"
-                                           f"[ User ]\n"
-                                           f"{member}\n\n"
-                                           f"[ Reason ]\n"
-                                           f"{reason}\n\n"
-                                           f"[ Warnings ]\n"
-                                           f"{count + 1}")
+                await simple_codeblock(ctx, f"[ User Warned ]\n"
+                                            f"Command author: {ctx.author}\n\n"
+                                            f"[ User ]\n"
+                                            f"{member}\n\n"
+                                            f"[ Reason ]\n"
+                                            f"{reason}\n\n"
+                                            f"[ Warnings ]\n"
+                                            f"{count + 1}")
 
     @commands.command(aliases=['warns'])
     @commands.has_permissions(administrator=True)
     async def warnings(self, ctx, member: discord.Member):
         if permission_check(ctx):
             if config["CONFIGURATION"]["blacklist"] == "True":
-                await log(ctx, "BLACKLIST", "This user attempted to use WARNS", color=embedcolor("red"))
+                print(log(ctx, "BLACKLIST", "This user attempted to use WARNS"))
             elif config["CONFIGURATION"]["whitelist"] == "True":
-                await log(ctx, "WHITELIST", "This user attempted to use WARNS", color=embedcolor("red"))
+                print(log(ctx, "WHITELIST", "This user attempted to use WARNS"))
         else:
-            await log(ctx, description="This user used the command WARNS", color=embedcolor())
+            print(log(ctx, description="This user used the command WARNS"))
             if not os.path.exists(f"data/warnings/{ctx.guild.id}/{member.id}.txt"):
-                embed = discord.embeds.Embed(
-                    title="User Warnings",
-                    description="This user doesn't have any warnings yet",
-                    colour=embedcolor()
-                )
-                await ctx.reply(embed=embed)
+                await simple_codeblock(ctx, f"[ User Warnigs ]\n"
+                                            f"This user doesn't have any warnings yet.")
             else:
                 with open(f"data/warnings/{ctx.guild.id}/{member.id}.txt", "r"):
                     warns = ""
@@ -100,36 +69,18 @@ class Warnings(commands.Cog):
                             else:
                                 remainder += 1
                     if remainder == 0:
-                        embed = discord.embeds.Embed(
-                            title="User Warnings",
-                            description=f"{member} has {count} warnings"
-                                        f"```{warns}```",
-                            colour=embedcolor()
-                        )
+                        await simple_codeblock(ctx,
+                                                f"[ User Warnings ]\n"
+                                                f"{member} has {count} warnings\n\n"
+                                                f"[ Warns ]\n"
+                                                f"{warns}")
                     else:
-                        embed = discord.embeds.Embed(
-                            title="User Warnings",
-                            description=f"{member} has {count} warnings"
-                                        f"```{warns}"
-                                        f"+ {remainder} more```",
-                            colour=embedcolor()
-                        )
-                    try:
-                        await ctx.reply(embed=embed)
-                    except Exception as e:
-                        if remainder == 0:
-                            await simple_codeblock(ctx,
-                                                   f"[ User Warnings ]\n"
-                                                   f"{member} has {count} warnings\n\n"
-                                                   f"[ Warns ]\n"
-                                                   f"{warns}")
-                        else:
-                            await simple_codeblock(ctx,
-                                                   f"[ User Warnings ]\n"
-                                                   f"{member} has {count} warnings\n\n"
-                                                   f"[ Warns ]\n"
-                                                   f"{warns}"
-                                                   f"+ {remainder} more")
+                        await simple_codeblock(ctx,
+                                                f"[ User Warnings ]\n"
+                                                f"{member} has {count} warnings\n\n"
+                                                f"[ Warns ]\n"
+                                                f"{warns}"
+                                                f"+ {remainder} more")
 
 
 def setup(userbot):

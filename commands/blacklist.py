@@ -13,7 +13,7 @@ class Blacklist(commands.Cog):
         # if command author is the bot user then...
         if ctx.author == bot.user:
 
-            await log(ctx, description="This user used the command BLACKLIST", color=embedcolor())  # logs to console
+            print(log(ctx, description="This user used the command BLACKLIST"))  # logs to console
 
             # if action is nothing, it will fetch the blacklisted users
             if action is None:
@@ -39,52 +39,21 @@ class Blacklist(commands.Cog):
                             total += 1
 
                 if remainder > 0:
-                    embed = discord.embeds.Embed(
-                        title="Blacklisted Users",
-                        description=f"**These users are not allowed to use any commands.**\n"
-                                    f"```{temp}"
-                                    f"+ {remainder} more...```"
-                                    f"Total Blacklisted Users: {total}",
-                        colour=embedcolor()
-                    )
-                else:
-                    if total == 0:
-                        embed = discord.embeds.Embed(
-                            title="Blacklisted Users",
-                            description=f"**No blacklisted users yet...**\n",
-                            colour=embedcolor()
-                        )
-                    else:
-                        embed = discord.embeds.Embed(
-                            title="Blacklisted Users",
-                            description=f"**These users are not allowed to use any commands.**\n"
-                                        f"```{temp}\n```"
-                                        f"Total Blacklisted Users: {total}",
-                            colour=embedcolor()
-                        )
-                embed.set_footer(
-                    text=f"Logged in as {bot.user} | Lost-UB",
-                    icon_url=bot.user.avatar_url
-                )
-                try:
-                    await ctx.reply(embed=embed)
-                except Exception as e:
-                    if remainder > 0:
                         string = f"These users are not allowed to use any commands.\n" \
                                  f"```{temp}" \
                                  f"+ {remainder} more...```" \
                                  f"Total Blacklisted Users: {total}"
+                else:
+                    if total == 0:
+                        string = f"No blacklisted users yet...\n"
                     else:
-                        if total == 0:
-                            string = f"No blacklisted users yet...\n"
-                        else:
-                            string = f"These users are not allowed to use any commands:\n\n" \
-                                     f"{temp}\n" \
-                                     f"[ Total Blacklisted Users ]\n" \
-                                     f"{total}"
-                    await simple_codeblock(ctx,
-                                           f"[ Blacklisted Users ]\n"
-                                           f"{string}")
+                        string = f"These users are not allowed to use any commands:\n\n" \
+                                    f"{temp}\n" \
+                                    f"[ Total Blacklisted Users ]\n" \
+                                    f"{total}"
+                await simple_codeblock(ctx,
+                                        f"[ Blacklisted Users ]\n"
+                                        f"{string}")
 
             # if action is add, it will add the specified user
             elif action.lower() == "add":
@@ -101,36 +70,12 @@ class Blacklist(commands.Cog):
                         with open("data/blacklist.txt", "a+") as oldfile:
                             oldfile.write(f"{oldfile.read()}"
                                           f"{member.id}\n")
-                        embed = discord.embeds.Embed(
-                            title="Blacklisted User Added",
-                            colour=embedcolor()
-                        )
-                        embed.add_field(
-                            name="User",
-                            value=f"{member}",
-                            inline=True
-                        )
-                        embed.add_field(
-                            name="ID",
-                            value=f"{member.id}",
-                            inline=True
-                        )
-                        embed.set_thumbnail(
-                            url=f"{member.avatar_url}"
-                        )
-                        embed.set_footer(
-                            text=f"Logged in as {bot.user} | Lost-UB",
-                            icon_url=bot.user.avatar_url
-                        )
-                        try:
-                            await ctx.reply(embed=embed)
-                        except Exception as e:
-                            await simple_codeblock(ctx,
-                                                   f"[ Blacklisted User Added ]\n\n"
-                                                   f"[ User ]\n"
-                                                   f"{member}\n\n"
-                                                   f"[ ID ]\n"
-                                                   f"{member.id}")
+                        await simple_codeblock(ctx,
+                                                f"[ Blacklisted User Added ]\n\n"
+                                                f"[ User ]\n"
+                                                f"{member}\n\n"
+                                                f"[ ID ]\n"
+                                                f"{member.id}")
                 else:
                     count = 0
                     for x in str(member):
@@ -156,59 +101,20 @@ class Blacklist(commands.Cog):
                                 else:
                                     oldfile.write(f"{oldfile.read()}"
                                                   f"{member.id}\n")
-                            embed = discord.embeds.Embed(
-                                title="Blacklisted User Added",
-                                colour=embedcolor()
-                            )
                             if notfound:
-                                embed.add_field(
-                                    name="User",
-                                    value="UNKNOWN",
-                                    inline=True
-                                )
-                                embed.add_field(
-                                    name="ID",
-                                    value=f"{member}",
-                                    inline=True
-                                )
-                                embed.set_thumbnail(
-                                    url=f"https://cdn.drawception.com/drawings/848910/l0ZT9m55a0.png"
-                                )
-                            else:
-                                embed.add_field(
-                                    name="User",
-                                    value=f"{member}",
-                                    inline=True
-                                )
-                                embed.add_field(
-                                    name="ID",
-                                    value=f"{member.id}",
-                                    inline=True
-                                )
-                                embed.set_thumbnail(
-                                    url=f"{member.avatar_url}"
-                                )
-                            embed.set_footer(
-                                text=f"Logged in as {bot.user} | Lost-UB",
-                                icon_url=bot.user.avatar_url
-                            )
-                            try:
-                                await ctx.reply(embed=embed)
-                            except Exception as e:
-                                if notfound:
                                     await simple_codeblock(ctx,
                                                            f"[ Blacklisted User Added ]\n\n"
                                                            f"[ User ]\n"
                                                            f"UKNOWN\n\n"
                                                            f"[ ID ]\n"
                                                            f"{member}")
-                                else:
-                                    await simple_codeblock(ctx,
-                                                           f"[ Blacklisted User Added ]\n\n"
-                                                           f"[ User ]\n"
-                                                           f"{member}\n\n"
-                                                           f"[ ID ]\n"
-                                                           f"{member.id}")
+                            else:
+                                await simple_codeblock(ctx,
+                                                        f"[ Blacklisted User Added ]\n\n"
+                                                        f"[ User ]\n"
+                                                        f"{member}\n\n"
+                                                        f"[ ID ]\n"
+                                                        f"{member.id}")
                     else:
                         await ctx.message.delete()
                         await ctx.send("Invalid Uer ID.")
@@ -232,36 +138,12 @@ class Blacklist(commands.Cog):
                                     temp += f"{x}\n"
                         with open("data/blacklist.txt", "w") as file:
                             file.write(temp)
-                        embed = discord.embeds.Embed(
-                            title="Blacklisted User Removed",
-                            colour=embedcolor()
-                        )
-                        embed.add_field(
-                            name="User",
-                            value=f"{member}",
-                            inline=True
-                        )
-                        embed.add_field(
-                            name="ID",
-                            value=f"{member.id}",
-                            inline=True
-                        )
-                        embed.set_thumbnail(
-                            url=f"{member.avatar_url}"
-                        )
-                        embed.set_footer(
-                            text=f"Logged in as {bot.user} | Lost-UB",
-                            icon_url=bot.user.avatar_url
-                        )
-                        try:
-                            await ctx.reply(embed=embed)
-                        except Exception as e:
-                            await simple_codeblock(ctx,
-                                                   f"[ Blacklisted User Removed ]\n\n"
-                                                   f"[ User ]\n"
-                                                   f"{member}\n\n"
-                                                   f"[ ID ]\n"
-                                                   f"{member.id}")
+                        await simple_codeblock(ctx,
+                                                f"[ Blacklisted User Removed ]\n\n"
+                                                f"[ User ]\n"
+                                                f"{member}\n\n"
+                                                f"[ ID ]\n"
+                                                f"{member.id}")
                     else:
                         await ctx.reply("That user isn't blacklisted.")
                 else:
@@ -288,73 +170,28 @@ class Blacklist(commands.Cog):
                                 user = await bot.fetch_user(member)
                             except discord.errors.NotFound:
                                 notfound = True
-                            embed = discord.embeds.Embed(
-                                title="Blacklisted User Removed",
-                                colour=embedcolor()
-                            )
                             if notfound:
-                                embed.add_field(
-                                    name="User",
-                                    value=f"UKNOWN",
-                                    inline=True
-                                )
-                                embed.add_field(
-                                    name="ID",
-                                    value=f"{member}",
-                                    inline=True
-                                )
-                                embed.set_thumbnail(
-                                    url=f"https://cdn.drawception.com/drawings/848910/l0ZT9m55a0.png"
-                                )
-                            else:
-                                embed.add_field(
-                                    name="User",
-                                    value=f"{user}",
-                                    inline=True
-                                )
-                                embed.add_field(
-                                    name="ID",
-                                    value=f"{user.id}",
-                                    inline=True
-                                )
-                                embed.set_thumbnail(
-                                    url=user.avatar_url
-                                )
-                            embed.set_footer(
-                                text=f"Logged in as {bot.user} | Lost-UB",
-                                icon_url=bot.user.avatar_url
-                            )
-                            try:
-                                await ctx.reply(embed=embed)
-                            except Exception as e:
-                                if notfound:
                                     await simple_codeblock(ctx,
                                                            f"[ Blacklisted User Removed ]\n\n"
                                                            f"[ User ]\n"
                                                            f"UNKNOWN\n\n"
                                                            f"[ ID ]\n"
                                                            f"{member}")
-                                else:
-                                    await simple_codeblock(ctx,
-                                                           f"[ Blacklisted User Removed ]\n\n"
-                                                           f"[ User ]\n"
-                                                           f"{user}\n\n"
-                                                           f"[ ID ]\n"
-                                                           f"{user.id}")
+                            else:
+                                await simple_codeblock(ctx,
+                                                        f"[ Blacklisted User Removed ]\n\n"
+                                                        f"[ User ]\n"
+                                                        f"{user}\n\n"
+                                                        f"[ ID ]\n"
+                                                        f"{user.id}")
                         else:
                             await ctx.reply(f"That user isn't blacklisted.")
                     elif count == 3:
                         if str(member).lower() == "all":
                             with open('data/blacklist.txt', 'w+', encoding='utf8') as file:
                                 file.write("")
-                                try:
-                                    await simple_embed(ctx,
-                                                       title="Blacklist",
-                                                       description="**Successfully removed all users.**")
-                                except Exception as e:
-                                    await simple_codeblock(ctx,
-                                                           "[ Blacklist ]\n"
-                                                           "Successfully removed all users.")
+                                await simple_codeblock(ctx, f"[ Blacklist ]\n"
+                                                            f"Successfully removed all users.")
                     else:
                         await ctx.message.delete()
                         await ctx.send("Invalid User ID.")

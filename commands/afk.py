@@ -9,7 +9,7 @@ class AFK(commands.Cog):
     @commands.command()
     async def afk(self, ctx):
         if ctx.author == bot.user:
-            await log(ctx, description="This user used the command AFK", color=embedcolor())
+            print(log(ctx, description="This user used the command AFK"))
             if config["CONFIGURATION"]["AFK"] == "True":
                 config["CONFIGURATION"]["AFK"] = "False"
                 write()

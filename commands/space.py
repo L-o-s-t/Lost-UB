@@ -10,15 +10,15 @@ class Space(commands.Cog):
     async def space(self, ctx, *, message):
         if permission_check(ctx):
             if config["CONFIGURATION"]["blacklist"] == "True":
-                await log(ctx, "BLACKLIST", "This user attempted to use SPACE", color=embedcolor("red"))
+                print(log(ctx, "BLACKLIST", "This user attempted to use SPACE"))
             elif config["CONFIGURATION"]["whitelist"] == "True":
-                await log(ctx, "WHITELIST", "This user attempted to use SPACE", color=embedcolor("red"))
+                print(log(ctx, "WHITELIST", "This user attempted to use SPACE"))
         else:
             uppercase_spacing = "ＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ"
             lowercase_spacing = "ａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚ"
     
             if message is None:
-                await log(ctx, description="This user used the command SPACE", color=embedcolor())
+                print(log(ctx, description="This user used the command SPACE"))
             else:
                 space_message = ""
                 for x in message:

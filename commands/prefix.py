@@ -12,7 +12,7 @@ class Prefix(commands.Cog):
             if new_prefix is None:
                 await ctx.reply(f"Current prefix: {bot.command_prefix}")
             else:
-                await log(ctx, description="This user used the command PREFIX", color=embedcolor())
+                print(log(ctx, description="This user used the command PREFIX"))
                 config["CONFIGURATION"]["prefix"] = new_prefix
                 write()
                 bot.command_prefix = new_prefix

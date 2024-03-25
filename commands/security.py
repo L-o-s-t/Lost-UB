@@ -18,13 +18,11 @@ class Security(commands.Cog):
             # if time_since < 0:
             #     time_since += 60
             if f"{ctx.content}".replace(f"<@!{bot.user.id}>", "") == "":
-                await log(ctx, title="GhostPing Detection",
-                          description="Nothing was included in the message apart from the ping.",
-                          color=embedcolor("red"))
+                print(log(ctx, title="GhostPing Detection",
+                          description="Nothing was included in the message apart from the ping."))
             else:
-                await log(ctx, title="GhostPing Detection",
-                          description=f"{ctx.content}".replace(f"<@!{bot.user.id}>", ""),
-                          color=embedcolor("red"))
+                print(log(ctx, title="GhostPing Detection",
+                          description=f"{ctx.content}".replace(f"<@!{bot.user.id}>", "")))
 
     # @commands.Cog.listener()
     # async def on_message(self, ctx):

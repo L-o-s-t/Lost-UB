@@ -10,11 +10,11 @@ class UserInfo(commands.Cog):
     async def userinfo(self, ctx, member: discord.Member):
         if permission_check(ctx):
             if config["CONFIGURATION"]["blacklist"] == "True":
-                await log(ctx, "BLACKLIST", "This user attempted to use USERINFO", color=embedcolor("red"))
+                print(log(ctx, "BLACKLIST", "This user attempted to use USERINFO"))
             elif config["CONFIGURATION"]["whitelist"] == "True":
-                await log(ctx, "WHITELIST", "This user attempted to use USERINFO", color=embedcolor("red"))
+                print(log(ctx, "WHITELIST", "This user attempted to use USERINFO"))
         else:
-            await log(ctx, description="This user used the command USERINFO", color=embedcolor())
+            print(log(ctx, description="This user used the command USERINFO"))
             minute = ""
             friends = ""
             guilds = ""
@@ -113,107 +113,34 @@ class UserInfo(commands.Cog):
                 suffix = "pm"
             if 0 <= a.minute <= 9:
                 minute = f"0{a.minute}"
-            try:
-                embed = discord.embeds.Embed(
-                    title="User Info",
-                    colour=embedcolor()
-                )
-                embed.add_field(
-                    name="User",
-                    value=str(member),
-                    inline=True
-                )
-                embed.add_field(
-                    name="Date Created",
-                    value=f"{month} {day}, {a.year}",
-                    inline=True
-                )
-                if 0 <= a.minute <= 9:
-                    embed.add_field(
-                        name="Time Created",
-                        value=f"{hour}:{minute}{suffix}",
-                        inline=True
-                    )
-                else:
-                    embed.add_field(
-                        name="Time Created",
-                        value=f"{hour}:{a.minute}{suffix}",
-                        inline=True
-                    )
-                embed.set_footer(
-                    text=f"Logged in as {ctx.author} | Lost-UB",
-                    icon_url=bot.user.avatar_url
-                )
-                if member.is_avatar_animated():
-                    embed.add_field(
-                        name="Avatar Url",
-                        value=f"[Link]({member.avatar_url_as(format='gif')})",
-                        inline=True
-                    )
-                else:
-                    embed.add_field(
-                        name="Avatar Url",
-                        value=f"[Link]({member.avatar_url_as(format='png')})",
-                        inline=True
-                    )
-                embed.add_field(
-                    name="Roles",
-                    value=f"{roles}",
-                    inline=True
-                )
-                embed.add_field(
-                    name="User ID",
-                    value=f"{member.id}",
-                    inline=True
-                )
-                embed.add_field(
-                    name="Mutual Friends",
-                    value=f"{friends}",
-                    inline=True
-                )
-                embed.add_field(
-                    name="Mutual Guilds",
-                    value=f"{guilds}",
-                    inline=True
-                )
-                embed.add_field(
-                    name="Gay?",
-                    value=f"{gay}",
-                    inline=True
-                )
-                embed.set_thumbnail(
-                    url=member.avatar_url
-                )
-                await ctx.reply(embed=embed)
-            except Exception as e:
-                if 0 <= a.minute <= 9:
+            if 0 <= a.minute <= 9:
                     time_created = f"{hour}:{minute}{suffix}"
-                else:
-                    time_created = f"{hour}:{a.minute}{suffix}"
-                if member.is_avatar_animated():
-                    avatar = f"{member.avatar_url_as(format='gif')}"
-                else:
-                    avatar = f"{member.avatar_url_as(format='png')}"
-                await simple_codeblock(ctx,
-                                       f"[ User Info ]\n\n"
-                                       f"[ User ]\n"
-                                       f"{member}\n\n"
-                                       f"[ Date Created ]\n"
-                                       f"{month} {day}, {a.year}\n\n"
-                                       f"[ Time Created ]\n"
-                                       f"{time_created}\n\n"
-                                       f"[ Avatar Url ]\n"
-                                       f"{avatar}\n\n"
-                                       f"[ Roles ]\n"
-                                       f"{roles}\n"
-                                       f"[ User ID ]\n"
-                                       f"{member.id}\n\n"
-                                       f"[ Mutual Friends ]\n"
-                                       f"{friends}\n\n"
-                                       f"[ Mutual Guilds ]\n"
-                                       f"{guilds}\n"
-                                       f"[ Gay? ]\n"
-                                       f"{gay}")
+            else:
+                time_created = f"{hour}:{a.minute}{suffix}"
+            if member.is_avatar_animated():
+                avatar = f"{member.avatar_url_as(format='gif')}"
+            else:
+                avatar = f"{member.avatar_url_as(format='png')}"
+            await simple_codeblock(ctx,
+                                    f"[ User Info ]\n\n"
+                                    f"[ User ]\n"
+                                    f"{member}\n\n"
+                                    f"[ Date Created ]\n"
+                                    f"{month} {day}, {a.year}\n\n"
+                                    f"[ Time Created ]\n"
+                                    f"{time_created}\n\n"
+                                    f"[ Avatar Url ]\n"
+                                    f"{avatar}\n\n"
+                                    f"[ Roles ]\n"
+                                    f"{roles}\n"
+                                    f"[ User ID ]\n"
+                                    f"{member.id}\n\n"
+                                    f"[ Mutual Friends ]\n"
+                                    f"{friends}\n\n"
+                                    f"[ Mutual Guilds ]\n"
+                                    f"{guilds}\n"
+                                    f"[ Gay? ]\n"
+                                    f"{gay}")
 
 
 def setup(userbot):

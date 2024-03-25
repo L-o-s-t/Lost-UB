@@ -10,11 +10,11 @@ class Calculate(commands.Cog):
     async def calculate(self, ctx, first_number: str = None, operator: str = None, second_number: str = None):
         if permission_check(ctx):
             if config["CONFIGURATION"]["blacklist"] == "True":
-                await log(ctx, "BLACKLIST", "This user attempted to use CALCULATE", color=embedcolor("red"))
+                print(log(ctx, "BLACKLIST", "This user attempted to use CALCULATE"))
             elif config["CONFIGURATION"]["whitelist"] == "True":
-                await log(ctx, "WHITELIST", "This user attempted to use CALCULATE", color=embedcolor("red"))
+                print(log(ctx, "WHITELIST", "This user attempted to use CALCULATE"))
         else:
-            await log(ctx, description="This user used the command CALCULATE", color=embedcolor())
+            print(log(ctx, description="This user used the command CALCULATE"))
             operators = ['*', '/', '+', '-']
             result = ""
             if not first_number.isnumeric():
@@ -37,19 +37,10 @@ class Calculate(commands.Cog):
                             result = int(first_number) + int(second_number)
                         elif operator == "-":
                             result = int(first_number) - int(second_number)
-                        try:
-                            embed = discord.embeds.Embed(
-                                title="Calculator",
-                                description=f"Equation: {first_number} {operator} {second_number}\n"
-                                            f"```{result}```",
-                                colour=embedcolor()
-                            )
-                            await ctx.reply(embed=embed)
-                        except Exception as e:
-                            await simple_codeblock(ctx,
-                                                   f"[ Calculator ]\n"
-                                                   f"Equation: {first_number} {operator} {second_number}\n"
-                                                   f"Result: {result}")
+                        await simple_codeblock(ctx,
+                                                f"[ Calculator ]\n"
+                                                f"Equation: {first_number} {operator} {second_number}\n"
+                                                f"Result: {result}")
 
 
 def setup(userbot):

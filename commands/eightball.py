@@ -9,11 +9,11 @@ class EightBall(commands.Cog):
     async def eightball(self, ctx, *, question: str = None):
         if permission_check(ctx):
             if config["CONFIGURATION"]["blacklist"] == "True":
-                await log(ctx, "BLACKLIST", "This user attempted to use EIGHTBALL", color=embedcolor("red"))
+                print(log(ctx, "BLACKLIST", "This user attempted to use EIGHTBALL"))
             elif config["CONFIGURATION"]["whitelist"] == "True":
-                await log(ctx, "WHITELIST", "This user attempted to use EIGHTBALL", color=embedcolor("red"))
+                print(log(ctx, "WHITELIST", "This user attempted to use EIGHTBALL"))
         else:
-            await log(ctx, description="This user used the command EIGHTBALL", color=embedcolor())
+            print(log(ctx, description="This user used the command EIGHTBALL"))
             if question is None:
                 await ctx.reply(f'Incorrect arguments | {config["CONFIGURATION"]["prefix"]}8ball (question)')
             else:
@@ -37,29 +37,13 @@ class EightBall(commands.Cog):
                                          'My sources say no.',
                                          'Outlook not so good.',
                                          'Very doubtful.'])
-                try:
-                    embed = discord.embeds.Embed(
-                        title="Eight Ball",
-                        description=f"{question}",
-                        colour=embedcolor()
-                    )
-                    embed.add_field(
-                        name="Answer",
-                        value=f"{answers}"
-                    )
-                    embed.set_footer(
-                        text=f"Logged in as {bot.user} | Lost-UB",
-                        icon_url=bot.user.avatar_url
-                    )
-                    await ctx.reply(embed=embed)
-                except Exception as e:
-                    await ctx.reply(f"```ini\n"
-                                    f"[ Eight Ball ]\n"
-                                    f"{question}\n\n"
-                                    f"[ Answer ]\n"
-                                    f"{answers}\n\n"
-                                    f"{codeblock_footer()}"
-                                    f"```")
+                ctx.reply(f"```ini\n"
+                        f"[ Eight Ball ]\n"
+                        f"{question}\n\n"
+                        f"[ Answer ]\n"
+                        f"{answers}\n\n"
+                        f"{codeblock_footer()}"
+                        f"```")
 
 
 def setup(userbot):

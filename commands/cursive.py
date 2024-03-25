@@ -10,17 +10,17 @@ class Cursive(commands.Cog):
     async def cursive(self, ctx, *, message):
         if permission_check(ctx):
             if config["CONFIGURATION"]["blacklist"] == "True":
-                await log(ctx, "BLACKLIST", "This user attempted to use CURSIVE", color=embedcolor("red"))
+                print(log(ctx, "BLACKLIST", "This user attempted to use CURSIVE"))
             elif config["CONFIGURATION"]["whitelist"] == "True":
-                await log(ctx, "WHITELIST", "This user attempted to use CURSIVE", color=embedcolor("red"))
+                print(log(ctx, "WHITELIST", "This user attempted to use CURSIVE"))
         else:
             uppercase_cursive = "𝓐𝓑𝓒𝓓𝓔𝓕𝓖𝓗𝓘𝓙𝓚𝓛𝓜𝓝𝓞𝓟𝓠𝓡𝓢𝓣𝓤𝓥𝓦𝓧𝓨𝓩"
             lowercase_cursive = "𝓪𝓫𝓬𝓭𝓮𝓯𝓰𝓱𝓲𝓳𝓴𝓵𝓶𝓷𝓸𝓹𝓺𝓻𝓼𝓽𝓾𝓿𝔀𝔁𝔂𝔃"
 
             if message is None:
-                await log(ctx, "ERROR", "You must specify a message you want in cursive!", color=embedcolor("red"))
+                print(log(ctx, "ERROR", "You must specify a message you want in cursive!"))
             else:
-                await log(ctx, description="This user used the command HELP", color=embedcolor())
+                print(log(ctx, description="This user used the command HELP"))
                 cursive_message = ""
                 for x in message:
                     if x == "A":

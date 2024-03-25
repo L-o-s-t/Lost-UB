@@ -10,17 +10,17 @@ class Monospace(commands.Cog):
     async def monospace(self, ctx, *, message):
         if permission_check(ctx):
             if config["CONFIGURATION"]["blacklist"] == "True":
-                await log(ctx, "BLACKLIST", "This user attempted to use MONOSPACE", color=embedcolor("red"))
+                print(log(ctx, "BLACKLIST", "This user attempted to use MONOSPACE"))
             elif config["CONFIGURATION"]["whitelist"] == "True":
-                await log(ctx, "WHITELIST", "This user attempted to use MONOSPACE", color=embedcolor("red"))
+                print(log(ctx, "WHITELIST", "This user attempted to use MONOSPACE"))
         else:
             uppercase_monocase = "𝙰𝙱𝙲𝙳𝙴𝙵𝙶𝙷𝙸𝙹𝙺𝙻𝙼𝙽𝙾𝙿𝚀𝚁𝚂𝚃𝚄𝚅𝚆𝚇𝚈𝚉"
             lowercase_monocase = "𝚊𝚋𝚌𝚍𝚎𝚏𝚐𝚑𝚒𝚓𝚔𝚕𝚖𝚗𝚘𝚙𝚚𝚛𝚜𝚝𝚞𝚟𝚠𝚡𝚢𝚣"
 
             if message is None:
-                await log(ctx, "ERROR", "You must specify a message you want monospaced!")
+                print(log(ctx, "ERROR", "You must specify a message you want monospaced!"))
             else:
-                await log(ctx, description="This user used the command MONOSPACE", color=embedcolor())
+                print(log(ctx, description="This user used the command MONOSPACE"))
                 monospace_message = ""
                 for x in message:
                     if x == "A":
