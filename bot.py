@@ -241,18 +241,6 @@ except ModuleNotFoundError:
     print(f"[LOST-UB][ERROR]> Lost-Ub was unable to load commands properly, restart and check for updates.")
     exit()
 
-# create shortcut
-# startup_folder = rf"C:\Users\{getpass.getuser()}\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup"
-# path = os.path.join(startup_folder, "LOST-UB.lnk")
-# target = rf"{os.getcwd()}\bot.pyw"
-# icon = rf"{os.getcwd()}\data\icon.ico"
-# shell = win32com.client.Dispatch("WScript.Shell")
-# shortcut = shell.CreateShortCut(path)
-# shortcut.Targetpath = target
-# shortcut.IconLocation = icon
-# shortcut.WorkingDirectory = os.getcwd()
-# shortcut.save()
-
 if config["CONFIGURATION"]["autoupdate"] == "True":
     while True:
         require_restart = False
@@ -410,160 +398,15 @@ if config["CONFIGURATION"]["autoupdate"] == "True":
             input(f"[LOST-UB]> No restarts required, press enter to continue...")
             break
 
-try:
-    if config['CONFIGURATION']['rich_presence'] == "True":
-        client_id = "878728783585226773"
-        start_time = time.time()
-        rpc = pypresence.Presence(client_id)
-        rpc.connect()
-        rpc.update(state="version 3.0",
-                   large_image="logo2",
-                   details="Free and Open Sourced!",
-                   start=int(start_time),
-                   buttons=[{"label": "Github Repo", "url": "https://github.com/L-o-s-t/Lost-UB"},
-                            {"label": "How to Install", "url": "https://www.youtube.com/watch?v=Fmbia_6jrI0"}])
-except pypresence.InvalidPipe:
-    print("[LOST-UB] Discord not installed? Rich Presence disabled.")
-    pass
-
 
 # When bot connects
 @bot.event
 async def on_connect():
     print("connected.")
 
-    # check if lost.ub server exists
-    server = ""
-    log_channel = ""
-    if config["CONFIGURATION"]["server"] == "ERROR":
-        for guild in bot.guilds:
-            if guild.name.lower() == "lost.ub":
-                server = guild
-        print("logs: " + server)
-        for category in server.categories:
-            print(f"{category}")
-            if category.name.lower() == "text channels":
-                for channel in category.channels:
-                    if channel.name.lower() == "general":
-                        embed = discord.embeds.Embed(
-                            title=f"Welcome, {bot.user.display_name}",
-                            description="Thank you for using LOST.UB!\n"
-                                        "This server will be used for logs, errors, and other neat things!",
-                            colour=embedcolor()
-                        )
-                        footer(embed)
-                        await channel.send(embed=embed)
-                await category.edit(name="Home")
-                log_channel = await category.create_text_channel(name="logs")
-            elif category.name.lower() == "voice channels":
-                for channel in category.channels:
-                    await channel.delete()
-                await category.delete()
-        config["CONFIGURATION"]["server"] = f"{server.id}"
-        config["CONFIGURATION"]["log_output"] = f"{log_channel.id}"
-        write()
-    try:
-        server = bot.get_guild(int(config["CONFIGURATION"]["server"]))
-    except ValueError:
-        server = None
-    if server == "None" or server is None:
-        server_icon = open("data/server_logo.png", "rb")
-        server = await bot.create_guild("Lost.ub", server_icon.read())
-        server = bot.get_guild(server.id)
-        while True:
-            try:
-                print(f"server categories: {server.categories}")
-                break
-            except AttributeError:
-                print(f"an unknown error occurred.")
-                config["CONFIGURATION"]["server"] = "ERROR"
-                write()
-                # os.startfile("bot.py")
-                exit()
-        for category in server.categories:
-            print(f"{category}")
-            if category.name.lower() == "text channels":
-                for channel in category.channels:
-                    if channel.name.lower() == "general":
-                        embed = discord.embeds.Embed(
-                            title=f"Welcome, {bot.user.display_name}",
-                            description="Thank you for using LOST.UB!\n"
-                                        "This server will be used for logs, errors, and other neat things!",
-                            colour=embedcolor()
-                        )
-                        footer(embed)
-                        try:
-                            await channel.send(embed=embed)
-                        except discord.HTTPException:
-                            await channel.send(f"```ini\n"
-                                               f"[ Welcome, {bot.user.display_name} ]\n\n"
-                                               f"Thank you for using LOST.UB!\n"
-                                               f"This server will be used for logs, errors, and other neat things!\n"
-                                               f"```")
-                await category.edit(name="Home")
-                log_channel = await category.create_text_channel(name="logs")
-            elif category.name.lower() == "voice channels":
-                for channel in category.channels:
-                    await channel.delete()
-                await category.delete()
-        config["CONFIGURATION"]["server"] = f"{server.id}"
-        config["CONFIGURATION"]["log_output"] = f"{log_channel.id}"
-        write()
-    else:
-        for channel in server.channels:
-            if channel.name.lower() == "logs":
-                log_channel = channel
-
-    # connected message
-    # embed = discord.embeds.Embed(
-    #     title="Connected",
-    #     description=f"Lost.ub successfully logged in.",
-    #     colour=embedcolor("light green")
-    # )
-    # embed.add_field(
-    #     name="User",
-    #     value=bot.user,
-    #     inline=True
-    # )
-    # embed.add_field(
-    #     name="Time",
-    #     value=timestamp(),
-    #     inline=True
-    # )
-    # embed.set_thumbnail(url=bot.user.avatar_url)
-    # footer(embed)
-    message = f"```ini\n" \
-              f"[ Connected ]\n" \
-              f"Lost.ub successfully logged in.\n\n" \
-              f"[ User ]\n" \
-              f"{bot.user}\n\n" \
-              f"[ Time ]\n" \
-              f"{timestamp()}\n\n" \
-              f"{codeblock_footer()}\n" \
-              f"```"
-    await log_channel.send(message)
-
-
 @bot.command(aliases=['quit'])
 async def disconnect(ctx):
     if ctx.author == bot.user:
-        # embed = discord.embeds.Embed(
-        #     title="Disconnected",
-        #     description="Lost.ub successfully logged out.",
-        #     colour=embedcolor("red")
-        # )
-        # embed.add_field(
-        #     name="User",
-        #     value=bot.user,
-        #     inline=True
-        # )
-        # embed.add_field(
-        #     name="Time",
-        #     value=timestamp(),
-        #     inline=True
-        # )
-        # embed.set_thumbnail(url=bot.user.avatar_url)
-        # footer(embed)
         log_channel = bot.get_channel(int(config["CONFIGURATION"]["log_output"]))
         message = f"```ini\n" \
                   f"[ Disconnected ]\n" \
@@ -638,6 +481,3 @@ else:
         write()
         os.startfile("bot.py")
         exit()
-# for safety purposes and ease of access, your token will be stored in
-# config.ini. if for whatever reason you mess up the token, just go to
-# config.ini and edit the token value.
