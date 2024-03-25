@@ -10,11 +10,9 @@ import subprocess
 from discord.ext import commands
 import asyncio
 import datetime
-import pypresence
 from git import Repo
 import winshell
 import win32com.client
-import getpass
 
 if os.path.exists("repo"):
     process = subprocess.run("echo y | rmdir /s repo",
