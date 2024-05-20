@@ -112,7 +112,7 @@ if not os.path.exists('config.ini'):
         "token": "None",
         "prefix": "~>",
         "autoupdate": "True",
-        "AFK": "False",
+        "afk": "False",
         "afk_msg": "I'm afk",
         "afk_legit": "True",
         "silentsteal": "False",
@@ -124,14 +124,14 @@ if not os.path.exists('config.ini'):
     write()
 else:
     config.read('config.ini')
-    if not config.has_option("CONFIGURATION", "AFK"):
-        config["CONFIGURATION"]["AFK"] = "False"
+    if not config.has_option("CONFIGURATION", "afk"):
+        config["CONFIGURATION"]["afk"] = "False"
         write()
-    if config["CONFIGURATION"]["AFK"] == "True":
-        config["CONFIGURATION"]["AFK"] = "False"
+    if config["CONFIGURATION"]["afk"] == "True":
+        config["CONFIGURATION"]["afk"] = "False"
         write()
-    elif config["CONFIGURATION"]["AFK"] != "True" or config["CONFIGURATION"]["AFK"] != "False":
-        config["CONFIGURATION"]["AFK"] = "False"
+    elif config["CONFIGURATION"]["afk"] != "True" or config["CONFIGURATION"]["afk"] != "False":
+        config["CONFIGURATION"]["afk"] = "False"
         write()
     if not config.has_option("CONFIGURATION", "prefix"):
         config["CONFIGURATION"]["prefix"] = ">"
