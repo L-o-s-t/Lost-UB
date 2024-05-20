@@ -129,15 +129,10 @@ class Cursive(commands.Cog):
                         cursive_message += lowercase_cursive[25]
                     else:
                         cursive_message += x
-                if ctx.author != bot.user:
-                    await ctx.reply(f"> {ctx.author}: {ctx.message.content}\n"
-                                    f"{cursive_message}")
-                elif ctx.author == bot.user:
+                if ctx.author == bot.user:
                     await ctx.send(cursive_message)
             if ctx.author == bot.user:
                 await ctx.message.delete()
-            else:
-                pass
 
 
 def setup(userbot):

@@ -58,14 +58,16 @@ class Blacklist(commands.Cog):
             # if action is add, it will add the specified user
             elif action.lower() == "add":
                 if member is None:
-                    await ctx.reply(f"Command usage {get_prefix()}blacklist add (@member)")
+                    await simple_codeblock(ctx, f"[ Command Usage ]\n"
+                                                f"{get_prefix()}blacklist add (@member)")
                 elif '@' in str(member):
                     member = await bot.fetch_user(int(member[3:21]))
                     oldfile = open("data/blacklist.txt", "r")
                     oldfile_content = oldfile.read()
                     lines = oldfile_content.split("\n")
                     if f"{member.id}" in lines:
-                        await ctx.reply("That user is already blacklisted.")
+                        await simple_codeblock(ctx, f"[ Error ]\n"
+                                                    f"That user is already blacklisted.")
                     else:
                         with open("data/blacklist.txt", "a+") as oldfile:
                             oldfile.write(f"{oldfile.read()}"
@@ -92,7 +94,8 @@ class Blacklist(commands.Cog):
                         oldfile_content = oldfile.read()
                         lines = oldfile_content.split("\n")
                         if f"{member}" in lines:
-                            await ctx.reply("That user is already blacklisted.")
+                            await simple_codeblock(ctx, f"[ Error ]\n"
+                                                        f"That user is already blacklisted.")
                         else:
                             with open("data/blacklist.txt", "a+") as oldfile:
                                 if notfound:
@@ -122,7 +125,8 @@ class Blacklist(commands.Cog):
             # if action is remove, it will add the specified user
             elif action.lower() == "remove":
                 if member is None:
-                    await ctx.reply(f"Command usage {get_prefix()}blacklist remove (@member)")
+                    await simple_codeblock(ctx, f"[ Command Usage ]\n"
+                                                f"{get_prefix()}blacklist remove (@member)")
                 elif '@' in str(member):
                     member = await bot.fetch_user(int(member[3:21]))
                     temp = ""
@@ -145,7 +149,8 @@ class Blacklist(commands.Cog):
                                                 f"[ ID ]\n"
                                                 f"{member.id}")
                     else:
-                        await ctx.reply("That user isn't blacklisted.")
+                        await simple_codeblock(ctx, f"[ Blacklist ]\n"
+                                                    f"That user isn't blacklisted.")
                 else:
                     count = 0
                     for x in f"{member}":
@@ -185,7 +190,8 @@ class Blacklist(commands.Cog):
                                                         f"[ ID ]\n"
                                                         f"{user.id}")
                         else:
-                            await ctx.reply(f"That user isn't blacklisted.")
+                            await simple_codeblock(ctx, f"[ Blacklist ]\n"
+                                                        f"That user isn't blacklisted.")
                     elif count == 3:
                         if str(member).lower() == "all":
                             with open('data/blacklist.txt', 'w+', encoding='utf8') as file:

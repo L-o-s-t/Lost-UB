@@ -129,15 +129,10 @@ class Monospace(commands.Cog):
                         monospace_message += lowercase_monocase[25]
                     else:
                         monospace_message += x
-                if ctx.author != bot.user:
-                    await ctx.reply(f"> {ctx.author}: {ctx.message.content}\n"
-                                    f"{monospace_message}")
-                elif ctx.author == bot.user:
+                if ctx.author == bot.user:
                     await ctx.send(monospace_message)
             if ctx.author == bot.user:
                 await ctx.message.delete()
-            else:
-                pass
 
 
 def setup(userbot):

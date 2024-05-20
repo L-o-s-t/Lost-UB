@@ -57,14 +57,16 @@ class Whitelist(commands.Cog):
             # if action is add, it will add the specified user
             elif action.lower() == "add":
                 if member is None:
-                    await ctx.reply(f"Command usage {get_prefix()}whitelist add (@member)")
+                    await simple_codeblock(ctx, f"[ Command Usage ]\n"
+                                                f"{get_prefix()}whitelist add (@member)")
                 elif '@' in str(member):
                     member = await bot.fetch_user(int(member[3:21]))
                     old_file = open("data/whitelist.txt", "r")
                     oldfile_content = old_file.read()
                     lines = oldfile_content.split("\n")
                     if f"{member.id}" in lines:
-                        await ctx.reply("That user is already whitelisted.")
+                        await simple_codeblock(ctx, f"[ Error ]\n"
+                                                    f"That user is already whitelisted.")
                     else:
                         with open("data/whitelist.txt", "a+") as old_file:
                             old_file.write(f"{old_file.read()}"
@@ -91,7 +93,8 @@ class Whitelist(commands.Cog):
                         oldfile_content = old_file.read()
                         lines = oldfile_content.split("\n")
                         if f"{member}" in lines:
-                            await ctx.reply("That user is already whitelisted.")
+                            await simple_codeblock(ctx, f"[ Error ]\n"
+                                                        f"That user is already whitelisted.")
                         else:
                             with open("data/whitelist.txt", "a+") as old_file:
                                 if notfound:
@@ -121,7 +124,8 @@ class Whitelist(commands.Cog):
             # if action is remove, it will add the specified user
             elif action.lower() == "remove":
                 if member is None:
-                    await ctx.reply(f"Command usage {get_prefix()}whitelist remove (@member)")
+                    await simple_codeblock(ctx, f"[ Command Usage ]\n"
+                                                f"{get_prefix()}whitelist remove (@member)")
                 elif '@' in str(member):
                     member = await bot.fetch_user(int(member[3:21]))
                     temp = ""
@@ -143,7 +147,8 @@ class Whitelist(commands.Cog):
                                                     f"[ ID ]\n"
                                                     f"{member.id}")
                     else:
-                        await ctx.reply("That user isn't whitelisted.")
+                        await simple_codeblock(ctx, f"[ Error ]\n"
+                                                    f"That user isn't whitelisted.")
                 else:
                     count = 0
                     for x in f"{member}":
@@ -183,7 +188,8 @@ class Whitelist(commands.Cog):
                                                         f"[ ID ]\n"
                                                         f"{user.id}")
                         else:
-                            await ctx.reply(f"That user isn't whitelisted.")
+                            await  simple_codeblock(ctx, f"[ Error ]\n"
+                                                         f"That user isn't whitelisted.")
                     elif count == 3:
                         if str(member).lower() == "all":
                             with open('data/whitelist.txt', 'w+', encoding='utf8') as file:

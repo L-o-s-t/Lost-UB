@@ -12,7 +12,8 @@ class Warnings(commands.Cog):
         print(log(ctx, description="This user used the command WARN"))
         if bot.user == ctx.author:
             if reason is None:
-                await ctx.reply("You must enter a reason for this warning.")
+                await simple_codeblock(ctx, f"[ Error ]\n"
+                                            f"You must enter a reason for this warning.")
             else:
                 print(log(ctx, description="This user used the command WARN"))
                 if not os.path.exists("data/warnings"):

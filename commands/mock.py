@@ -26,15 +26,10 @@ class Mock(commands.Cog):
                     else:
                         mocked_msg += f"{x.lower()}"
                     count += 1
-                if ctx.author != bot.user:
-                    await ctx.reply(f"> {ctx.author}: {ctx.message.content}\n"
-                                    f"{mocked_msg}")
-                elif ctx.author == bot.user:
+                if ctx.author == bot.user:
                     await ctx.send(mocked_msg)
             if ctx.author == bot.user:
                 await ctx.message.delete()
-            else:
-                pass
 
     @commands.command()
     async def automock(self, ctx, action: str = None, member=None):
@@ -234,7 +229,7 @@ class Mock(commands.Cog):
                             else:
                                 mocked_msg += f"{x.lower()}"
                             count += 1
-                        await ctx.reply(mocked_msg + " 🤡")
+                        await ctx.send(mocked_msg + " 🤡")
 
 
 def setup(userbot):

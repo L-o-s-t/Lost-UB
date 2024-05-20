@@ -14,22 +14,20 @@ class RPS(commands.Cog):
                 print(log(ctx, "WHITELIST", "This user attempted to use RPS"))
         else:
             print(log(ctx, description="This user used the command RPS"))
-            await ctx.reply(f"```ini\n"
-                            f"[ Rock, Paper, Scissors Game]\n"
-                            f"What is your choice?\n\n"
-                            f"[ Choices ]\n"
-                            f"Rock\n"
-                            f"Paper\n"
-                            f"Scissors\n\n"
-                            f"{codeblock_footer()}"
-                            f"```")
+            await ctx.simple_codeblock(ctx, f"[ Rock, Paper, Scissors Game]\n"
+                                            f"What is your choice?\n\n"
+                                            f"[ Choices ]\n"
+                                            f"Rock\n"
+                                            f"Paper\n"
+                                            f"Scissors\n\n")
+                                            
 
             def check(m):
                 return m.author == ctx.author
 
             try:
-                rps_choice = random.choice(['rock', 'paper', 'scissors'])
                 answer = await bot.wait_for("message", check=check, timeout=60.0)
+                rps_choice = random.choice(['rock', 'paper', 'scissors'])
                 result = ""
                 if answer.content.lower() == "rock":
                     if rps_choice == "rock":
@@ -53,19 +51,18 @@ class RPS(commands.Cog):
                     elif rps_choice == "scissors":
                         result = "It's a tie!"
                 else:
-                    await answer.reply("Those weren't any of the choices!")
+                    await simple_codeblock(ctx, f"[ Rock, Paper, Scissors Game Results! ]\n"
+                                                f"Those weren't any of the choices!")
                     return
-                await ctx.reply(f"```ini\n"
-                                f"[ Rock, Paper, Scissors Game Results! ]\n"
-                                f"{result}\n\n"
-                                f"[ Your Choice ]\n"
-                                f"{answer.content.lower()}\n\n"
-                                f"[ CPU's Choice ]\n"
-                                f"{rps_choice}\n\n"
-                                f"{codeblock_footer()}"
-                                f"```")
+                await simple_codeblock(ctx, f"[ Rock, Paper, Scissors Game Results! ]\n"
+                                            f"{result}\n\n"
+                                            f"[ Your Choice ]\n"
+                                            f"{answer.content.lower()}\n\n"
+                                            f"[ CPU's Choice ]\n"
+                                            f"{rps_choice}")
             except asyncio.TimeoutError:
-                await ctx.reply("You took too long to respond!")
+                await simple_codeblock(ctx, f"[ Error ]\n"
+                                            f"You took too long to respond!")
 
 
 def setup(userbot):

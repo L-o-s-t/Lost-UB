@@ -128,10 +128,7 @@ class Space(commands.Cog):
                         space_message += lowercase_spacing[25]
                     else:
                         space_message += x
-                if ctx.author != bot.user:
-                    await ctx.reply(f"> {ctx.author}: {ctx.message.content}\n"
-                                    f"{space_message}")
-                elif ctx.author == bot.user:
+                if ctx.author == bot.user:
                     await ctx.send(space_message)
             if ctx.author == bot.user:
                 await ctx.message.delete()

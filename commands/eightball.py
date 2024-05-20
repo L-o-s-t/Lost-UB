@@ -15,7 +15,8 @@ class EightBall(commands.Cog):
         else:
             print(log(ctx, description="This user used the command EIGHTBALL"))
             if question is None:
-                await ctx.reply(f'Incorrect arguments | {config["CONFIGURATION"]["prefix"]}8ball (question)')
+                await simple_codeblock(ctx, f"[ Error ]\n"
+                                            f"Incorrect arugments | {bot.command_prefix}8ball (question)")
             else:
                 answers = random.choice(['It is Certain.',
                                          'It is decidedly so.',
@@ -37,13 +38,11 @@ class EightBall(commands.Cog):
                                          'My sources say no.',
                                          'Outlook not so good.',
                                          'Very doubtful.'])
-                ctx.reply(f"```ini\n"
-                        f"[ Eight Ball ]\n"
-                        f"{question}\n\n"
-                        f"[ Answer ]\n"
-                        f"{answers}\n\n"
-                        f"{codeblock_footer()}"
-                        f"```")
+
+                await simple_codeblock(ctx, f"[ Eight Ball ]\n"
+                                            f"{question}\n\n"
+                                            f"[ Answer ]\n"
+                                            f"{answers}")
 
 
 def setup(userbot):

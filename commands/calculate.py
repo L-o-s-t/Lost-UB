@@ -19,15 +19,18 @@ class Calculate(commands.Cog):
             result = ""
             if not first_number.isnumeric():
                 await ctx.message.delete()
-                await ctx.reply(f"Invalid argument(s). {first_number} is not a number.")
+                await simple_codeblock(ctx, "[ Error ]\n"
+                                            f"Invalid argument(s). {first_number} is not a number.")
             else:
                 if operator not in operators:
                     await ctx.message.delete()
-                    await ctx.reply(f"Invalid argument(s). {operator} is not an operator.")
+                    await simple_codeblock(ctx, f"[ Error ]\n"
+                                                f"Invalid argument(s). {operator} is not an operator.")
                 else:
                     if not second_number.isnumeric():
                         await ctx.message.delete()
-                        await ctx.reply(f"Invalid argument(s). {first_number} is not a number.")
+                        await simple_codeblock(ctx, f"[ Error ]\n"
+                                                    f"Invalid argument(s). {second_number} is not a number.")
                     else:
                         if operator == "*":
                             result = int(first_number) * int(second_number)

@@ -15,7 +15,8 @@ class FlipCoin(commands.Cog):
         else:
             print(log(ctx, description="This user used the command FLIPCOIN"))
             side = random.choice(['heads', 'tails'])
-            await ctx.reply(f"it's {side}")
+            await simple_codeblock(ctx, f"[ Flip a Coin ]\n"
+                                        f"It's {side}")
 
 
 def setup(userbot):

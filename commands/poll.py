@@ -17,7 +17,7 @@ class Poll(commands.Cog):
                 title, description = arguments.split('| ')
                 await ctx.message.delete()
                 msg = await simple_codeblock(ctx, f"[ {title} ]\n"
-                                                  f"{description}", reply=False)
+                                                  f"{description}")
                 await msg.add_reaction('✅')
                 await msg.add_reaction('❎')
 

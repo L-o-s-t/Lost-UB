@@ -39,24 +39,18 @@ class PFP(commands.Cog):
         else:
             print(log(ctx, description="This user used the command PFP"))
             if member is None:
-                await ctx.reply(f"```ini\n"
-                                f"[ Profile Picture ]\n\n"
-                                f"[ Link ]\n"
-                                f"{ctx.author.avatar_url}\n\n"
-                                f"[ User ]\n"
-                                f"{ctx.author.display_name}\n\n"
-                                f"{codeblock_footer()}\n"
-                                f"```")
+                await simple_codeblock(ctx, f"[ Profile Picture ]\n"
+                                            f"[ Profile Picture ]\n\n"
+                                            f"[ Link ]\n"
+                                            f"{ctx.author.avatar_url}\n\n"
+                                            f"[ User ]\n"
+                                            f"{ctx.author.display_name}")
             else:
-                await ctx.reply(f"```ini\n"
-                                f"[ Profile Picture ]\n\n"
-                                f"[ Link ]\n"
-                                f"{member.avatar_url}\n\n"
-                                f"[ User ]\n"
-                                f"{member.display_name}\n\n"
-                                f"{codeblock_footer()}\n"
-                                f"```")
-
+                await simple_codeblock(ctx, f"[ Profile Picture ]\n"
+                                            f"[ Link ]\n"
+                                            f"{member.avatar_url}\n\n"
+                                            f"[ User ]\n"
+                                            f"{member.display_name}")
     @commands.command()
     async def savepfp(self, ctx, member: discord.Member):
         if ctx.author == bot.user:
