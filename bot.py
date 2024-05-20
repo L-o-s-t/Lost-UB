@@ -69,7 +69,7 @@ def codeblock_footer():
 
 
 
-def simple_codeblock(context, text, reply: bool = True):
+def simple_codeblock(context, text, reply: bool = False):
     if reply is True:
         return context.reply(f"```ini\n"
                              f"{text}\n\n"
@@ -102,7 +102,7 @@ def timestamp():
 
 def log(context, title: str = "Command Usage", description: str = None):
     if context.guild is None:
-        context.guild = "dms"
+        context.guild = "Direct Messages"
     return f"[{title} - {description}][{context.guild}][{context.author}][{timestamp()}]"
 
 # Checks ===============================================================================================================
